@@ -11,7 +11,7 @@ import com.jaehong.koreanhistory.navigation.Destination
 import com.jaehong.koreanhistory.navigation.NavHost
 import com.jaehong.koreanhistory.navigation.NavigationIntent
 import com.jaehong.koreanhistory.navigation.composable
-import com.jaehong.koreanhistory.presenter.StudyTypeScreen
+import com.jaehong.koreanhistory.presenter.studytype.StudyTypeScreen
 import com.jaehong.koreanhistory.presenter.dynasty.DynastyScreen
 import com.jaehong.koreanhistory.ui.theme.KoreanHistoryTheme
 import kotlinx.coroutines.channels.Channel
