@@ -13,6 +13,7 @@ import com.jaehong.koreanhistory.navigation.NavigationIntent
 import com.jaehong.koreanhistory.navigation.composable
 import com.jaehong.koreanhistory.presenter.studytype.StudyTypeScreen
 import com.jaehong.koreanhistory.presenter.dynasty.DynastyScreen
+import com.jaehong.koreanhistory.presenter.studypage.StudyPageScreen
 import com.jaehong.koreanhistory.ui.theme.KoreanHistoryTheme
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -36,6 +37,9 @@ fun HomeScreen(
             }
             composable(Destination.StudyType) {
                 StudyTypeScreen()
+            }
+            composable(Destination.StudyPage) {
+                StudyPageScreen()
             }
         }
     }
