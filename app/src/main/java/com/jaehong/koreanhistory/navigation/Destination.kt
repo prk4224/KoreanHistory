@@ -1,10 +1,5 @@
 package com.jaehong.koreanhistory.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.*
-import androidx.navigation.compose.composable
-
 sealed class Destination(protected val route: String, vararg params: String) {
 
     val fullRoute: String = if (params.isEmpty()) route else {
@@ -37,7 +32,7 @@ sealed class Destination(protected val route: String, vararg params: String) {
 
 }
 
-internal fun String.appendParams(vararg params: Pair<String, Any?>): String {
+private fun String.appendParams(vararg params: Pair<String, Any?>): String {
     val builder = StringBuilder(this)
 
     params.forEach {
@@ -47,35 +42,4 @@ internal fun String.appendParams(vararg params: Pair<String, Any?>): String {
     }
 
     return builder.toString()
-}
-
-@Composable
-fun NavHost(
-    navController: NavHostController,
-    startDestination: Destination,
-    modifier: Modifier = Modifier,
-    route: String? = null,
-    builder: NavGraphBuilder.() -> Unit
-) {
-    androidx.navigation.compose.NavHost(
-        navController = navController,
-        startDestination = startDestination.fullRoute,
-        modifier = modifier,
-        route = route,
-        builder = builder
-    )
-}
-
-fun NavGraphBuilder.composable(
-    destination: Destination,
-    arguments: List<NamedNavArgument> = emptyList(),
-    deepLinks: List<NavDeepLink> = emptyList(),
-    content: @Composable (NavBackStackEntry) -> Unit
-) {
-    composable(
-        route = destination.fullRoute,
-        arguments = arguments,
-        deepLinks = deepLinks,
-        content = content
-    )
 }

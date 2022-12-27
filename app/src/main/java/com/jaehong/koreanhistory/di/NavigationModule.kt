@@ -1,6 +1,8 @@
 package com.jaehong.koreanhistory.di
 
 import com.jaehong.koreanhistory.navigation.KoreanHistoryNavigator
+import com.jaehong.koreanhistory.navigation.KoreanHistoryNavigatorImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,9 +11,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NavigationModule {
+interface NavigationModule {
 
     @Singleton
-    @Provides
-    fun provideKoreanHistoryNavigator(): KoreanHistoryNavigator = KoreanHistoryNavigator()
+    @Binds
+    fun bindKoreanHistoryNavigator(appNavigatorImpl: KoreanHistoryNavigatorImpl): KoreanHistoryNavigator
 }
