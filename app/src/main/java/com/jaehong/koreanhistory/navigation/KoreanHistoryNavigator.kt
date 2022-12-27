@@ -1,70 +1,33 @@
 package com.jaehong.koreanhistory.navigation
 
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 
-class KoreanHistoryNavigator {
+interface KoreanHistoryNavigator {
 
-    val navigationChannel = Channel<NavigationIntent>(
-        capacity = Int.MAX_VALUE,
-        onBufferOverflow = BufferOverflow.DROP_LATEST,
-    )
-
+    val navigationChannel : Channel<NavigationIntent>
     suspend fun navigateBack(
         route: String? = null,
         inclusive: Boolean = false,
-    ) {
-        navigationChannel.send(
-            NavigationIntent.NavigateBack(
-                route = route,
-                inclusive = inclusive
-            )
-        )
-    }
+    )
 
     fun tryNavigateBack(
         route: String? = null,
         inclusive: Boolean = false,
-    ) {
-        navigationChannel.trySend(
-            NavigationIntent.NavigateBack(
-                route = route,
-                inclusive = inclusive
-            )
-        )
-    }
+    )
 
     suspend fun navigateTo(
         route: String,
         popUpToRoute: String? = null,
         inclusive: Boolean = false,
         isSingleTop: Boolean = false,
-    ) {
-        navigationChannel.send(
-            NavigationIntent.NavigateTo(
-                route = route,
-                popUpToRoute = popUpToRoute,
-                inclusive = inclusive,
-                isSingleTop = isSingleTop,
-            )
-        )
-    }
+    )
 
     fun tryNavigateTo(
         route: String,
         popUpToRoute: String? = null,
         inclusive: Boolean = false,
         isSingleTop: Boolean = false,
-    ) {
-        navigationChannel.trySend(
-            NavigationIntent.NavigateTo(
-                route = route,
-                popUpToRoute = popUpToRoute,
-                inclusive = inclusive,
-                isSingleTop = isSingleTop,
-            )
-        )
-    }
+    )
 }
 sealed class NavigationIntent {
     data class NavigateBack(
