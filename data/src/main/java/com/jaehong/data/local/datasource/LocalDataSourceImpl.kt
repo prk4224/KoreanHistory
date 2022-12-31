@@ -1,16 +1,17 @@
-package com.jaehong.data.datasource
+package com.jaehong.data.local.datasource
 
 import android.content.Context
 import com.google.gson.Gson
+import com.jaehong.data.local.model.StudyInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class StudyPageDataSource @Inject constructor(
+class LocalDataSourceImpl @Inject constructor(
     @ApplicationContext private val context: Context
-    ) {
+    ): LocalDataSource {
 
-    fun getStudyInfo(): com.jaehong.data.model.StudyInfo {
+    override suspend fun getStudyInfo(): StudyInfo {
         val json = context.assets.open("Test.json").reader().readText()
-        return Gson().fromJson(json, com.jaehong.data.model.StudyInfo::class.java)
+        return Gson().fromJson(json, StudyInfo::class.java)
     }
 }

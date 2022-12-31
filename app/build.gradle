@@ -57,6 +57,4 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
-    kapt "androidx.hilt:hilt-compiler:$hiltCompilerVersion"
-    implementation "androidx.hilt:hilt-navigation-compose:$hiltCompilerVersion"
 }

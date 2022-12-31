@@ -1,4 +1,4 @@
-package com.jaehong.data.model
+package com.jaehong.data.local.model
 
 data class StudyInfoItem(
     val dynasty: String,
