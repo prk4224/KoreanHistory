@@ -1,21 +1,21 @@
 package com.jaehong.data.mapper
 
-import com.jaehong.data.local.model.StudyInfo
-import com.jaehong.data.local.model.StudyInfoItem
-import com.jaehong.domain.local.model.UiStudyInfo
-import com.jaehong.domain.local.model.UiStudyInfoItem
+import com.jaehong.data.local.model.StudyEntity
+import com.jaehong.data.local.model.StudyEntityItem
+import com.jaehong.domain.local.model.StudyInfo
+import com.jaehong.domain.local.model.StudyInfoItem
 
 object Mapper {
 
-    fun StudyInfo.changeDataToRepository(): UiStudyInfo{
-        val uiStudyInfo = UiStudyInfo()
+    fun StudyEntity.toDomain(): StudyInfo{
+        val uiStudyInfo = StudyInfo()
         this.forEach {
-            uiStudyInfo.add(it.changeDataToRepository())
+            uiStudyInfo.add(it.toDmain())
         }
         return uiStudyInfo
     }
 
-    fun StudyInfoItem.changeDataToRepository(): UiStudyInfoItem{
-        return UiStudyInfoItem(this.dynasty,this.title,this.description)
+    fun StudyEntityItem.toDmain(): StudyInfoItem{
+        return StudyInfoItem(this.dynasty,this.title,this.description)
     }
 }

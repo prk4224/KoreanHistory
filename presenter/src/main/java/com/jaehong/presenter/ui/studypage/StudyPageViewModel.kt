@@ -3,7 +3,7 @@ package com.jaehong.presenter.ui.studypage
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jaehong.domain.local.model.UiStudyInfo
+import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.usecase.StudyPageUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
@@ -26,7 +26,7 @@ class StudyPageViewModel @Inject constructor(
     private val _studyState = MutableStateFlow("")
     val studyState = _studyState.asStateFlow()
 
-    private val _studyInfoList = MutableStateFlow(UiStudyInfo())
+    private val _studyInfoList = MutableStateFlow(StudyInfo())
     val studyInfoList = _studyInfoList.asStateFlow()
 
     init {

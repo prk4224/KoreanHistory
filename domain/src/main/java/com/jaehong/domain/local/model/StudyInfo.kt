@@ -1,3 +1,3 @@
-package com.jaehong.data.local.model
+package com.jaehong.domain.local.model
 
 class StudyInfo : ArrayList<StudyInfoItem>()
