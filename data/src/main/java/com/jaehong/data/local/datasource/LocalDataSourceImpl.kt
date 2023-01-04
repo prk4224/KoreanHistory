@@ -12,6 +12,8 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun getStudyInfo(): StudyEntity {
         val json = context.assets.open("Test.json").reader().readText()
-        return Gson().fromJson(json, StudyEntity::class.java)
+        val data = Gson().fromJson(json, StudyEntity::class.java)
+        return data
     }
+
 }

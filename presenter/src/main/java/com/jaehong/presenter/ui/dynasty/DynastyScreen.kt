@@ -52,11 +52,3 @@ fun DynastyButton(
         Text(text = title, style = Typography.bodyLarge)
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun DynastyScreenPreview() {
-    KoreanHistoryTheme {
-        DynastyScreen()
-    }
-}

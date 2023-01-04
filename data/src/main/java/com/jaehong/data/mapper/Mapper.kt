@@ -8,14 +8,14 @@ import com.jaehong.domain.local.model.StudyInfoItem
 object Mapper {
 
     fun StudyEntity.toDomain(): StudyInfo{
-        val uiStudyInfo = StudyInfo()
+        val studyInfo = StudyInfo()
         this.forEach {
-            uiStudyInfo.add(it.toDmain())
+            studyInfo.add(it.toDomain())
         }
-        return uiStudyInfo
+        return studyInfo
     }
 
-    fun StudyEntityItem.toDmain(): StudyInfoItem{
+    fun StudyEntityItem.toDomain(): StudyInfoItem{
         return StudyInfoItem(this.dynasty,this.title,this.description)
     }
 }
