@@ -3,15 +3,17 @@ package com.jaehong.presenter.ui.studypage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,8 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.DynastyButtonColor
 
-val selectedItems = mutableStateMapOf<Int, Boolean>()
-
 @Composable
 fun StudyPageScreen(
     studyTypeViewModel: StudyPageViewModel = hiltViewModel()
@@ -32,8 +32,6 @@ fun StudyPageScreen(
     val dynastyState = studyTypeViewModel.dynastyState.collectAsState().value
     val studyState = studyTypeViewModel.studyState.collectAsState().value
     val studyData = studyTypeViewModel.studyInfoList.collectAsState().value
-
-
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -54,24 +52,27 @@ fun StudyPageScreen(
                 )
             }
             itemsIndexed(studyData) {index, studyInfo ->
-                ItemView(studyInfo,index)
+                ItemView(studyInfo)
             }
         }
     }
 }
 
 @Composable
-fun ItemView(studyInfo: StudyInfoItem, index: Int){
+fun ItemView(
+    studyInfo: StudyInfoItem,
+){
+    var selected by remember { mutableStateOf(false) }
+    val backgroundColor = if (selected) Color.DarkGray else Color.White
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Max)
-            .background(ItemClicked(index))
             .clickable(
-                onClick = {
-                    selectedItems[index] != selectedItems[index]
-                }
+                onClick = {selected = !selected}
             )
+            .background(backgroundColor)
         ,
+
     ) {
         Text(
             text = studyInfo.title,
@@ -82,7 +83,7 @@ fun ItemView(studyInfo: StudyInfoItem, index: Int){
                 .fillMaxHeight()
                 .background(Color.LightGray)
                 .wrapContentSize(Alignment.Center),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         Text(
             text = studyInfo.description,
@@ -94,18 +95,6 @@ fun ItemView(studyInfo: StudyInfoItem, index: Int){
                 .padding(5.dp)
             ,
         )
-    }
-}
-
-@Composable
-fun ItemClicked(index: Int): Color{
-    return if(selectedItems[index] == null ){
-        selectedItems[index] = false
-        Color.White
-    } else if(selectedItems[index] == false) {
-        Color.White
-    } else {
-        Color.DarkGray
     }
 }
 
