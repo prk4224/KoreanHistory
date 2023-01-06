@@ -16,10 +16,6 @@ class GetStudyInfoUseCase @Inject constructor(
         return localRepository.gatStudyInfo(dynastyType,studyType)
     }
 
-    suspend fun getMyStudyInfo(): List<StudyInfoItem>{
-        return localRepository.gatMyStudyInfo()
-    }
-
     suspend fun addMyStudyInfo(studyInfo: List<StudyInfoItem>){
         localRepository.addMyStudyInfo(studyInfo)
     }
