@@ -10,11 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.theme.DynastyButtonColor
-import com.jaehong.presenter.theme.KoreanHistoryTheme
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.ui.MainActivity
 
