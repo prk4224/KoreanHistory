@@ -1,5 +1,10 @@
 package com.jaehong.presenter.navigation
 
+import com.jaehong.presenter.navigation.DestinationConstants.DYNASTY
+import com.jaehong.presenter.navigation.DestinationConstants.MY_STUDY
+import com.jaehong.presenter.navigation.DestinationConstants.STUDY_PAGE
+import com.jaehong.presenter.navigation.DestinationConstants.STUDY_TYPE
+
 sealed class Destination(protected val route: String, vararg params: String) {
 
     val fullRoute: String = if (params.isEmpty()) route else {
@@ -12,15 +17,16 @@ sealed class Destination(protected val route: String, vararg params: String) {
         operator fun invoke(): String = route
     }
 
-    object Dynasty : NoArgumentsDestination(DestinationConstants.DYNASTY)
-    object StudyType : Destination(DestinationConstants.STUDY_TYPE, "dynastyType") {
+    object Dynasty : NoArgumentsDestination(DYNASTY)
+    object MyStudy : NoArgumentsDestination(MY_STUDY)
+    object StudyType : Destination(STUDY_TYPE, "dynastyType") {
         const val DYNASTY_TYPE_KEY = "dynastyType"
 
         operator fun invoke(dynastyType: String): String = route.appendParams(
             DYNASTY_TYPE_KEY to dynastyType
         )
     }
-    object StudyPage : Destination(DestinationConstants.STUDY_PAGE, "dynastyType", "studyType") {
+    object StudyPage : Destination(STUDY_PAGE, "dynastyType", "studyType") {
         const val DYNASTY_TYPE_KEY = "dynastyType"
         const val STUDY_TYPE_KEY = "studyType"
 
@@ -29,6 +35,7 @@ sealed class Destination(protected val route: String, vararg params: String) {
             STUDY_TYPE_KEY to studyType
         )
     }
+
 
 }
 

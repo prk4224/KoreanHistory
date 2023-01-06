@@ -13,6 +13,7 @@ import com.jaehong.presenter.navigation.NavigationIntent
 import com.jaehong.presenter.navigation.composable
 import com.jaehong.presenter.theme.KoreanHistoryTheme
 import com.jaehong.presenter.ui.dynasty.DynastyScreen
+import com.jaehong.presenter.ui.mystudy.MyStudyScreen
 import com.jaehong.presenter.ui.studypage.StudyPageScreen
 import com.jaehong.presenter.ui.studytype.StudyTypeScreen
 import kotlinx.coroutines.channels.Channel
@@ -28,12 +29,14 @@ fun HomeScreen(
         navHostController = navController
     )
     KoreanHistoryTheme {
-        // A surface container using the 'background' color from the theme
         NavHost(
             navController = navController,
             startDestination = Destination.Dynasty) {
             composable(Destination.Dynasty) {
                 DynastyScreen()
+            }
+            composable(Destination.MyStudy) {
+                MyStudyScreen()
             }
             composable(Destination.StudyType) {
                 StudyTypeScreen()
