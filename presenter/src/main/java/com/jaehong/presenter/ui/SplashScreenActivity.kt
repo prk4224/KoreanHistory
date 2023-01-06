@@ -33,7 +33,7 @@ class SplashScreenActivity: ComponentActivity() {
             setContent {
                 SplashScreen()
             }
-            delay(2000)
+            delay(1000)
             val intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
