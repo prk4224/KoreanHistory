@@ -1,17 +1,19 @@
 package com.jaehong.presenter.ui.studypage
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,24 +24,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.DynastyButtonColor
+import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 
 @Composable
 fun StudyPageScreen(
-    studyTypeViewModel: StudyPageViewModel = hiltViewModel()
+    studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
-    val dynastyState = studyTypeViewModel.dynastyState.collectAsState().value
-    val studyState = studyTypeViewModel.studyState.collectAsState().value
-    val studyData = studyTypeViewModel.studyInfoList.collectAsState().value
+    val dynastyState = studyPageViewModel.dynastyState.collectAsState().value
+    val studyState = studyPageViewModel.studyState.collectAsState().value
+    val studyData = studyPageViewModel.studyInfoList.collectAsState().value
+    val isVisible = studyPageViewModel.isVisible.collectAsState().value
+    val allStudyData = studyPageViewModel.allStudyInfoList.collectAsState().value
+    val selectedItems = studyPageViewModel.selectedItems.collectAsState().value
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.DarkGray
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.DarkGray),
     ) {
         LazyColumn(
             modifier = Modifier.padding(30.dp),
         ) {
+            val data = when (studyState) {
+                ORIGIN_STUDY -> allStudyData
+                else -> studyData
+            }
+
             item {
                 Text(
                     text = dynastyState,
@@ -51,31 +64,82 @@ fun StudyPageScreen(
                     color = Color.White
                 )
             }
-            itemsIndexed(studyData) {index, studyInfo ->
-                ItemView(studyInfo)
+            itemsIndexed(data) { index, studyInfo ->
+                StudyAllViewItem(studyInfo, index, allStudyData, studyState)
+            }
+        }
+
+        AnimatedVisibility(
+            visible = isVisible,
+            modifier = Modifier.align(Alignment.BottomEnd),
+            enter = slideInHorizontally(initialOffsetX = {
+                +it
+            }),
+            exit = slideOutHorizontally(targetOffsetX = {
+                +it
+            })
+        ) {
+            IconButton(
+                onClick = { studyPageViewModel.addMyStudyInfo(selectedItems) },
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.AddCircle,
+                    tint = DynastyButtonColor,
+                    contentDescription = null,
+                    modifier = Modifier.size(150.dp)
+                )
             }
         }
     }
 }
 
 @Composable
-fun ItemView(
+fun StudyAllViewItem(
     studyInfo: StudyInfoItem,
-){
+    index: Int,
+    allStudyData: StudyInfo,
+    studyState: String,
+    studyPageViewModel: StudyPageViewModel = hiltViewModel(),
+) {
     var selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selected) Color.DarkGray else Color.White
+    val backgroundColor = if (selected) Color.LightGray else Color.White
+
+    var hintSelected by remember { mutableStateOf(false) }
+    val hintText = if (hintSelected) allStudyData[index].description else studyInfo.description
+
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Max)
             .clickable(
-                onClick = {selected = !selected}
+                onClick = {
+                    when (studyState) {
+                        ORIGIN_STUDY -> {
+                            selected = selected.not()
+                            with(studyPageViewModel) {
+                                if (selected) {
+                                    addSelectedItem(studyInfo)
+                                } else {
+                                    removeSelectedItem(studyInfo)
+                                }
+                                if (selectedItems.value.size > 0) {
+                                    changeButtonState(true)
+                                } else {
+                                    changeButtonState(false)
+                                }
+                            }
+                        }
+                        else -> {
+                            selected = selected.not()
+                            hintSelected = hintSelected.not()
+                        }
+                    }
+                },
             )
-            .background(backgroundColor)
-        ,
+            .background(backgroundColor),
 
-    ) {
+        ) {
         Text(
-            text = studyInfo.title,
+            text = studyInfo.king_name,
             fontSize = 25.sp,
             modifier = Modifier
                 .border(1.dp, Color.Black, RectangleShape)
@@ -86,15 +150,13 @@ fun ItemView(
             textAlign = TextAlign.Center,
         )
         Text(
-            text = studyInfo.description,
+            text = hintText,
             fontSize = 25.sp,
             modifier = Modifier
                 .border(1.dp, Color.Black, RectangleShape)
                 .weight(1f)
                 .fillMaxHeight()
-                .padding(5.dp)
-            ,
+                .padding(5.dp),
         )
     }
 }
-
