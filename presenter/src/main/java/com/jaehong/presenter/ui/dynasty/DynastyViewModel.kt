@@ -10,12 +10,15 @@ import javax.inject.Inject
 class DynastyViewModel @Inject constructor(
     private val koreanHistoryNavigator: KoreanHistoryNavigator
 ): ViewModel() {
-
     fun onBackButtonClicked() {
         koreanHistoryNavigator.tryNavigateBack()
     }
 
     fun onNavigateToStudyTypeClicked(dynastyType: String) {
         koreanHistoryNavigator.tryNavigateTo(Destination.StudyType(dynastyType))
+    }
+
+    fun onNavigateToMyStudyClicked() {
+        koreanHistoryNavigator.tryNavigateTo(Destination.MyStudy())
     }
 }

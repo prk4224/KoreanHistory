@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.theme.DynastyButtonColor
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.ui.MainActivity
+import com.jaehong.presenter.util.Constants.MY_KEYWORD
 
 @Composable
 fun DynastyScreen() {
@@ -39,7 +40,11 @@ fun DynastyButton(
 ) {
     Button(
         onClick = {
-            dynastyViewModel.onNavigateToStudyTypeClicked(title)
+            if(title == MY_KEYWORD) {
+                dynastyViewModel.onNavigateToMyStudyClicked()
+            } else {
+                dynastyViewModel.onNavigateToStudyTypeClicked(title)
+            }
         },
         Modifier
             .width(250.dp)
