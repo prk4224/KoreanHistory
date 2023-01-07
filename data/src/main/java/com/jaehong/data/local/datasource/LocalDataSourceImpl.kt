@@ -52,4 +52,8 @@ class LocalDataSourceImpl @Inject constructor(
         koreanHistoryDataBase.myStudyDao().insertMyStudyWithListTransaction(studyList)
     }
 
+    override suspend fun deleteMyStudyInfo(studyList: List<MyStudyEntity>) {
+        koreanHistoryDataBase.myStudyDao().deleteMyStudyWithListTransaction(studyList)
+    }
+
 }

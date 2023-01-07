@@ -11,4 +11,5 @@ interface LocalDataSource {
     suspend fun gatMyStudyInfo(): List<MyStudyEntity>
 
     suspend fun addMyStudyInfo(studyList: List<MyStudyEntity>)
+    suspend fun deleteMyStudyInfo(studyList: List<MyStudyEntity>)
 }
