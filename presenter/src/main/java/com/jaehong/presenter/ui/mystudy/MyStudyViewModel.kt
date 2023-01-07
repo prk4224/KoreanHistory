@@ -46,6 +46,12 @@ class MyStudyViewModel @Inject constructor(
         _isVisible.value = state
     }
 
+    fun deleteMyStudyInfo(studyList: List<StudyInfoItem>){
+        viewModelScope.launch {
+            myStudyInfoUseCase.deleteMyStudyInfo(studyList)
+        }
+    }
+
     fun onBackButtonClicked() {
         koreanHistoryNavigator.tryNavigateBack()
     }

@@ -72,7 +72,7 @@ fun MyStudyScreen(
             })
         ) {
             IconButton(
-                onClick = { },
+                onClick = { myStudyViewModel.deleteMyStudyInfo(selectedItems) },
             ) {
                 Icon(
                     imageVector = Icons.Filled.RemoveCircle,
