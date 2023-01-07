@@ -27,5 +27,7 @@ class LocalRepositoryImpl @Inject constructor(
 
     override suspend fun addMyStudyInfo(studyList: List<StudyInfoItem>) {
         dataSource.addMyStudyInfo(studyList.domainToDataBase())
+    override suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>) {
+        dataSource.deleteMyStudyInfo(studyList.domainToDataBase())
     }
 }
