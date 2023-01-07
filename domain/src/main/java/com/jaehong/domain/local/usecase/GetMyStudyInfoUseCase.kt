@@ -11,4 +11,7 @@ class GetMyStudyInfoUseCase @Inject constructor(
         return localRepository.gatMyStudyInfo()
     }
 
+    suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>) {
+        localRepository.deleteMyStudyInfo(studyList)
+    }
 }
