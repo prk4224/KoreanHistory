@@ -1,7 +1,6 @@
 package com.jaehong.data.local.repository
 
 import com.jaehong.data.local.datasource.LocalDataSource
-import com.jaehong.data.local.model.StudyEntity
 import com.jaehong.data.mapper.Mapper.dataBaseToDomain
 import com.jaehong.data.mapper.Mapper.dataToDomain
 import com.jaehong.data.mapper.Mapper.domainToDataBase
@@ -25,8 +24,10 @@ class LocalRepositoryImpl @Inject constructor(
         return dataSource.gatMyStudyInfo().dataBaseToDomain()
     }
 
-    override suspend fun addMyStudyInfo(studyList: List<StudyInfoItem>) {
-        dataSource.addMyStudyInfo(studyList.domainToDataBase())
+    override suspend fun insertMyStudyInfo(studyList: List<StudyInfoItem>) {
+        dataSource.insertMyStudyInfo(studyList.domainToDataBase())
+    }
+
     override suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>) {
         dataSource.deleteMyStudyInfo(studyList.domainToDataBase())
     }

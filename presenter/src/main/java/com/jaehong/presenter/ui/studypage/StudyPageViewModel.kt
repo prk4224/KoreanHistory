@@ -58,7 +58,7 @@ class StudyPageViewModel @Inject constructor(
 
     fun addMyStudyInfo(studyInfo: List<StudyInfoItem>){
         viewModelScope.launch {
-            studyInfoUseCase.addMyStudyInfo(studyInfo)
+            studyInfoUseCase.insertMyStudyInfo(studyInfo)
         }
     }
 

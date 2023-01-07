@@ -48,7 +48,7 @@ class LocalDataSourceImpl @Inject constructor(
         return koreanHistoryDataBase.myStudyDao().getMyStudyList()
     }
 
-    override suspend fun addMyStudyInfo(studyList: List<MyStudyEntity>) {
+    override suspend fun insertMyStudyInfo(studyList: List<MyStudyEntity>) {
         koreanHistoryDataBase.myStudyDao().insertMyStudyWithListTransaction(studyList)
     }
 

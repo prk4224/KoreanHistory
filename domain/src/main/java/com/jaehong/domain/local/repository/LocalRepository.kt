@@ -10,6 +10,7 @@ interface LocalRepository {
 
     suspend fun gatMyStudyInfo(): List<StudyInfoItem>
 
-    suspend fun addMyStudyInfo(studyList: List<StudyInfoItem>)
+    suspend fun insertMyStudyInfo(studyList: List<StudyInfoItem>)
+
     suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>)
 }
