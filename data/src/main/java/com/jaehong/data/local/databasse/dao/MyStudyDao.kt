@@ -23,4 +23,14 @@ interface MyStudyDao {
             insertMyStudy(it)
         }
     }
+
+    @Delete
+    suspend fun deleteMyStudy(info: MyStudyEntity)
+
+    @Transaction
+    suspend fun deleteMyStudyWithListTransaction(myStudyList: List<MyStudyEntity>) {
+        myStudyList.forEach {
+            deleteMyStudy(it)
+        }
+    }
 }
