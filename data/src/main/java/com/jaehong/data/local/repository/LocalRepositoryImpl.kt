@@ -16,8 +16,8 @@ class LocalRepositoryImpl @Inject constructor(
         return dataSource.getAllStudyInfo(dynastyType,studyType).dataToDomain()
     }
 
-    override suspend fun gatStudyInfo(dynastyType: String, studyType: String): StudyInfo {
-        return dataSource.gatStudyInfo(dynastyType,studyType).dataToDomain()
+    override suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyInfo {
+        return dataSource.getStudyInfo(dynastyType,studyType).dataToDomain()
     }
 
     override suspend fun gatMyStudyInfo(): List<StudyInfoItem> {

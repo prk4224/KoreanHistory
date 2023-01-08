@@ -6,7 +6,7 @@ import com.jaehong.domain.local.model.StudyInfoItem
 interface LocalRepository {
     suspend fun getAllStudyInfo(dynastyType: String, studyType: String): StudyInfo
 
-    suspend fun gatStudyInfo(dynastyType: String, studyType: String): StudyInfo
+    suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyInfo
 
     suspend fun gatMyStudyInfo(): List<StudyInfoItem>
 

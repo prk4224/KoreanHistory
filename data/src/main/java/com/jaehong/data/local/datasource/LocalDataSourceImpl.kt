@@ -23,11 +23,10 @@ class LocalDataSourceImpl @Inject constructor(
             else -> throw IllegalArgumentException("Dynasty Type Error")
         }
 
-        val data = Gson().fromJson(json, StudyEntity::class.java)
-        return data
+        return Gson().fromJson(json, StudyEntity::class.java)
     }
 
-    override suspend fun gatStudyInfo(dynastyType: String, studyType: String): StudyEntity {
+    override suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyEntity {
 
         val json = when {
             dynastyType == SAM_GUG && studyType == ORIGIN_STUDY -> {
@@ -40,8 +39,7 @@ class LocalDataSourceImpl @Inject constructor(
                 throw IllegalArgumentException("Dynasty Type Error")
             }
         }
-        val data = Gson().fromJson(json, StudyEntity::class.java)
-        return data
+        return Gson().fromJson(json, StudyEntity::class.java)
     }
 
     override suspend fun gatMyStudyInfo(): List<MyStudyEntity> {

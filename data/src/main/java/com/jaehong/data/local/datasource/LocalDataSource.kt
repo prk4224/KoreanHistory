@@ -6,7 +6,7 @@ import com.jaehong.data.local.model.StudyEntity
 interface LocalDataSource {
     suspend fun getAllStudyInfo(dynastyType: String, studyType: String): StudyEntity
 
-    suspend fun gatStudyInfo(dynastyType: String, studyType: String): StudyEntity
+    suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyEntity
 
     suspend fun gatMyStudyInfo(): List<MyStudyEntity>
 
