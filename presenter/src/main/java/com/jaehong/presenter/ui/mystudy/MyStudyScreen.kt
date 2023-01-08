@@ -88,7 +88,7 @@ fun MyStudyScreen(
 @Composable
 fun MyStudyViewItem(
     studyInfo: StudyInfoItem,
-    myStudyViewModel: MyStudyViewModel = hiltViewModel(),
+
 ) {
     var selected by remember { mutableStateOf(false) }
     val backgroundColor = if (selected) Color.LightGray else Color.White
@@ -96,6 +96,49 @@ fun MyStudyViewItem(
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Max)
+
+            .background(backgroundColor),
+
+        ) {
+        Text(
+            text = studyInfo.king_name,
+            fontSize = 25.sp,
+            modifier = Modifier
+                .border(1.dp, Color.Black, RectangleShape)
+                .weight(0.5f)
+                .fillMaxHeight()
+                .background(Color.LightGray)
+                .wrapContentSize(Alignment.Center),
+            textAlign = TextAlign.Center,
+        )
+        Column(modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight()
+            .padding(5.dp),) {
+            studyInfo.description.forEach { description ->
+                MyDescriptionTextView(studyInfo,description,)
+            }
+        }
+    }
+}
+
+@Composable
+fun MyDescriptionTextView(
+    studyInfo: StudyInfoItem,
+    description: String,
+    myStudyViewModel: MyStudyViewModel = hiltViewModel(),
+) {
+    var selected by remember { mutableStateOf(false) }
+    val backgroundColor = if (selected) Color.LightGray else Color.White
+
+    Text(
+        text = description,
+        fontSize = 25.sp,
+        modifier = Modifier
+            .border(1.dp, Color.Black, RectangleShape)
+            .fillMaxWidth()
+            .padding(5.dp)
+            .background(backgroundColor)
             .clickable(
                 onClick = {
                     with(myStudyViewModel) {
@@ -113,28 +156,5 @@ fun MyStudyViewItem(
                     }
                 },
             )
-            .background(backgroundColor),
-
-        ) {
-        Text(
-            text = studyInfo.king_name,
-            fontSize = 25.sp,
-            modifier = Modifier
-                .border(1.dp, Color.Black, RectangleShape)
-                .weight(0.5f)
-                .fillMaxHeight()
-                .background(Color.LightGray)
-                .wrapContentSize(Alignment.Center),
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = studyInfo.description,
-            fontSize = 25.sp,
-            modifier = Modifier
-                .border(1.dp, Color.Black, RectangleShape)
-                .weight(1f)
-                .fillMaxHeight()
-                .padding(5.dp),
-        )
-    }
+    )
 }

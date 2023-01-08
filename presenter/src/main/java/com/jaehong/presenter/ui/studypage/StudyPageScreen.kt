@@ -99,27 +99,74 @@ fun StudyAllViewItem(
     index: Int,
     allStudyData: StudyInfo,
     studyState: String,
-    studyPageViewModel: StudyPageViewModel = hiltViewModel(),
+) {
+    Row(
+        modifier = Modifier
+            .height(IntrinsicSize.Max)
+            .background(Color.White),
+
+        ) {
+        Text(
+            text = studyInfo.king_name,
+            fontSize = 25.sp,
+            modifier = Modifier
+                .border(1.dp, Color.Black, RectangleShape)
+                .weight(0.5f)
+                .fillMaxHeight()
+                .background(Color.LightGray)
+                .wrapContentSize(Alignment.Center),
+            textAlign = TextAlign.Center,
+        )
+
+        Column(modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight()
+            ,) {
+            studyInfo.description.forEachIndexed() { descIndex, description ->
+                DescriptionTextView(studyInfo,description,index,descIndex,allStudyData,studyState)
+            }
+        }
+    }
+}
+
+@Composable
+fun DescriptionTextView(
+    studyInfo: StudyInfoItem,
+    description: String,
+    studyIndex: Int,
+    descriptionIndex: Int,
+    allStudyData: StudyInfo,
+    studyState: String,
+    studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
     var selected by remember { mutableStateOf(false) }
     val backgroundColor = if (selected) Color.LightGray else Color.White
 
     var hintSelected by remember { mutableStateOf(false) }
-    val hintText = if (hintSelected) allStudyData[index].description else studyInfo.description
+    val hintText = if (hintSelected) allStudyData[studyIndex].description[descriptionIndex] else description
 
-    Row(
+
+    Text(
+        text = hintText,
+        fontSize = 25.sp,
         modifier = Modifier
-            .height(IntrinsicSize.Max)
+            .border(1.dp, Color.Black, RectangleShape)
+            .fillMaxWidth()
+            .padding(5.dp)
+            .background(backgroundColor)
             .clickable(
                 onClick = {
                     when (studyState) {
                         ORIGIN_STUDY -> {
                             selected = selected.not()
                             with(studyPageViewModel) {
+                                val temp = StudyInfoItem(studyInfo.id,studyInfo.detail,studyInfo.king_name,
+                                    arrayListOf(description)
+                                )
                                 if (selected) {
-                                    addSelectedItem(studyInfo)
+                                    addSelectedItem(temp)
                                 } else {
-                                    removeSelectedItem(studyInfo)
+                                    removeSelectedItem(temp)
                                 }
                                 if (selectedItems.value.size > 0) {
                                     changeButtonState(true)
@@ -134,29 +181,6 @@ fun StudyAllViewItem(
                         }
                     }
                 },
-            )
-            .background(backgroundColor),
-
-        ) {
-        Text(
-            text = studyInfo.king_name,
-            fontSize = 25.sp,
-            modifier = Modifier
-                .border(1.dp, Color.Black, RectangleShape)
-                .weight(0.5f)
-                .fillMaxHeight()
-                .background(Color.LightGray)
-                .wrapContentSize(Alignment.Center),
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = hintText,
-            fontSize = 25.sp,
-            modifier = Modifier
-                .border(1.dp, Color.Black, RectangleShape)
-                .weight(1f)
-                .fillMaxHeight()
-                .padding(5.dp),
-        )
-    }
+            ),
+    )
 }
