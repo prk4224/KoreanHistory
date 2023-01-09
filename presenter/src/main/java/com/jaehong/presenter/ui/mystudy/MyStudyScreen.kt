@@ -72,7 +72,9 @@ fun MyStudyScreen(
             })
         ) {
             IconButton(
-                onClick = { myStudyViewModel.deleteMyStudyInfo(selectedItems) },
+                onClick = {
+                    myStudyViewModel.deleteMyStudyInfo(selectedItems)
+                },
             ) {
                 Icon(
                     imageVector = Icons.Filled.RemoveCircle,
@@ -88,17 +90,14 @@ fun MyStudyScreen(
 @Composable
 fun MyStudyViewItem(
     studyInfo: StudyInfoItem,
-
 ) {
-    var selected by remember { mutableStateOf(false) }
+    val selected by remember { mutableStateOf(false) }
     val backgroundColor = if (selected) Color.LightGray else Color.White
 
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Max)
-
             .background(backgroundColor),
-
         ) {
         Text(
             text = studyInfo.king_name,
@@ -111,12 +110,13 @@ fun MyStudyViewItem(
                 .wrapContentSize(Alignment.Center),
             textAlign = TextAlign.Center,
         )
-        Column(modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight()
-            .padding(5.dp),) {
-            studyInfo.description.forEach { description ->
-                MyDescriptionTextView(studyInfo,description,)
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+        ) {
+            studyInfo.description.forEachIndexed { index, description ->
+                MyDescriptionTextView(studyInfo, description, index)
             }
         }
     }
@@ -126,6 +126,7 @@ fun MyStudyViewItem(
 fun MyDescriptionTextView(
     studyInfo: StudyInfoItem,
     description: String,
+    descriptionIndex: Int,
     myStudyViewModel: MyStudyViewModel = hiltViewModel(),
 ) {
     var selected by remember { mutableStateOf(false) }
@@ -135,18 +136,26 @@ fun MyDescriptionTextView(
         text = description,
         fontSize = 25.sp,
         modifier = Modifier
-            .border(1.dp, Color.Black, RectangleShape)
             .fillMaxWidth()
+            .border(1.dp, Color.Black, RectangleShape)
             .padding(5.dp)
             .background(backgroundColor)
             .clickable(
                 onClick = {
                     with(myStudyViewModel) {
                         selected = selected.not()
+
+                        val selectedItem = StudyInfoItem(
+                            studyInfo.id + descriptionIndex,
+                            studyInfo.detail,
+                            studyInfo.king_name,
+                            arrayListOf(description)
+                        )
+
                         if (selected) {
-                            addSelectedItem(studyInfo)
+                            addSelectedItem(selectedItem)
                         } else {
-                            removeSelectedItem(studyInfo)
+                            removeSelectedItem(selectedItem)
                         }
                         if (selectedItems.value.size > 0) {
                             changeButtonState(true)

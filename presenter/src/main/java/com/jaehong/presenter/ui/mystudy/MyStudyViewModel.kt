@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetMyStudyInfoUseCase
+import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,8 +30,13 @@ class MyStudyViewModel @Inject constructor(
     val selectedItems = _selectedItems.asStateFlow()
 
     init {
+        getMyStudyData()
+    }
+
+    private fun getMyStudyData() {
         viewModelScope.launch {
             _myStudyInfoList.value = myStudyInfoUseCase()
+            _selectedItems.value = initList
         }
     }
 
@@ -49,10 +55,12 @@ class MyStudyViewModel @Inject constructor(
     fun deleteMyStudyInfo(studyList: List<StudyInfoItem>){
         viewModelScope.launch {
             myStudyInfoUseCase.deleteMyStudyInfo(studyList)
+            onNavigateReFresh()
         }
     }
 
-    fun onBackButtonClicked() {
+    private fun onNavigateReFresh() {
         koreanHistoryNavigator.tryNavigateBack()
+        koreanHistoryNavigator.tryNavigateTo(Destination.MyStudy())
     }
 }
