@@ -48,7 +48,7 @@ fun StudyTypeScreen(
                         text = it,
                         fontSize = 40.sp,
                         modifier = Modifier.padding(15.dp),
-                        style = Typography.bodyLarge,
+                        style = Typography.bodyMedium,
                         color = Color.Black,
                     )
                 }
