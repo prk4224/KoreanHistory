@@ -5,21 +5,20 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.DynastyButtonColor
+import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 
 @Composable
@@ -38,7 +38,8 @@ fun StudyPageScreen(
     val studyData = studyPageViewModel.studyInfoList.collectAsState().value
     val isVisible = studyPageViewModel.isVisible.collectAsState().value
     val allStudyData = studyPageViewModel.allStudyInfoList.collectAsState().value
-    val selectedItems = studyPageViewModel.selectedItems.collectAsState().value
+    val dialogState = studyPageViewModel.showDialog.collectAsState().value
+    val allHintState = studyPageViewModel.isAllHintVisible.collectAsState().value
 
     Box(
         modifier = Modifier
@@ -48,9 +49,10 @@ fun StudyPageScreen(
         LazyColumn(
             modifier = Modifier.padding(30.dp),
         ) {
-            val data = when (studyState) {
-                ORIGIN_STUDY -> allStudyData
-                else -> studyData
+            val data = if (studyState == ORIGIN_STUDY || allHintState) {
+                allStudyData
+            } else {
+                studyData
             }
 
             item {
@@ -64,6 +66,7 @@ fun StudyPageScreen(
                     color = Color.White
                 )
             }
+
             itemsIndexed(data) { index, studyInfo ->
                 StudyAllViewItem(studyInfo, index, allStudyData, studyState)
             }
@@ -80,7 +83,7 @@ fun StudyPageScreen(
             })
         ) {
             IconButton(
-                onClick = { studyPageViewModel.addMyStudyInfo(selectedItems) },
+                onClick = { studyPageViewModel.onOpenDialogClicked() },
             ) {
                 Icon(
                     imageVector = Icons.Filled.AddCircle,
@@ -90,6 +93,9 @@ fun StudyPageScreen(
                 )
             }
         }
+    }
+    if (dialogState) {
+        SimpleAlertDialog()
     }
 }
 
@@ -122,8 +128,15 @@ fun StudyAllViewItem(
             .weight(1f)
             .fillMaxHeight()
             ,) {
-            studyInfo.description.forEachIndexed() { descIndex, description ->
-                DescriptionTextView(studyInfo,description,index,descIndex,allStudyData,studyState)
+            studyInfo.description.forEachIndexed { descIndex, description ->
+                DescriptionTextView(
+                    studyInfo,
+                    description,
+                    index,
+                    descIndex,
+                    allStudyData,
+                    studyState
+                )
             }
         }
     }
@@ -145,7 +158,6 @@ fun DescriptionTextView(
     var hintSelected by remember { mutableStateOf(false) }
     val hintText = if (hintSelected) allStudyData[studyIndex].description[descriptionIndex] else description
 
-
     Text(
         text = hintText,
         fontSize = 25.sp,
@@ -154,33 +166,60 @@ fun DescriptionTextView(
             .fillMaxWidth()
             .padding(5.dp)
             .background(backgroundColor)
-            .clickable(
-                onClick = {
-                    when (studyState) {
-                        ORIGIN_STUDY -> {
-                            selected = selected.not()
-                            with(studyPageViewModel) {
-                                val temp = StudyInfoItem(studyInfo.id,studyInfo.detail,studyInfo.king_name,
-                                    arrayListOf(description)
-                                )
-                                if (selected) {
-                                    addSelectedItem(temp)
-                                } else {
-                                    removeSelectedItem(temp)
-                                }
-                                if (selectedItems.value.size > 0) {
-                                    changeButtonState(true)
-                                } else {
-                                    changeButtonState(false)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        when (studyState) {
+                            ORIGIN_STUDY -> {
+                                selected = selected.not()
+                                with(studyPageViewModel) {
+                                    val selectedItem = StudyInfoItem(
+                                        studyInfo.id + descriptionIndex,
+                                        studyInfo.detail,
+                                        studyInfo.king_name,
+                                        arrayListOf(description)
+                                    )
+                                    if (selected) {
+                                        addSelectedItem(selectedItem)
+                                    } else {
+                                        removeSelectedItem(selectedItem)
+                                    }
+                                    if (selectedItems.value.size > 0) {
+                                        changeButtonState(true)
+                                    } else {
+                                        changeButtonState(false)
+                                    }
                                 }
                             }
+                            else -> {
+                                selected = selected.not()
+                                hintSelected = hintSelected.not()
+                            }
                         }
-                        else -> {
-                            selected = selected.not()
-                            hintSelected = hintSelected.not()
-                        }
+                    },
+                    onLongPress = {
+                        studyPageViewModel.changeAllHintState()
                     }
-                },
-            ),
+                )
+            }
+
+    )
+}
+
+@Composable
+fun SimpleAlertDialog(
+    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+) {
+    AlertDialog(
+        onDismissRequest = { },
+        confirmButton = {
+            TextButton(onClick = { studyPageViewModel.onDialogConfirm() })
+            { Text(text = "저장", style = Typography.bodyLarge) }
+        },
+        dismissButton = {
+            TextButton(onClick = { studyPageViewModel.onDialogDismiss() })
+            { Text(text = "취소", style = Typography.bodyLarge) }
+        },
+        title = { Text(text = "나의 복습 노트에 저장하시겠습니까 ?", style = Typography.bodyLarge) },
     )
 }

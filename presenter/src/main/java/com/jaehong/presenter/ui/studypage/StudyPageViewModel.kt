@@ -11,6 +11,7 @@ import com.jaehong.presenter.navigation.KoreanHistoryNavigator
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,6 +42,12 @@ class StudyPageViewModel @Inject constructor(
     private val _isVisible = MutableStateFlow(false)
     val isVisible = _isVisible.asStateFlow()
 
+    private val _isAllHintVisible = MutableStateFlow(false)
+    val isAllHintVisible = _isAllHintVisible.asStateFlow()
+
+    private val _showDialog = MutableStateFlow(false)
+    val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
+
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.StudyPage.DYNASTY_TYPE_KEY)
         val studyType = savedStateHandle.get<String>(Destination.StudyPage.STUDY_TYPE_KEY)
@@ -56,7 +63,21 @@ class StudyPageViewModel @Inject constructor(
         }
     }
 
-    fun addMyStudyInfo(studyInfo: List<StudyInfoItem>){
+    fun onOpenDialogClicked() {
+        _showDialog.value = true
+    }
+
+    fun onDialogConfirm() {
+        _showDialog.value = false
+        addMyStudyInfo(selectedItems.value)
+        onNavigateToMyStudyClicked()
+    }
+
+    fun onDialogDismiss() {
+        _showDialog.value = false
+    }
+
+    private fun addMyStudyInfo(studyInfo: List<StudyInfoItem>){
         viewModelScope.launch {
             studyInfoUseCase.insertMyStudyInfo(studyInfo)
         }
@@ -74,7 +95,16 @@ class StudyPageViewModel @Inject constructor(
         _isVisible.value = state
     }
 
-    fun onBackButtonClicked() {
+    fun changeAllHintState(){
+        _isAllHintVisible.value = _isAllHintVisible.value.not()
+    }
+
+    private fun onNavigateToMyStudyClicked() {
+        koreanHistoryNavigator.tryNavigateTo(Destination.MyStudy())
+    }
+
+    private fun onNavigateReFresh() {
         koreanHistoryNavigator.tryNavigateBack()
+        koreanHistoryNavigator.tryNavigateTo(Destination.MyStudy())
     }
 }
