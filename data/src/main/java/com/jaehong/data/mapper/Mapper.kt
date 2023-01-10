@@ -3,6 +3,7 @@ package com.jaehong.data.mapper
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
 import com.jaehong.data.local.model.StudyEntity
 import com.jaehong.data.local.model.StudyEntityItem
+import com.jaehong.data.mapper.Mapper.dataToDomain
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 
@@ -37,7 +38,12 @@ object Mapper {
     fun List<MyStudyEntity>.dataBaseToDomain(): StudyInfo{
         val studyInfo = StudyInfo()
         this.forEach {
-            studyInfo.add(it.dataBaseToDomain())
+            val index = studyInfo.checkDescription(it.king_name)
+            if(index != -1){
+                studyInfo[index].description.add(it.description)
+            } else {
+                studyInfo.add(it.dataBaseToDomain())
+            }
         }
         return studyInfo
     }

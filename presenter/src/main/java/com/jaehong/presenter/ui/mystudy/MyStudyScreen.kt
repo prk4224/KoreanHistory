@@ -24,10 +24,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.DynastyButtonColor
 import com.jaehong.presenter.util.Constants.MY_KEYWORD
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MyStudyScreen(
     myStudyViewModel: MyStudyViewModel = hiltViewModel()
@@ -36,28 +39,39 @@ fun MyStudyScreen(
     val isVisible = myStudyViewModel.isVisible.collectAsState().value
     val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
 
+    val currentPage = myStudyViewModel.currentPage.collectAsState().value
+    val pagerList = myStudyViewModel.pagerList.collectAsState().value
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.DarkGray),
     ) {
-        LazyColumn(
-            modifier = Modifier.padding(30.dp),
-        ) {
-            item {
-                Text(
-                    text = MY_KEYWORD,
-                    modifier = Modifier
-                        .background(DynastyButtonColor, RoundedCornerShape(50, 50, 0, 0))
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    fontSize = 30.sp,
-                    color = Color.White
-                )
+       HorizontalPager(count = pagerList.size) { page ->
+            if (currentPage != this.currentPage) {
+                myStudyViewModel.updatePage(this.currentPage)
             }
 
-            items(myStudyData) { studyInfo ->
-                MyStudyViewItem(studyInfo)
+            LazyColumn(
+                modifier = Modifier.padding(30.dp),
+            ) {
+                item {
+                    Text(
+                        text = "$MY_KEYWORD - ${pagerList[page]}",
+                        modifier = Modifier
+                            .background(DynastyButtonColor, RoundedCornerShape(50, 50, 0, 0))
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 30.sp,
+                        color = Color.White
+                    )
+                }
+
+                items(myStudyData) { studyInfo ->
+                    if(pagerList[page] == studyInfo.detail) {
+                        MyStudyViewItem(studyInfo)
+                    }
+                }
             }
         }
 

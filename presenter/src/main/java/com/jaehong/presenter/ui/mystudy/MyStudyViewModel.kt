@@ -29,14 +29,36 @@ class MyStudyViewModel @Inject constructor(
     private val _selectedItems = MutableStateFlow(initList)
     val selectedItems = _selectedItems.asStateFlow()
 
+    private val _pagerList = MutableStateFlow(listOf(""))
+    val pagerList = _pagerList.asStateFlow()
+
+    private val _currentPage = MutableStateFlow(0)
+    val currentPage = _currentPage.asStateFlow()
+
     init {
         getMyStudyData()
+    }
+
+    fun updatePage(page: Int){
+        _currentPage.value = page
+        _selectedItems.value.clear()
+        _isVisible.value = false
+    }
+
+    private fun getPagerList(): List<String> {
+        val pagerList = mutableListOf<String>()
+        _myStudyInfoList.value.forEach {
+            if(pagerList.contains(it.detail).not()){
+                pagerList.add(it.detail)
+            }
+        }
+        return pagerList
     }
 
     private fun getMyStudyData() {
         viewModelScope.launch {
             _myStudyInfoList.value = myStudyInfoUseCase()
-            _selectedItems.value = initList
+            _pagerList.value = getPagerList()
         }
     }
 

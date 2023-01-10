@@ -9,26 +9,32 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.DynastyButtonColor
-import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun StudyPageScreen(
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
@@ -40,35 +46,43 @@ fun StudyPageScreen(
     val allStudyData = studyPageViewModel.allStudyInfoList.collectAsState().value
     val dialogState = studyPageViewModel.showDialog.collectAsState().value
     val allHintState = studyPageViewModel.isAllHintVisible.collectAsState().value
+    val currentPage = studyPageViewModel.currentPage.collectAsState().value
+    val pagerList = studyPageViewModel.pagerList.collectAsState().value
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.DarkGray),
     ) {
-        LazyColumn(
-            modifier = Modifier.padding(30.dp),
-        ) {
-            val data = if (studyState == ORIGIN_STUDY || allHintState) {
-                allStudyData
-            } else {
-                studyData
+        HorizontalPager(count = pagerList.size) { page ->
+            if(currentPage != this.currentPage){
+                studyPageViewModel.updatePage(this.currentPage)
             }
+            LazyColumn(
+                modifier = Modifier.padding(30.dp),
+            ) {
+                val data = if (studyState == ORIGIN_STUDY || allHintState) {
+                    allStudyData
+                } else {
+                    studyData
+                }
 
-            item {
-                Text(
-                    text = dynastyState,
-                    modifier = Modifier
-                        .background(DynastyButtonColor, RoundedCornerShape(50, 50, 0, 0))
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    fontSize = 30.sp,
-                    color = Color.White
-                )
-            }
-
-            itemsIndexed(data) { index, studyInfo ->
-                StudyAllViewItem(studyInfo, index, allStudyData, studyState)
+                item {
+                    Text(
+                        text = "$dynastyState - ${pagerList[page]}",
+                        modifier = Modifier
+                            .background(DynastyButtonColor, RoundedCornerShape(50, 50, 0, 0))
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 30.sp,
+                        color = Color.White
+                    )
+                }
+                itemsIndexed(data) { index, studyInfo ->
+                    if(studyInfo.detail == pagerList[page]){
+                        StudyAllViewItem(studyInfo, index, allStudyData, studyState)
+                    }
+                }
             }
         }
 
@@ -93,9 +107,10 @@ fun StudyPageScreen(
                 )
             }
         }
-    }
-    if (dialogState) {
-        SimpleAlertDialog()
+
+        if (dialogState) {
+            SaveCheckAlertDialog()
+        }
     }
 }
 
@@ -108,9 +123,8 @@ fun StudyAllViewItem(
 ) {
     Row(
         modifier = Modifier
-            .height(IntrinsicSize.Max)
+            .height(IntrinsicSize.Min)
             .background(Color.White),
-
         ) {
         Text(
             text = studyInfo.king_name,
@@ -126,6 +140,7 @@ fun StudyAllViewItem(
 
         Column(modifier = Modifier
             .weight(1f)
+            .border(1.dp, Color.Black, RectangleShape)
             .fillMaxHeight()
             ,) {
             studyInfo.description.forEachIndexed { descIndex, description ->
@@ -162,8 +177,8 @@ fun DescriptionTextView(
         text = hintText,
         fontSize = 25.sp,
         modifier = Modifier
-            .border(1.dp, Color.Black, RectangleShape)
             .fillMaxWidth()
+            .border(1.dp, Color.Black, getTopLineShape())
             .padding(5.dp)
             .background(backgroundColor)
             .pointerInput(Unit) {
@@ -184,6 +199,7 @@ fun DescriptionTextView(
                                     } else {
                                         removeSelectedItem(selectedItem)
                                     }
+
                                     if (selectedItems.value.size > 0) {
                                         changeButtonState(true)
                                     } else {
@@ -206,20 +222,18 @@ fun DescriptionTextView(
     )
 }
 
-@Composable
-fun SimpleAlertDialog(
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
-) {
-    AlertDialog(
-        onDismissRequest = { },
-        confirmButton = {
-            TextButton(onClick = { studyPageViewModel.onDialogConfirm() })
-            { Text(text = "저장", style = Typography.bodyLarge) }
-        },
-        dismissButton = {
-            TextButton(onClick = { studyPageViewModel.onDialogDismiss() })
-            { Text(text = "취소", style = Typography.bodyLarge) }
-        },
-        title = { Text(text = "나의 복습 노트에 저장하시겠습니까 ?", style = Typography.bodyLarge) },
-    )
+private fun getTopLineShape() : Shape {
+    return GenericShape { size, _ ->
+        // 1) Bottom-left corner
+        moveTo(0f, 0f )
+        // 2) Bottom-right corner
+        lineTo(size.width, 0f )
+        // 3) Top-right corner
+        lineTo(size.width, 0f - 2f)
+        // 4) Top-left corner
+        lineTo(0f, 0f - 2f )
+    }
 }
+
+
+
