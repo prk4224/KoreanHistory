@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
@@ -32,6 +33,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.DynastyButtonColor
+import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
+import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 
 @OptIn(ExperimentalPagerApi::class)
@@ -61,10 +64,10 @@ fun StudyPageScreen(
             LazyColumn(
                 modifier = Modifier.padding(30.dp),
             ) {
-                val data = if (studyState == ORIGIN_STUDY || allHintState) {
-                    allStudyData
-                } else {
+                val data = if (studyState == FIRST_REVIEW && allHintState.not()) {
                     studyData
+                } else {
+                    allStudyData
                 }
 
                 item {
@@ -169,9 +172,8 @@ fun DescriptionTextView(
 ) {
     var selected by remember { mutableStateOf(false) }
     val backgroundColor = if (selected) Color.LightGray else Color.White
-
-    var hintSelected by remember { mutableStateOf(false) }
-    val hintText = if (hintSelected) allStudyData[studyIndex].description[descriptionIndex] else description
+    val alphaText = if(selected || studyState != ALL_BLANK_REVIEW) 1f else 0f
+    val hintText = if (selected) allStudyData[studyIndex].description[descriptionIndex] else description
 
     Text(
         text = hintText,
@@ -181,6 +183,7 @@ fun DescriptionTextView(
             .border(1.dp, Color.Black, getTopLineShape())
             .padding(5.dp)
             .background(backgroundColor)
+            .alpha(alphaText)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
@@ -209,7 +212,6 @@ fun DescriptionTextView(
                             }
                             else -> {
                                 selected = selected.not()
-                                hintSelected = hintSelected.not()
                             }
                         }
                     },
@@ -217,20 +219,16 @@ fun DescriptionTextView(
                         studyPageViewModel.changeAllHintState()
                     }
                 )
-            }
+            },
 
     )
 }
 
 private fun getTopLineShape() : Shape {
     return GenericShape { size, _ ->
-        // 1) Bottom-left corner
         moveTo(0f, 0f )
-        // 2) Bottom-right corner
         lineTo(size.width, 0f )
-        // 3) Top-right corner
         lineTo(size.width, 0f - 2f)
-        // 4) Top-left corner
         lineTo(0f, 0f - 2f )
     }
 }

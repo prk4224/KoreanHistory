@@ -8,10 +8,9 @@ import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
-import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
+import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -61,8 +60,8 @@ class StudyPageViewModel @Inject constructor(
         _dynastyState.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
         _studyState.value = studyType ?: throw IllegalArgumentException("Study Type Error")
         viewModelScope.launch {
-            _allStudyInfoList.value = studyInfoUseCase(dynastyType,studyType)
-            if(studyType != ORIGIN_STUDY) {
+            _allStudyInfoList.value = studyInfoUseCase(dynastyType)
+            if(studyType == FIRST_REVIEW) {
                 _studyInfoList.value = studyInfoUseCase.getStudyIngo(dynastyType,studyType)
             }
             _pagerList.value = getPagerList()
