@@ -4,7 +4,7 @@ import com.jaehong.data.local.databasse.entity.MyStudyEntity
 import com.jaehong.data.local.model.StudyEntity
 
 interface LocalDataSource {
-    suspend fun getAllStudyInfo(dynastyType: String, studyType: String): StudyEntity
+    suspend fun getAllStudyInfo(dynastyType: String): StudyEntity
 
     suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyEntity
 

@@ -12,8 +12,8 @@ class LocalRepositoryImpl @Inject constructor(
     private val dataSource: LocalDataSource
 ): com.jaehong.domain.local.repository.LocalRepository {
 
-    override suspend fun getAllStudyInfo(dynastyType: String, studyType: String): StudyInfo {
-        return dataSource.getAllStudyInfo(dynastyType,studyType).dataToDomain()
+    override suspend fun getAllStudyInfo(dynastyType: String): StudyInfo {
+        return dataSource.getAllStudyInfo(dynastyType).dataToDomain()
     }
 
     override suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyInfo {

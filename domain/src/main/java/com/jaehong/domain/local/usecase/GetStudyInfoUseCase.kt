@@ -8,8 +8,8 @@ import javax.inject.Inject
 class GetStudyInfoUseCase @Inject constructor(
     private val localRepository: LocalRepository
 ) {
-    suspend operator fun invoke(dynastyType: String, studyType: String): StudyInfo {
-        return localRepository.getAllStudyInfo(dynastyType,studyType)
+    suspend operator fun invoke(dynastyType: String): StudyInfo {
+        return localRepository.getAllStudyInfo(dynastyType)
     }
 
     suspend fun getStudyIngo(dynastyType: String, studyType: String): StudyInfo {

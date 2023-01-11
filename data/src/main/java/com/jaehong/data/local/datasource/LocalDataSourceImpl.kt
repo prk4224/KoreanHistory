@@ -6,8 +6,11 @@ import com.jaehong.data.local.databasse.KoreanHistoryDataBase
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
 import com.jaehong.data.local.model.StudyEntity
 import com.jaehong.data.util.Constants.FIRST_REVIEW
+import com.jaehong.data.util.Constants.GO_LYEO
+import com.jaehong.data.util.Constants.JO_SEON
 import com.jaehong.data.util.Constants.ORIGIN_STUDY
 import com.jaehong.data.util.Constants.SAM_GUG
+import com.jaehong.data.util.Constants.SIN_LA
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -16,10 +19,13 @@ class LocalDataSourceImpl @Inject constructor(
     private val koreanHistoryDataBase: KoreanHistoryDataBase
 ): LocalDataSource {
 
-    override suspend fun getAllStudyInfo(dynastyType: String, studyType: String): StudyEntity {
+    override suspend fun getAllStudyInfo(dynastyType: String): StudyEntity {
 
         val json = when(dynastyType) {
             SAM_GUG -> context.assets.open("samkok_all.json").reader().readText()
+            SIN_LA -> context.assets.open("hoosamkok_all.json").reader().readText()
+            GO_LYEO -> context.assets.open("golyeo_all.json").reader().readText()
+            JO_SEON -> context.assets.open("joseon_all.json").reader().readText()
             else -> throw IllegalArgumentException("Dynasty Type Error")
         }
 
@@ -28,16 +34,12 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyEntity {
 
-        val json = when {
-            dynastyType == SAM_GUG && studyType == ORIGIN_STUDY -> {
-                context.assets.open("samkok_all.json").reader().readText()
-            }
-            dynastyType == SAM_GUG && studyType == FIRST_REVIEW  -> {
-                context.assets.open("samkok_first_letter.json").reader().readText()
-            }
-            else -> {
-                throw IllegalArgumentException("Dynasty Type Error")
-            }
+        val json = when(dynastyType) {
+            SAM_GUG -> context.assets.open("samkok_first_letter.json").reader().readText()
+            SIN_LA  -> context.assets.open("hoosamkok_first_letter.json").reader().readText()
+            GO_LYEO -> context.assets.open("golyeo_first_letter.json").reader().readText()
+            JO_SEON -> context.assets.open("joseon_first_letter.json").reader().readText()
+            else -> throw IllegalArgumentException("Dynasty Type Error")
         }
         return Gson().fromJson(json, StudyEntity::class.java)
     }
