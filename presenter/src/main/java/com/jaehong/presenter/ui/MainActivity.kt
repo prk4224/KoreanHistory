@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.jaehong.presenter.ui.home.HomeScreen
 import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
-import com.jaehong.presenter.util.Constants.BLANK_REVIEW
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 import com.jaehong.presenter.util.Constants.GO_LYEO
 import com.jaehong.presenter.util.Constants.JO_SEON
@@ -27,6 +26,6 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         val dynastyList = listOf(SAM_GUG, SIN_LA, GO_LYEO, JO_SEON, MY_KEYWORD)
-        val studyList = listOf(ORIGIN_STUDY, FIRST_REVIEW, BLANK_REVIEW, ALL_BLANK_REVIEW)
+        val studyList = listOf(ORIGIN_STUDY, FIRST_REVIEW, ALL_BLANK_REVIEW)
     }
 }
