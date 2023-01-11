@@ -7,9 +7,9 @@
   {"id":7,"detail":"고구려","king_name":"미천왕","description":"ㅅㅇㅍ 점령 → ㄴㄹ군, ㄷㅂ군 격파"},
   {"id":8,"detail":"고구려","king_name":"고국원왕","description":"백제 ㄱㅊㄱ왕에게 ㅍㅇㅅ 공격 당함"},
   {"id":9,"detail":"고구려","king_name":"소수림왕","description":"ㅂㄱ(중국ㅈㅈ,승려ㅅㄷ), ㅌㅎ, ㅇㄹ반포"},
-  {"id":10,"detail":"고구려","king_name":"광개토 대왕","description":"ㅇ락,ㅅㄹ 도움(ㅎㅇㅁ그릇)"},
+  {"id":10,"detail":"고구려","king_name":"광개토 대왕","description":"연호[ㅇ락],ㅅㄹ 도움(ㅎㅇㅁ그릇)"},
   {"id":11,"detail":"고구려","king_name":"광개토 대왕","description":"ㅁㅈ,ㅇㄷ반도 확보"},
-  {"id":12,"detail":"고구려","king_name":"장수왕","description":"ㄱ련,ㅍㅇ천도(ㄴㅈ정책)"},
+  {"id":12,"detail":"고구려","king_name":"장수왕","description":"연호[ㄱ련],ㅍㅇ천도(ㄴㅈ정책)"},
   {"id":13,"detail":"고구려","king_name":"장수왕","description":"ㅎㅅ 공격, ㄱㄷ"},
   {"id":14,"detail":"고구려","king_name":"문자왕","description":"ㅂㅇ 복속 → 고구려 ㅊㄷ 영토"},
   {"id":15,"detail":"고구려","king_name":"영양왕","description":"ㅅㅅ대첩,ㅇㄷ장군 → ㅅㄹ공격"},
@@ -35,7 +35,7 @@
   {"id":35,"detail":"신라","king_name":"눌지마립간","description":"백제 ㅂㅇ왕과 ㄴ·ㅈ 동맹 체결"},
   {"id":36,"detail":"신라","king_name":"소지마립간","description":"백제 ㄷㅅ왕과 ㄱㅎ 동맹으로 동맹 강화"},
   {"id":37,"detail":"신라","king_name":"지증왕","description":"ㅇㅅ국(ㅇㅅㅂ), 순장x, 지방제도, 동시전"},
-  {"id":38,"detail":"신라","king_name":"법흥왕","description":"ㄱ원, ㅂㄱ(ㅇㅊㄷ),ㅇ령, ㅅㄷ등, ㄱㄱ가야"},
+  {"id":38,"detail":"신라","king_name":"법흥왕","description":"연호[ㄱ원], ㅂㄱ(ㅇㅊㄷ),ㅇ령, ㅅㄷ등, ㄱㄱ가야"},
   {"id":39,"detail":"신라","king_name":"진흥왕","description":"ㅎㄹ도, ㅎ강, ㄱㅅ성, ㅅㅅ비, ㅍ주, ㄷ가야"},
   {"id":40,"detail":"신라","king_name":"진평왕","description":"ㄱㅅㅍ(중국ㅅ나라에게, 승려ㅇㄱ의 외교문서)"},
   {"id":41,"detail":"신라","king_name":"선덕여왕","description":"ㅂㄷ의 난, ㅎㄹ사 9층 ㅁㅌ, ㅊㅅ대, ㅂㅎ사"},
@@ -51,4 +51,4 @@
   {"id":51,"detail":"가야","king_name":"고구려의 대외항쟁","description":"→ ㄷ나라 건국 → ㅊㄹㅈㅅ 축조 (ㅇㄹ왕, 631)"},
   {"id":52,"detail":"가야","king_name":"고구려의 대외항쟁","description":" →ㅇㄱㅅㅁ의 정변 (ㅁㄹㅈ, ㅂㅈ왕 옹립)"},
   {"id":53,"detail":"가야","king_name":"고구려의 대외항쟁","description":"→ ㅇㅅ성 전투 (고구려, 양ㅁㅊ vs ㄷ 태종)"},
-  {"id":54,"detail":"가야","king_name":"삼국통일","description":"** ***왕 (***년)"}]
+  {"id":54,"detail":"삼국시대","king_name":"삼국통일","description":"** ***왕 (***년)"}]

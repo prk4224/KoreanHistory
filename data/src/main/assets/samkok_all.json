@@ -7,9 +7,9 @@
   {"id":7,"detail":"고구려","king_name":"미천왕","description":"서안평 점령 → 낭랑군, 대방군 격파"},
   {"id":8,"detail":"고구려","king_name":"고국원왕","description":"백제 근초고왕에게 평양성 공격 당함"},
   {"id":9,"detail":"고구려","king_name":"소수림왕","description":"불교(중국전진,승려순도), 태학, 율령"},
-  {"id":10,"detail":"고구려","king_name":"광개토 대왕","description":"영락,신라 도움(호우명그릇)"},
-  {"id":11,"detail":"고구려","king_name":"광개토 대왕","description":"만주,요동반도 확보"},
-  {"id":12,"detail":"고구려","king_name":"장수왕","description":"거련,평양천도(남진정책)"},
+  {"id":10,"detail":"고구려","king_name":"광개토대왕","description":"연호[영락],신라 도움(호우명그릇)"},
+  {"id":11,"detail":"고구려","king_name":"광개토대왕","description":"만주,요동반도 확보"},
+  {"id":12,"detail":"고구려","king_name":"장수왕","description":"연호[거련],평양천도(남진정책)"},
   {"id":13,"detail":"고구려","king_name":"장수왕","description":"한성 공격, 경당"},
   {"id":14,"detail":"고구려","king_name":"문자왕","description":"부여 복속 → 고구려 최대 영토"},
   {"id":15,"detail":"고구려","king_name":"영양왕","description":"살수대첩,온달장군 → 신라공격"},
@@ -35,7 +35,7 @@
   {"id":35,"detail":"신라","king_name":"눌지마립간","description":"백제 비유왕과 나·제 동맹 체결"},
   {"id":36,"detail":"신라","king_name":"소지마립간","description":"백제 동성왕과 결혼 동맹으로 동맹 강화"},
   {"id":37,"detail":"신라","king_name":"지증왕","description":"우산국(이사부), 순장x, 지방제도, 동시전"},
-  {"id":38,"detail":"신라","king_name":"법흥왕","description":"건원, 불교(이차돈),율령, 상대등, 금관가야"},
+  {"id":38,"detail":"신라","king_name":"법흥왕","description":"연호[건원], 불교(이차돈),율령, 상대등, 금관가야"},
   {"id":39,"detail":"신라","king_name":"진흥왕","description":"화랑도, 한강, 관산성, 순수비, 품주, 대가야"},
   {"id":40,"detail":"신라","king_name":"진평왕","description":"걸사표(중국수나라에게, 승려원광의 외교문서)"},
   {"id":41,"detail":"신라","king_name":"선덕여왕","description":"비담의 난, 황룡사 9층 목탑, 첨성대, 분황사"},
@@ -50,4 +50,5 @@
   {"id":50,"detail":"가야","king_name":"고구려의 대외항쟁","description":"살수대첩(을지문덕,612년) → 수나라 멸망"},
   {"id":51,"detail":"가야","king_name":"고구려의 대외항쟁","description":"→ 당나라 건국 → 천리장성 축조 (영류왕, 631)"},
   {"id":52,"detail":"가야","king_name":"고구려의 대외항쟁","description":" →연개소문의 정변 (막리지, 보장왕 옹립)"},
-  {"id":53,"detail":"가야","king_name":"고구려의 대외항쟁","description":"→ 안시성 전투 (고구려, 양만춘 vs 당 태종)"}]
+  {"id":53,"detail":"가야","king_name":"고구려의 대외항쟁","description":"→ 안시성 전투 (고구려, 양만춘 vs 당 태종)"},
+  {"id":54,"detail":"삼국시대","king_name":"삼국통일","description":"신라 문무왕(676년)"}]
