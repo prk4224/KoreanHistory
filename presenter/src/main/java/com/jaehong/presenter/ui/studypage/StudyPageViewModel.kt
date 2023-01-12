@@ -75,6 +75,7 @@ class StudyPageViewModel @Inject constructor(
     fun onDialogConfirm() {
         _showDialog.value = false
         addMyStudyInfo(selectedItems.value)
+
         onNavigateReFresh()
     }
 

@@ -5,10 +5,8 @@ import com.google.gson.Gson
 import com.jaehong.data.local.databasse.KoreanHistoryDataBase
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
 import com.jaehong.data.local.model.StudyEntity
-import com.jaehong.data.util.Constants.FIRST_REVIEW
 import com.jaehong.data.util.Constants.GO_LYEO
 import com.jaehong.data.util.Constants.JO_SEON
-import com.jaehong.data.util.Constants.ORIGIN_STUDY
 import com.jaehong.data.util.Constants.SAM_GUG
 import com.jaehong.data.util.Constants.SIN_LA
 import dagger.hilt.android.qualifiers.ApplicationContext

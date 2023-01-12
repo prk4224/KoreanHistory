@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.theme.DynastyButtonColor
 import com.jaehong.presenter.theme.Typography
@@ -72,7 +73,7 @@ fun DynastyButton(
                 .padding(15.dp),
             colors = ButtonDefaults.buttonColors(DynastyButtonColor)
         ) {
-            Text(text = title, style = Typography.bodyMedium)
+            Text(text = title, style = Typography.bodyMedium, fontSize = 25.sp)
         }
     }
 
