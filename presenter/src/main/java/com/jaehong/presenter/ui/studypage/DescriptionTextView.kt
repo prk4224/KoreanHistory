@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.util.Constants
 
 @Composable
@@ -31,7 +33,7 @@ fun DescriptionTextView(
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
     var selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selected) Color.LightGray else Color.White
+    val backgroundColor = if (selected) Gray2 else Color.White
     val alphaText = if(selected || studyState != Constants.ALL_BLANK_REVIEW) 1f else 0f
     val hintText = if (selected) allStudyData[studyIndex].description[descriptionIndex] else description
 
@@ -40,7 +42,7 @@ fun DescriptionTextView(
         fontSize = 25.sp,
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, Color.Black, getTopLineShape())
+            .border(1.dp, Color.LightGray, getTopLineShape())
             .padding(5.dp)
             .background(backgroundColor)
             .alpha(alphaText)

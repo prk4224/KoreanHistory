@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.presenter.theme.Gray2
 
 @Composable
 fun StudyAllViewItem(
@@ -31,17 +32,17 @@ fun StudyAllViewItem(
             text = studyInfo.king_name,
             fontSize = 25.sp,
             modifier = Modifier
-                .border(1.dp, Color.Black, RectangleShape)
+                .border(1.dp, Color.LightGray, RectangleShape)
                 .weight(0.5f)
                 .fillMaxHeight()
-                .background(Color.LightGray)
+                .background(Gray2)
                 .wrapContentSize(Alignment.Center),
             textAlign = TextAlign.Center,
         )
 
         Column(modifier = Modifier
             .weight(1f)
-            .border(1.dp, Color.Black, RectangleShape)
+            .border(1.dp, Color.LightGray, RectangleShape)
             .fillMaxHeight()
             ,) {
             studyInfo.description.forEachIndexed { descIndex, description ->
