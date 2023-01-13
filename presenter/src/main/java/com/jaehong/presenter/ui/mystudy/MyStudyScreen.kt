@@ -42,53 +42,85 @@ fun MyStudyScreen(
     val currentPage = myStudyViewModel.currentPage.collectAsState().value
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.DarkGray),
-    ) {
-       HorizontalPager(count = pagerList.size) { page ->
-            if (currentPage != this.currentPage) {
-                myStudyViewModel.updatePage(this.currentPage)
-            }
-
-            LazyColumn(
-                modifier = Modifier.padding(30.dp),
-            ) {
-                item {
-                    Text(
-                        text = "$MY_KEYWORD - ${pagerList[page]}",
-                        modifier = Modifier
-                            .background(DynastyButtonColor, RoundedCornerShape(50, 50, 0, 0))
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        fontSize = 30.sp,
-                        color = Color.White
-                    )
+    Box {
+        if(pagerList.isEmpty()) {
+            MyStudyBlankView()
+        } else {
+            HorizontalPager(
+                count = pagerList.size,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Gray3),
+                verticalAlignment = Alignment.Top
+            ) { page ->
+                if (currentPage != this.currentPage) {
+                    myStudyViewModel.updatePage(this.currentPage)
                 }
 
-                items(myStudyData) { studyInfo ->
-                    if(pagerList[page] == studyInfo.detail) {
-                        MyStudyViewItem(studyInfo)
+                LazyColumn(
+                    modifier = Modifier.padding(vertical = 50.dp, horizontal = 20.dp),
+                ) {
+                    item {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .height(60.dp)
+                                .background(MyStudyColor, RoundedCornerShape(50, 50, 0, 0))
+                        ){
+                            Text(
+                                text = MY_KEYWORD,
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                fontSize = 35.sp,
+                                color = Color.White
+                            )
+                            Text(
+                                text ="(${pagerList[page]})",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                fontSize = 24.sp,
+                                color = Color.White
+                            )
+                        }
+                    }
+                    item{
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .border(1.dp, Color.LightGray, RectangleShape)
+                                .background(Gray2)
+                                .padding(8.dp)
+                        ) {
+                            Text(
+                                text = " 부족한 부분 한번 더 복습하기 ★",
+                                fontSize = 24.sp,
+                                modifier = Modifier
+                                    .background(Color.White, RoundedCornerShape(10))
+                                    .fillMaxWidth()
+                            )
+                        }
+                    }
+
+                    items(myStudyData) { studyInfo ->
+                        if(pagerList[page] == studyInfo.detail) {
+                            MyStudyViewItem(studyInfo)
+                        }
                     }
                 }
             }
         }
 
-        AnimatedVisibility(
-            visible = isVisible,
-            modifier = Modifier.align(Alignment.BottomEnd),
-            enter = slideInHorizontally(initialOffsetX = {
-                +it
-            }),
-            exit = slideOutHorizontally(targetOffsetX = {
-                +it
-            })
-        ) {
-            IconButton(
-                onClick = {
-                    myStudyViewModel.deleteMyStudyInfo(selectedItems)
-                },
+            AnimatedVisibility(
+                visible = isVisible,
+                modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
+                enter = slideInHorizontally(initialOffsetX = {
+                    +it
+                }),
+                exit = slideOutHorizontally(targetOffsetX = {
+                    +it
+                })
             ) {
                 Icon(
                     imageVector = Icons.Filled.RemoveCircle,
