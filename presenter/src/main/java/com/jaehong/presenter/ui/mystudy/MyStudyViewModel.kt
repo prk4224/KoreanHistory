@@ -81,6 +81,10 @@ class MyStudyViewModel @Inject constructor(
         }
     }
 
+    fun onBackButtonClicked() {
+        koreanHistoryNavigator.tryNavigateBack()
+    }
+
     private fun onNavigateReFresh() {
         koreanHistoryNavigator.tryNavigateBack()
         koreanHistoryNavigator.tryNavigateTo(Destination.MyStudy())
