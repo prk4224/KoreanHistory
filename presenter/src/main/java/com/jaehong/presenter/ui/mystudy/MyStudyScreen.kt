@@ -5,7 +5,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,7 +14,8 @@ import androidx.compose.material.icons.filled.RemoveCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,8 +26,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.jaehong.domain.local.model.StudyInfoItem
-import com.jaehong.presenter.theme.DynastyButtonColor
+import com.jaehong.presenter.theme.BaseColor1
+import com.jaehong.presenter.theme.Gray2
+import com.jaehong.presenter.theme.Gray3
+import com.jaehong.presenter.theme.MyStudyColor
 import com.jaehong.presenter.util.Constants.MY_KEYWORD
 
 @OptIn(ExperimentalPagerApi::class)
@@ -110,7 +112,6 @@ fun MyStudyScreen(
                     }
                 }
             }
-        }
 
             AnimatedVisibility(
                 visible = isVisible,
@@ -122,94 +123,21 @@ fun MyStudyScreen(
                     +it
                 })
             ) {
-                Icon(
-                    imageVector = Icons.Filled.RemoveCircle,
-                    tint = DynastyButtonColor,
-                    contentDescription = null,
-                    modifier = Modifier.size(150.dp)
-                )
+                IconButton(
+                    onClick = {
+                        myStudyViewModel.deleteMyStudyInfo(selectedItems)
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.RemoveCircle,
+                        tint = BaseColor1,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .background(Color.White)
+                    )
+                }
             }
         }
     }
-}
-
-@Composable
-fun MyStudyViewItem(
-    studyInfo: StudyInfoItem,
-) {
-    val selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selected) Color.LightGray else Color.White
-
-    Row(
-        modifier = Modifier
-            .height(IntrinsicSize.Max)
-            .background(backgroundColor),
-        ) {
-        Text(
-            text = studyInfo.king_name,
-            fontSize = 25.sp,
-            modifier = Modifier
-                .border(1.dp, Color.Black, RectangleShape)
-                .weight(0.5f)
-                .fillMaxHeight()
-                .background(Color.LightGray)
-                .wrapContentSize(Alignment.Center),
-            textAlign = TextAlign.Center,
-        )
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-        ) {
-            studyInfo.description.forEachIndexed { index, description ->
-                MyDescriptionTextView(studyInfo, description, index)
-            }
-        }
-    }
-}
-
-@Composable
-fun MyDescriptionTextView(
-    studyInfo: StudyInfoItem,
-    description: String,
-    descriptionIndex: Int,
-    myStudyViewModel: MyStudyViewModel = hiltViewModel(),
-) {
-    var selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selected) Color.LightGray else Color.White
-
-    Text(
-        text = description,
-        fontSize = 25.sp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, Color.Black, RectangleShape)
-            .padding(5.dp)
-            .background(backgroundColor)
-            .clickable(
-                onClick = {
-                    with(myStudyViewModel) {
-                        selected = selected.not()
-
-                        val selectedItem = StudyInfoItem(
-                            studyInfo.id + descriptionIndex,
-                            studyInfo.detail,
-                            studyInfo.king_name,
-                            arrayListOf(description)
-                        )
-
-                        if (selected) {
-                            addSelectedItem(selectedItem)
-                        } else {
-                            removeSelectedItem(selectedItem)
-                        }
-                        if (selectedItems.value.size > 0) {
-                            changeButtonState(true)
-                        } else {
-                            changeButtonState(false)
-                        }
-                    }
-                },
-            )
-    )
 }
