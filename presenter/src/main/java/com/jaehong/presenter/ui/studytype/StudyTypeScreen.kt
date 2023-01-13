@@ -24,6 +24,7 @@ fun StudyTypeScreen(
     studyTypeViewModel: StudyTypeViewModel = hiltViewModel()
 ) {
     val dynastyType = studyTypeViewModel.dynastyState.collectAsState().value
+    val isVisible = studyTypeViewModel.isVisible.collectAsState().value
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -31,6 +32,18 @@ fun StudyTypeScreen(
         contentAlignment = Alignment.Center,
     ) {
 
+        val animationHeight by animateIntAsState(
+            targetValue = if(isVisible) 400 else 50,
+            animationSpec = tween(
+                delayMillis = 100
+            )
+        )
+        val animationRadius by animateIntAsState(
+            targetValue = if(isVisible) 10 else 50,
+            animationSpec = tween(
+                delayMillis = 100
+            )
+        )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -60,8 +73,8 @@ fun StudyTypeScreen(
             fontSize = 35.sp,
             color = Color.White,
             modifier = Modifier
-                .offset(y = (-200).dp)
-                .background(DynastyButtonColor, CircleShape)
+                .offset(y = (-(animationHeight/2)).dp)
+                .background(BaseColor1, CircleShape)
                 .width(250.dp)
 
         )
