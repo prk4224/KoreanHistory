@@ -10,11 +10,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.jaehong.presenter.theme.DynastyButtonColor
+import com.jaehong.presenter.theme.BaseColor1
+import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -42,16 +42,15 @@ fun StudyPageScreen(
     val allHintState = studyPageViewModel.isAllHintVisible.collectAsState().value
     val currentPage = studyPageViewModel.currentPage.collectAsState().value
     val pagerList = studyPageViewModel.pagerList.collectAsState().value
-    val selectedSize = studyPageViewModel.selectedItems.collectAsState().value.size
 
-
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.DarkGray),
-    ) {
-        HorizontalPager(count = pagerList.size) { page ->
+    Box {
+        HorizontalPager(
+            count = pagerList.size,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Gray3),
+            verticalAlignment = Alignment.Top,
+        ) { page ->
             if (currentPage != this.currentPage) {
                 studyPageViewModel.updatePage(this.currentPage)
             }
@@ -66,12 +65,12 @@ fun StudyPageScreen(
 
                 item {
                     Text(
-                        text = "$dynastyState - ${pagerList[page]}",
+                        text = "$dynastyState, ${pagerList[page]}",
                         modifier = Modifier
-                            .background(DynastyButtonColor, RoundedCornerShape(50, 50, 0, 0))
+                            .background(BaseColor1, RoundedCornerShape(50, 50, 0, 0))
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        fontSize = 30.sp,
+                        fontSize = 35.sp,
                         color = Color.White
                     )
                 }
@@ -85,29 +84,28 @@ fun StudyPageScreen(
 
         AnimatedVisibility(
             visible = isVisible,
-            modifier = Modifier.align(Alignment.BottomEnd),
+            modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
             enter = slideInHorizontally(initialOffsetX = {
                 +it
             }),
             exit = slideOutHorizontally(targetOffsetX = {
                 +it
-            })
+            }),
         ) {
             IconButton(
                 onClick = { studyPageViewModel.onOpenDialogClicked() },
             ) {
                 Icon(
                     imageVector = Icons.Filled.AddCircle,
-                    tint = DynastyButtonColor,
+                    tint = BaseColor1,
                     contentDescription = null,
-                    modifier = Modifier.size(150.dp)
+                    modifier = Modifier.size(50.dp).background(Color.White)
                 )
             }
         }
 
         if (dialogState) {
-            SaveCheckAlertDialog(selectedSize)
+            SaveCheckAlertDialog()
         }
-
     }
 }
