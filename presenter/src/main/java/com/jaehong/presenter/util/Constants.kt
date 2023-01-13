@@ -9,4 +9,9 @@ object Constants {
     const val ORIGIN_STUDY = "• 학습 판서"
     const val FIRST_REVIEW = "• 초성 판서"
     const val ALL_BLANK_REVIEW = "• 백지 복습"
+    const val SAVE_TEXT = "저장"
+    const val CANCEL_TEXT = "취소"
+    const val SAVE_DIALOG_MESSAGE = "복습 노트에 저장하시겠습니까 ?"
+    const val REVIEW_TEXT = "복습페이지가 비었어요"
+    const val PLUS_KEYWORD_TEXT = "+ 키워드 담으러 가기"
 }
