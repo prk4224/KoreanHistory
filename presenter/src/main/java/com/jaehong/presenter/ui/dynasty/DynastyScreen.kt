@@ -3,21 +3,23 @@ package com.jaehong.presenter.ui.dynasty
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.presenter.theme.DynastyButtonColor
+import com.jaehong.presenter.R
+import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.ui.MainActivity
 import com.jaehong.presenter.util.Constants.MY_KEYWORD
@@ -27,11 +29,16 @@ fun DynastyScreen(
     dynastyViewModel: DynastyViewModel = hiltViewModel()
 ) {
     val isVisible = dynastyViewModel.isVisible.collectAsState().value
+    val markImage = painterResource(id = R.drawable.woo_su_mark)
 
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White),
+    ) {
         Column(
             modifier = Modifier
-                .background(Color.White),
+
+                .align(Alignment.Center),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -40,6 +47,14 @@ fun DynastyScreen(
                 DynastyButton(title = it, isVisible)
             }
         }
+
+        Image(
+            painter = markImage,
+            contentDescription = "Signature Mark",
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 30.dp)
+        )
     }
     dynastyViewModel.startAnimation()
 }
@@ -68,13 +83,12 @@ fun DynastyButton(
                 }
             },
             Modifier
-                .width(250.dp)
+                .width(270.dp)
                 .background(Color.White)
                 .padding(15.dp),
-            colors = ButtonDefaults.buttonColors(DynastyButtonColor)
+            colors = ButtonDefaults.buttonColors(BaseColor1)
         ) {
-            Text(text = title, style = Typography.bodyMedium, fontSize = 25.sp)
+            Text(text = title, style = Typography.bodyMedium, fontSize = 30.sp)
         }
     }
-
 }

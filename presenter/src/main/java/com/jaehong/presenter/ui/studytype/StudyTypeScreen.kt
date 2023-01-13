@@ -1,5 +1,8 @@
 package com.jaehong.presenter.ui.studytype
 
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -8,14 +11,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.presenter.theme.DynastyButtonColor
+import com.jaehong.presenter.R
+import com.jaehong.presenter.theme.BaseColor1
+import com.jaehong.presenter.theme.Gray1
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.ui.MainActivity.Companion.studyList
 
@@ -25,10 +32,12 @@ fun StudyTypeScreen(
 ) {
     val dynastyType = studyTypeViewModel.dynastyState.collectAsState().value
     val isVisible = studyTypeViewModel.isVisible.collectAsState().value
+    val markImage = painterResource(id = R.drawable.woo_su_mark)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray),
+            .background(Gray1),
         contentAlignment = Alignment.Center,
     ) {
 
@@ -47,9 +56,9 @@ fun StudyTypeScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp)
-                .height(400.dp)
-                .background(Color.White, RoundedCornerShape(10)),
+                .padding(horizontal = 50.dp)
+                .height(animationHeight.dp)
+                .background(Color.White, RoundedCornerShape(animationRadius)),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -59,7 +68,7 @@ fun StudyTypeScreen(
                 }) {
                     Text(
                         text = it,
-                        fontSize = 40.sp,
+                        fontSize = 50.sp,
                         modifier = Modifier.padding(15.dp),
                         style = Typography.bodyMedium,
                         color = Color.Black,
@@ -70,13 +79,21 @@ fun StudyTypeScreen(
         Text(
             text = dynastyType,
             textAlign = TextAlign.Center,
-            fontSize = 35.sp,
+            fontSize = 40.sp,
             color = Color.White,
             modifier = Modifier
                 .offset(y = (-(animationHeight/2)).dp)
                 .background(BaseColor1, CircleShape)
                 .width(250.dp)
-
+        )
+        Image(
+            painter = markImage,
+            contentDescription = "Signature Mark",
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 30.dp)
         )
     }
+
+    studyTypeViewModel.startAnimation()
 }
