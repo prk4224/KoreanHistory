@@ -23,8 +23,15 @@ fun MyDescriptionTextView(
     descriptionIndex: Int,
     myStudyViewModel: MyStudyViewModel = hiltViewModel(),
 ) {
+    val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
+    val selectedItem = StudyInfoItem(
+        studyInfo.id + descriptionIndex,
+        studyInfo.detail,
+        studyInfo.king_name,
+        arrayListOf(description)
+    )
     var selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selected) Gray2 else Color.White
+    val backgroundColor = if (selectedItems.contains(selectedItem)) Gray2 else Color.White
 
     Text(
         fontSize = 25.nonScaledSp,
@@ -39,24 +46,8 @@ fun MyDescriptionTextView(
                 onClick = {
                     with(myStudyViewModel) {
                         selected = selected.not()
-
-                        val selectedItem = StudyInfoItem(
-                            studyInfo.id + descriptionIndex,
-                            studyInfo.detail,
-                            studyInfo.king_name,
-                            arrayListOf(description)
-                        )
-
-                        if (selected) {
-                            addSelectedItem(selectedItem)
-                        } else {
-                            removeSelectedItem(selectedItem)
-                        }
-                        if (selectedItems.value.size > 0) {
-                            changeButtonState(true)
-                        } else {
-                            changeButtonState(false)
-                        }
+                        changeSelectedItem(selectedItem,selected)
+                        changeButtonState()
                     }
                 },
             )

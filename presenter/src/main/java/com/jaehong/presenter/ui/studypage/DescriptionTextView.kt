@@ -5,22 +5,24 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.util.Constants
+import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun DescriptionTextView(
@@ -32,8 +34,16 @@ fun DescriptionTextView(
     studyState: String,
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
+    val selectedItems = studyPageViewModel.selectedItems.collectAsState().value
+    val selectedItem = StudyInfoItem(
+        studyInfo.id + descriptionIndex,
+        studyInfo.detail,
+        studyInfo.king_name,
+        arrayListOf(description)
+    )
+
     var selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selected) Gray2 else Color.White
+    val backgroundColor = if (selectedItems.contains(selectedItem)) Gray2 else Color.White
     val alphaText = if(selected || studyState != Constants.ALL_BLANK_REVIEW) 1f else 0f
     val hintText = if (selected) allStudyData[studyIndex].description[descriptionIndex] else description
 
@@ -41,7 +51,6 @@ fun DescriptionTextView(
         fontSize = 25.nonScaledSp,
         lineHeight = 25.nonScaledSp,
         text = hintText,
-        fontSize = 25.sp,
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, Color.LightGray, getTopLineShape())
@@ -51,31 +60,11 @@ fun DescriptionTextView(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        when (studyState) {
-                            Constants.ORIGIN_STUDY -> {
-                                selected = selected.not()
-                                with(studyPageViewModel) {
-                                    val selectedItem = StudyInfoItem(
-                                        studyInfo.id + descriptionIndex,
-                                        studyInfo.detail,
-                                        studyInfo.king_name,
-                                        arrayListOf(description)
-                                    )
-                                    if (selected) {
-                                        addSelectedItem(selectedItem)
-                                    } else {
-                                        removeSelectedItem(selectedItem)
-                                    }
-
-                                    if (selectedItems.value.size > 0) {
-                                        changeButtonState(true)
-                                    } else {
-                                        changeButtonState(false)
-                                    }
-                                }
-                            }
-                            else -> {
-                                selected = selected.not()
+                        selected = selected.not()
+                        if (studyState == ORIGIN_STUDY) {
+                            with(studyPageViewModel) {
+                                changeSelectedItem(selectedItem,selected)
+                                changeButtonState()
                             }
                         }
                     },
