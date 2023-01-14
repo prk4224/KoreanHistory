@@ -38,6 +38,8 @@ fun DescriptionTextView(
     val hintText = if (selected) allStudyData[studyIndex].description[descriptionIndex] else description
 
     Text(
+        fontSize = 25.nonScaledSp,
+        lineHeight = 25.nonScaledSp,
         text = hintText,
         fontSize = 25.sp,
         modifier = Modifier

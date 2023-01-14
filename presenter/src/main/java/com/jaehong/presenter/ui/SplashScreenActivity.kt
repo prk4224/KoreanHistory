@@ -48,8 +48,8 @@ fun SplashScreen() {
         Text(text = "즐거운 역사 공부",
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 100.dp),
-            fontSize = 30.sp,
-            fontFamily = FontFamily.Default
+            fontSize = 30.nonScaledSp,
+            style = Typography.bodyLarge
         )
 
         Image(

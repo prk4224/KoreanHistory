@@ -13,13 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.Constants.PLUS_KEYWORD_TEXT
 import com.jaehong.presenter.util.Constants.REVIEW_TEXT
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun MyStudyBlankView(
@@ -44,7 +44,7 @@ fun MyStudyBlankView(
 
             Text(
                 text = REVIEW_TEXT,
-                fontSize = 26.sp,
+                fontSize = 26.nonScaledSp,
                 style = Typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 color = Color.Black,

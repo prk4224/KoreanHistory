@@ -16,13 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.ui.MainActivity
 import com.jaehong.presenter.util.Constants.MY_KEYWORD
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun DynastyScreen(
@@ -88,7 +88,7 @@ fun DynastyButton(
                 .padding(15.dp),
             colors = ButtonDefaults.buttonColors(BaseColor1)
         ) {
-            Text(text = title, style = Typography.bodyMedium, fontSize = 30.sp)
+            Text(text = title, style = Typography.bodyMedium, fontSize = 35.nonScaledSp)
         }
     }
 }

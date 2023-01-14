@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -31,6 +30,7 @@ import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.theme.MyStudyColor
 import com.jaehong.presenter.util.Constants.MY_KEYWORD
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -74,7 +74,7 @@ fun MyStudyScreen(
                                 modifier = Modifier
                                     .fillMaxWidth(),
                                 textAlign = TextAlign.Center,
-                                fontSize = 35.sp,
+                                fontSize = 35.nonScaledSp,
                                 color = Color.White
                             )
                             Text(
@@ -82,7 +82,7 @@ fun MyStudyScreen(
                                 modifier = Modifier
                                     .fillMaxWidth(),
                                 textAlign = TextAlign.Center,
-                                fontSize = 24.sp,
+                                fontSize = 24.nonScaledSp,
                                 color = Color.White
                             )
                         }
@@ -97,7 +97,7 @@ fun MyStudyScreen(
                         ) {
                             Text(
                                 text = " 부족한 부분 한번 더 복습하기 ★",
-                                fontSize = 24.sp,
+                                fontSize = 24.nonScaledSp,
                                 modifier = Modifier
                                     .background(Color.White, RoundedCornerShape(10))
                                     .fillMaxWidth()

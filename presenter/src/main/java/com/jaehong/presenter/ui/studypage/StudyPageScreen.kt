@@ -20,13 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -70,9 +70,9 @@ fun StudyPageScreen(
                             .background(BaseColor1, RoundedCornerShape(50, 50, 0, 0))
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        fontSize = 35.sp,
                         color = Color.White
                     )
+                            fontSize = 30.nonScaledSp,
                 }
                 itemsIndexed(data) { index, studyInfo ->
                     if(studyInfo.detail == pagerList[page]){

@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun MyDescriptionTextView(
@@ -27,8 +27,9 @@ fun MyDescriptionTextView(
     val backgroundColor = if (selected) Gray2 else Color.White
 
     Text(
+        fontSize = 25.nonScaledSp,
+        lineHeight = 25.nonScaledSp,
         text = description,
-        fontSize = 25.sp,
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, Color.LightGray, RectangleShape)

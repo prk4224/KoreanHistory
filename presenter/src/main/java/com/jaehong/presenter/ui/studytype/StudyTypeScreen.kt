@@ -18,13 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Gray1
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.ui.MainActivity.Companion.studyList
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun StudyTypeScreen(
@@ -68,7 +68,7 @@ fun StudyTypeScreen(
                 }) {
                     Text(
                         text = it,
-                        fontSize = 50.sp,
+                        fontSize = 50.nonScaledSp,
                         modifier = Modifier.padding(15.dp),
                         style = Typography.bodyMedium,
                         color = Color.Black,

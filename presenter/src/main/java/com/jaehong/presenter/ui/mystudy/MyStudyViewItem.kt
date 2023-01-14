@@ -14,9 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun MyStudyViewItem(
@@ -32,7 +32,8 @@ fun MyStudyViewItem(
     ) {
         Text(
             text = studyInfo.king_name,
-            fontSize = 25.sp,
+            fontSize = 25.nonScaledSp,
+            lineHeight = 25.nonScaledSp,
             modifier = Modifier
                 .border(1.dp, Color.LightGray, RectangleShape)
                 .weight(0.5f)

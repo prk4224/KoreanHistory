@@ -21,10 +21,13 @@ fun SaveCheckAlertDialog(
                 studyPageViewModel.onDialogConfirm()
             })
             { Text(text = SAVE_TEXT, style = Typography.bodyLarge) }
+                    fontSize = 22.nonScaledSp
         },
         dismissButton = {
             TextButton(onClick = { studyPageViewModel.onDialogDismiss() })
             { Text(text = CANCEL_TEXT, style = Typography.bodyLarge) }
+                    fontSize = 22.nonScaledSp
+                fontSize = 22.nonScaledSp
         },
         title = { Text(text = SAVE_DIALOG_MESSAGE, style = Typography.bodyLarge) },
     )
