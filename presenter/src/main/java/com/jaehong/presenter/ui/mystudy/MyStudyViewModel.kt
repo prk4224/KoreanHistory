@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetMyStudyInfoUseCase
-import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,31 +61,35 @@ class MyStudyViewModel @Inject constructor(
         }
     }
 
-    fun addSelectedItem(studyInfoItem: StudyInfoItem){
-        _selectedItems.value.add(studyInfoItem)
+    fun changeSelectedItem(studyInfoItem: StudyInfoItem,check: Boolean){
+        if(check) _selectedItems.value.add(studyInfoItem)
+        else _selectedItems.value.remove(studyInfoItem)
     }
 
-    fun removeSelectedItem(studyInfoItem: StudyInfoItem){
-        _selectedItems.value.remove(studyInfoItem)
-    }
-
-    fun changeButtonState(state: Boolean){
-        _isVisible.value = state
+    fun changeButtonState(){
+        _isVisible.value = selectedItems.value.size > 0
     }
 
     fun deleteMyStudyInfo(studyList: List<StudyInfoItem>){
         viewModelScope.launch {
             myStudyInfoUseCase.deleteMyStudyInfo(studyList)
-            onNavigateReFresh()
         }
+        removeMyStudyData(studyList)
     }
 
     fun onBackButtonClicked() {
         koreanHistoryNavigator.tryNavigateBack()
     }
 
-    private fun onNavigateReFresh() {
-        koreanHistoryNavigator.tryNavigateBack()
-        koreanHistoryNavigator.tryNavigateTo(Destination.MyStudy())
+    private fun clearSelectedItems(){
+        _selectedItems.value.clear()
+        _isVisible.value = false
+    }
+
+    private fun removeMyStudyData(studyList: List<StudyInfoItem>){
+        val myList = _myStudyInfoList.value.toMutableList()
+        myList.removeAll(studyList)
+        _myStudyInfoList.value = myList
+        clearSelectedItems()
     }
 }

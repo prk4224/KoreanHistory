@@ -73,10 +73,9 @@ class StudyPageViewModel @Inject constructor(
     }
 
     fun onDialogConfirm() {
-        _showDialog.value = false
         addMyStudyInfo(selectedItems.value)
-
-        onNavigateReFresh()
+        clearSelectedItems()
+        _showDialog.value = false
     }
 
     fun onDialogDismiss() {
@@ -85,6 +84,23 @@ class StudyPageViewModel @Inject constructor(
 
     fun updatePage(page: Int){
         _currentPage.value = page
+        clearSelectedItems()
+    }
+
+    fun changeSelectedItem(studyInfoItem: StudyInfoItem,check: Boolean){
+        if(check) _selectedItems.value.add(studyInfoItem)
+        else _selectedItems.value.remove(studyInfoItem)
+    }
+
+    fun changeButtonState(){
+        _isVisible.value = selectedItems.value.size > 0
+    }
+
+    fun changeAllHintState() {
+        _isAllHintVisible.value = _isAllHintVisible.value.not()
+    }
+
+    private fun clearSelectedItems(){
         _selectedItems.value.clear()
         _isVisible.value = false
     }
@@ -103,26 +119,5 @@ class StudyPageViewModel @Inject constructor(
             }
         }
         return pagerList
-    }
-
-    fun addSelectedItem(studyInfoItem: StudyInfoItem){
-        _selectedItems.value.add(studyInfoItem)
-    }
-
-    fun removeSelectedItem(studyInfoItem: StudyInfoItem){
-        _selectedItems.value.remove(studyInfoItem)
-    }
-
-    fun changeButtonState(state: Boolean){
-        _isVisible.value = state
-    }
-
-    fun changeAllHintState() {
-        _isAllHintVisible.value = _isAllHintVisible.value.not()
-    }
-
-    private fun onNavigateReFresh() {
-        koreanHistoryNavigator.tryNavigateBack()
-        koreanHistoryNavigator.tryNavigateTo(Destination.StudyPage(dynastyState.value,studyState.value))
     }
 }
