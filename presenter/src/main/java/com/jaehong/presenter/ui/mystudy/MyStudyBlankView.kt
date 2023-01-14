@@ -58,7 +58,8 @@ fun MyStudyBlankView(
                 Text(
                     text = PLUS_KEYWORD_TEXT,
                     style = Typography.bodyLarge,
-                    color = Color.Black
+                    color = Color.Black,
+                    fontSize = 22.nonScaledSp
                 )
             }
         }
