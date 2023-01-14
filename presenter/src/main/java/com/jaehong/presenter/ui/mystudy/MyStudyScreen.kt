@@ -99,7 +99,6 @@ fun MyStudyScreen(
                                 text = " 부족한 부분 한번 더 복습하기 ★",
                                 fontSize = 24.nonScaledSp,
                                 modifier = Modifier
-                                    .background(Color.White, RoundedCornerShape(10))
                                     .fillMaxWidth()
                             )
                         }

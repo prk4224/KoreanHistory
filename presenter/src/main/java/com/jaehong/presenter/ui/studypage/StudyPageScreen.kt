@@ -64,15 +64,19 @@ fun StudyPageScreen(
                 }
 
                 item {
-                    Text(
-                        text = "$dynastyState, ${pagerList[page]}",
-                        modifier = Modifier
-                            .background(BaseColor1, RoundedCornerShape(50, 50, 0, 0))
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        color = Color.White
-                    )
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .background(BaseColor1, RoundedCornerShape(50, 50, 0, 0)),
+                         contentAlignment = Alignment.Center
+                    ){
+                        Text(
+                            text = "$dynastyState, ${pagerList[page]}",
+                            textAlign = TextAlign.Center,
                             fontSize = 30.nonScaledSp,
+                            color = Color.White
+                        )
+                    }
                 }
                 itemsIndexed(data) { index, studyInfo ->
                     if(studyInfo.detail == pagerList[page]){
@@ -84,7 +88,9 @@ fun StudyPageScreen(
 
         AnimatedVisibility(
             visible = isVisible,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(10.dp),
             enter = slideInHorizontally(initialOffsetX = {
                 +it
             }),
@@ -99,7 +105,9 @@ fun StudyPageScreen(
                     imageVector = Icons.Filled.AddCircle,
                     tint = BaseColor1,
                     contentDescription = null,
-                    modifier = Modifier.size(50.dp).background(Color.White)
+                    modifier = Modifier
+                        .size(50.dp)
+                        .background(Color.White)
                 )
             }
         }

@@ -76,21 +76,29 @@ fun StudyTypeScreen(
                 }
             }
         }
-        Text(
-            text = dynastyType,
-            textAlign = TextAlign.Center,
-            fontSize = 40.sp,
-            color = Color.White,
-            modifier = Modifier
-                .offset(y = (-(animationHeight/2)).dp)
-                .background(BaseColor1, CircleShape)
-                .width(250.dp)
-        )
+
+        Box( modifier = Modifier
+            .offset(y = (-(animationHeight/2)).dp)
+            .background(BaseColor1, CircleShape)
+            .width(250.dp)
+            .height(40.dp),
+            contentAlignment = Alignment.Center
+
+        ) {
+            Text(
+                text = dynastyType,
+                textAlign = TextAlign.Center,
+                fontSize = 35.nonScaledSp,
+                color = Color.White,
+                )
+        }
+
         Image(
             painter = markImage,
             contentDescription = "Signature Mark",
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .size(100.dp)
                 .padding(bottom = 30.dp)
         )
     }

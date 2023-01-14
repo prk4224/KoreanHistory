@@ -38,7 +38,6 @@ fun MyStudyViewItem(
                 .border(1.dp, Color.LightGray, RectangleShape)
                 .weight(0.5f)
                 .fillMaxHeight()
-                .background(Gray2)
                 .wrapContentSize(Alignment.Center),
             textAlign = TextAlign.Center,
         )

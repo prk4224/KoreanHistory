@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.jaehong.presenter.R
+import com.jaehong.presenter.theme.Typography
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 

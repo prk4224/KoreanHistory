@@ -31,13 +31,13 @@ fun DynastyScreen(
     val isVisible = dynastyViewModel.isVisible.collectAsState().value
     val markImage = painterResource(id = R.drawable.woo_su_mark)
 
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White),
     ) {
         Column(
             modifier = Modifier
-
                 .align(Alignment.Center),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -53,6 +53,7 @@ fun DynastyScreen(
             contentDescription = "Signature Mark",
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .size(100.dp)
                 .padding(bottom = 30.dp)
         )
     }
@@ -83,9 +84,9 @@ fun DynastyButton(
                 }
             },
             Modifier
-                .width(270.dp)
+                .width(300.dp)
                 .background(Color.White)
-                .padding(15.dp),
+                .padding(12.dp),
             colors = ButtonDefaults.buttonColors(BaseColor1)
         ) {
             Text(text = title, style = Typography.bodyMedium, fontSize = 35.nonScaledSp)
