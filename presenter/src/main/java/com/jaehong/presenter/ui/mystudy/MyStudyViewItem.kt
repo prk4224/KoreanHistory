@@ -22,13 +22,10 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 fun MyStudyViewItem(
     studyInfo: StudyInfoItem,
 ) {
-    val selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selected) Gray2 else Color.White
-
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Max)
-            .background(backgroundColor),
+            .background(Color.White),
     ) {
         Text(
             text = studyInfo.king_name,

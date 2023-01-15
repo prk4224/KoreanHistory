@@ -30,6 +30,7 @@ import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.theme.MyStudyColor
 import com.jaehong.presenter.util.Constants.MY_KEYWORD
+import com.jaehong.presenter.util.Constants.MY_STUDY_TEXT
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @OptIn(ExperimentalPagerApi::class)
@@ -39,8 +40,6 @@ fun MyStudyScreen(
 ) {
     val myStudyData = myStudyViewModel.myStudyInfoList.collectAsState().value
     val isVisible = myStudyViewModel.isVisible.collectAsState().value
-    val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
-
     val currentPage = myStudyViewModel.currentPage.collectAsState().value
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
 
@@ -96,7 +95,7 @@ fun MyStudyScreen(
                                 .padding(8.dp)
                         ) {
                             Text(
-                                text = " 부족한 부분 한번 더 복습하기 ★",
+                                text = MY_STUDY_TEXT,
                                 fontSize = 24.nonScaledSp,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -123,9 +122,7 @@ fun MyStudyScreen(
                 })
             ) {
                 IconButton(
-                    onClick = {
-                        myStudyViewModel.deleteMyStudyInfo(selectedItems)
-                    },
+                    onClick = { myStudyViewModel.deleteMyStudyInfo() },
                 ) {
                     Icon(
                         imageVector = Icons.Filled.RemoveCircle,

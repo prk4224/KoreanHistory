@@ -1,11 +1,11 @@
 package com.jaehong.presenter.ui.studypage
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -14,13 +14,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
-import com.jaehong.presenter.util.Constants
+import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
@@ -44,7 +43,7 @@ fun DescriptionTextView(
 
     var selected by remember { mutableStateOf(false) }
     val backgroundColor = if (selectedItems.contains(selectedItem)) Gray2 else Color.White
-    val alphaText = if(selected || studyState != Constants.ALL_BLANK_REVIEW) 1f else 0f
+    val alphaText = if(selected || studyState != ALL_BLANK_REVIEW) 1f else 0f
     val hintText = if (selected) allStudyData[studyIndex].description[descriptionIndex] else description
 
     Text(
@@ -67,6 +66,7 @@ fun DescriptionTextView(
                                 changeButtonState()
                             }
                         }
+                        Log.d("onClick","\n $selected / ${selectedItems.contains(selectedItem)} \n Color : $backgroundColor")
                     },
                     onLongPress = {
                         studyPageViewModel.changeAllHintState()

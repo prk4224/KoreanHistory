@@ -17,7 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StudyPageViewModel @Inject constructor(
-    private val koreanHistoryNavigator: KoreanHistoryNavigator,
     savedStateHandle: SavedStateHandle,
     private val studyInfoUseCase: GetStudyInfoUseCase
 ) : ViewModel() {

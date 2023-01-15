@@ -1,15 +1,17 @@
 package com.jaehong.presenter.ui.mystudy
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
@@ -30,8 +32,9 @@ fun MyDescriptionTextView(
         studyInfo.king_name,
         arrayListOf(description)
     )
+
     var selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selectedItems.contains(selectedItem)) Gray2 else Color.White
+    val backgroundColor = if(selectedItems.contains(selectedItem)) Gray2 else Color.White
 
     Text(
         fontSize = 25.nonScaledSp,
@@ -39,17 +42,27 @@ fun MyDescriptionTextView(
         text = description,
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, Color.LightGray, RectangleShape)
+            .border(1.dp, Color.LightGray, getTopLineShape())
             .padding(5.dp)
             .background(backgroundColor)
             .clickable(
                 onClick = {
+                    selected = selected.not()
                     with(myStudyViewModel) {
-                        selected = selected.not()
                         changeSelectedItem(selectedItem,selected)
                         changeButtonState()
                     }
+                    Log.d("onClick","\n $selected / ${selectedItems.contains(selectedItem)} \n Color : $backgroundColor")
                 },
             )
     )
+}
+
+private fun getTopLineShape() : Shape {
+    return GenericShape { size, _ ->
+        moveTo(0f, 0f )
+        lineTo(size.width, 0f )
+        lineTo(size.width, 0f - 2f)
+        lineTo(0f, 0f - 2f )
+    }
 }

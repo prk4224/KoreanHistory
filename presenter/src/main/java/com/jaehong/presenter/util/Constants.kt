@@ -14,4 +14,5 @@ object Constants {
     const val SAVE_DIALOG_MESSAGE = "복습 노트에 저장하시겠습니까 ?"
     const val REVIEW_TEXT = "복습페이지가 비었어요"
     const val PLUS_KEYWORD_TEXT = "+ 키워드 담으러 가기"
+    const val MY_STUDY_TEXT = " 부족한 부분 한번 더 복습하기 ★"
 }

@@ -1,10 +1,12 @@
 package com.jaehong.presenter.ui.mystudy
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetMyStudyInfoUseCase
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
+import com.jaehong.presenter.theme.Gray2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,25 +42,7 @@ class MyStudyViewModel @Inject constructor(
 
     fun updatePage(page: Int){
         _currentPage.value = page
-        _selectedItems.value.clear()
-        _isVisible.value = false
-    }
-
-    private fun getPagerList(): List<String> {
-        val pagerList = mutableListOf<String>()
-        _myStudyInfoList.value.forEach {
-            if(pagerList.contains(it.detail).not()){
-                pagerList.add(it.detail)
-            }
-        }
-        return pagerList
-    }
-
-    private fun getMyStudyData() {
-        viewModelScope.launch {
-            _myStudyInfoList.value = myStudyInfoUseCase()
-            _pagerList.value = getPagerList()
-        }
+        clearSelectedItems()
     }
 
     fun changeSelectedItem(studyInfoItem: StudyInfoItem,check: Boolean){
@@ -66,15 +50,16 @@ class MyStudyViewModel @Inject constructor(
         else _selectedItems.value.remove(studyInfoItem)
     }
 
-    fun changeButtonState(){
+    fun changeButtonState() {
         _isVisible.value = selectedItems.value.size > 0
     }
 
-    fun deleteMyStudyInfo(studyList: List<StudyInfoItem>){
+    fun deleteMyStudyInfo() {
         viewModelScope.launch {
-            myStudyInfoUseCase.deleteMyStudyInfo(studyList)
+            myStudyInfoUseCase.deleteMyStudyInfo(selectedItems.value)
+            getMyStudyData()
+            clearSelectedItems()
         }
-        removeMyStudyData(studyList)
     }
 
     fun onBackButtonClicked() {
@@ -86,10 +71,21 @@ class MyStudyViewModel @Inject constructor(
         _isVisible.value = false
     }
 
-    private fun removeMyStudyData(studyList: List<StudyInfoItem>){
-        val myList = _myStudyInfoList.value.toMutableList()
-        myList.removeAll(studyList)
-        _myStudyInfoList.value = myList
-        clearSelectedItems()
+    private fun getMyStudyData() {
+        viewModelScope.launch {
+            val myStudyList = myStudyInfoUseCase()
+            _myStudyInfoList.value = myStudyList
+            _pagerList.value = getPagerList()
+        }
+    }
+
+    private fun getPagerList(): List<String> {
+        val pagerList = mutableListOf<String>()
+        myStudyInfoList.value.forEach {
+            if (pagerList.contains(it.detail).not()) {
+                pagerList.add(it.detail)
+            }
+        }
+        return pagerList
     }
 }
