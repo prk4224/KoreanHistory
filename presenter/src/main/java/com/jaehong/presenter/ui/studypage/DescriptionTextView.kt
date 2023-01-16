@@ -1,6 +1,5 @@
-package com.jaehong.presenter.ui.studypage
+package com.jaehong.presenter.ui.studypage.all_view
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -19,7 +18,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
+import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
+import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
@@ -33,16 +34,14 @@ fun DescriptionTextView(
     studyState: String,
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
-    val selectedItems = studyPageViewModel.selectedItems.collectAsState().value
     val selectedItem = StudyInfoItem(
-        studyInfo.id + descriptionIndex,
-        studyInfo.detail,
-        studyInfo.king_name,
-        arrayListOf(description)
+            studyInfo.id + descriptionIndex,
+            studyInfo.detail,
+            studyInfo.king_name,
+            arrayListOf(description)
     )
-
     var selected by remember { mutableStateOf(false) }
-    val backgroundColor = if (selectedItems.contains(selectedItem)) Gray2 else Color.White
+    val backgroundColor = if (selected) Gray2 else Color.White
     val alphaText = if(selected || studyState != ALL_BLANK_REVIEW) 1f else 0f
     val hintText = if (selected) allStudyData[studyIndex].description[descriptionIndex] else description
 
@@ -60,20 +59,18 @@ fun DescriptionTextView(
                 detectTapGestures(
                     onTap = {
                         selected = selected.not()
+                        studyPageViewModel.changeSelectedItem(selectedItem, selected)
                         if (studyState == ORIGIN_STUDY) {
-                            with(studyPageViewModel) {
-                                changeSelectedItem(selectedItem,selected)
-                                changeButtonState()
-                            }
+                            studyPageViewModel.changeButtonState()
                         }
-                        Log.d("onClick","\n $selected / ${selectedItems.contains(selectedItem)} \n Color : $backgroundColor")
                     },
                     onLongPress = {
-                        studyPageViewModel.changeAllHintState()
+                        if (studyState == FIRST_REVIEW) {
+                            studyPageViewModel.changeAllHintState()
+                        }
                     }
                 )
             },
-
         )
 }
 

@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.presenter.ui.studypage.all_view.DescriptionTextView
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable

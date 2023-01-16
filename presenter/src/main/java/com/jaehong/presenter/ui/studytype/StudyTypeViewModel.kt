@@ -40,6 +40,6 @@ class StudyTypeViewModel @Inject constructor(
     }
 
     fun onNavigateToStudyPageClicked(dynastyType: String, studyType: String) {
-        koreanHistoryNavigator.tryNavigateTo(Destination.StudyPage(dynastyType,studyType))
+        koreanHistoryNavigator.tryNavigateTo(Destination.StudyPage(dynastyType,studyType,"0"))
     }
 }

@@ -26,13 +26,15 @@ sealed class Destination(protected val route: String, vararg params: String) {
             DYNASTY_TYPE_KEY to dynastyType
         )
     }
-    object StudyPage : Destination(STUDY_PAGE, "dynastyType", "studyType") {
+    object StudyPage : Destination(STUDY_PAGE, "dynastyType", "studyType","startPage") {
         const val DYNASTY_TYPE_KEY = "dynastyType"
         const val STUDY_TYPE_KEY = "studyType"
+        const val START_PAGE_KEY = "startPage"
 
-        operator fun invoke(dynastyType: String, studyType: String): String = route.appendParams(
+        operator fun invoke(dynastyType: String, studyType: String, startPage: String): String = route.appendParams(
             DYNASTY_TYPE_KEY to dynastyType,
-            STUDY_TYPE_KEY to studyType
+            STUDY_TYPE_KEY to studyType,
+            START_PAGE_KEY to startPage
         )
     }
 

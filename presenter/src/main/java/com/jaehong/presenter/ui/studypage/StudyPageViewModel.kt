@@ -17,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StudyPageViewModel @Inject constructor(
+    private val koreanHistoryNavigator: KoreanHistoryNavigator,
     savedStateHandle: SavedStateHandle,
     private val studyInfoUseCase: GetStudyInfoUseCase
 ) : ViewModel() {
@@ -35,7 +36,7 @@ class StudyPageViewModel @Inject constructor(
 
     private val initList: MutableList<StudyInfoItem> = mutableListOf()
     private val _selectedItems = MutableStateFlow(initList)
-    val selectedItems = _selectedItems.asStateFlow()
+    private val selectedItems = _selectedItems.asStateFlow()
 
     private val _isVisible = MutableStateFlow(false)
     val isVisible = _isVisible.asStateFlow()
@@ -55,9 +56,12 @@ class StudyPageViewModel @Inject constructor(
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.StudyPage.DYNASTY_TYPE_KEY)
         val studyType = savedStateHandle.get<String>(Destination.StudyPage.STUDY_TYPE_KEY)
+        val startPage = savedStateHandle.get<String>(Destination.StudyPage.START_PAGE_KEY)
 
         _dynastyState.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
         _studyState.value = studyType ?: throw IllegalArgumentException("Study Type Error")
+        _currentPage.value = startPage?.toInt() ?: throw IllegalArgumentException("Start Page Error")
+
         viewModelScope.launch {
             _allStudyInfoList.value = studyInfoUseCase(dynastyType)
             if(studyType == FIRST_REVIEW) {
@@ -73,7 +77,7 @@ class StudyPageViewModel @Inject constructor(
 
     fun onDialogConfirm() {
         addMyStudyInfo(selectedItems.value)
-        clearSelectedItems()
+        onNavigateRefreshClicked()
         _showDialog.value = false
     }
 
@@ -86,8 +90,8 @@ class StudyPageViewModel @Inject constructor(
         clearSelectedItems()
     }
 
-    fun changeSelectedItem(studyInfoItem: StudyInfoItem,check: Boolean){
-        if(check) _selectedItems.value.add(studyInfoItem)
+    fun changeSelectedItem(studyInfoItem: StudyInfoItem, check: Boolean){
+        if (check) _selectedItems.value.add(studyInfoItem)
         else _selectedItems.value.remove(studyInfoItem)
     }
 
@@ -100,8 +104,8 @@ class StudyPageViewModel @Inject constructor(
     }
 
     private fun clearSelectedItems(){
-        _selectedItems.value.clear()
         _isVisible.value = false
+        _selectedItems.value.clear()
     }
 
     private fun addMyStudyInfo(studyInfo: List<StudyInfoItem>){
@@ -118,5 +122,12 @@ class StudyPageViewModel @Inject constructor(
             }
         }
         return pagerList
+    }
+
+    private fun onNavigateRefreshClicked() {
+        koreanHistoryNavigator.tryNavigateBack()
+        koreanHistoryNavigator.tryNavigateTo(
+            Destination.StudyPage(dynastyState.value,studyState.value,"${currentPage.value}")
+        )
     }
 }

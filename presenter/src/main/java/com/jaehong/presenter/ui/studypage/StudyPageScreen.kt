@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
@@ -50,8 +51,9 @@ fun StudyPageScreen(
                 .fillMaxSize()
                 .background(Gray3),
             verticalAlignment = Alignment.Top,
+            state = rememberPagerState(initialPage = currentPage)
         ) { page ->
-            if (currentPage != this.currentPage) {
+            if(currentPage != this.currentPage){
                 studyPageViewModel.updatePage(this.currentPage)
             }
             LazyColumn(
