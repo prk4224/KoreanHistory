@@ -1,6 +1,5 @@
 package com.jaehong.presenter.ui.mystudy
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -8,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -25,16 +26,15 @@ fun MyDescriptionTextView(
     descriptionIndex: Int,
     myStudyViewModel: MyStudyViewModel = hiltViewModel(),
 ) {
-    val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
     val selectedItem = StudyInfoItem(
         studyInfo.id + descriptionIndex,
         studyInfo.detail,
         studyInfo.king_name,
         arrayListOf(description)
     )
-
-    var selected by remember { mutableStateOf(false) }
-    val backgroundColor = if(selectedItems.contains(selectedItem)) Gray2 else Color.White
+    val selectedItems  = remember { mutableStateListOf<StudyInfoItem>() }
+    val selected = selectedItems.contains(selectedItem)
+    val backgroundColor = if(selected) Gray2 else Color.White
 
     Text(
         fontSize = 25.nonScaledSp,
@@ -47,12 +47,12 @@ fun MyDescriptionTextView(
             .background(backgroundColor)
             .clickable(
                 onClick = {
-                    selected = selected.not()
                     with(myStudyViewModel) {
-                        changeSelectedItem(selectedItem,selected)
+                        changeSelectedItem(selectedItem, selected)
                         changeButtonState()
+                        if (selected) selectedItems.remove(selectedItem)
+                        else selectedItems.add(selectedItem)
                     }
-                    Log.d("onClick","\n $selected / ${selectedItems.contains(selectedItem)} \n Color : $backgroundColor")
                 },
             )
     )

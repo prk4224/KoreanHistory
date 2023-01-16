@@ -42,22 +42,20 @@ fun MyStudyScreen(
     val isVisible = myStudyViewModel.isVisible.collectAsState().value
     val currentPage = myStudyViewModel.currentPage.collectAsState().value
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
+    val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
 
-    Box {
-        if(pagerList.isEmpty()) {
-            MyStudyBlankView()
-        } else {
+    if(pagerList.isNotEmpty()){
+        Box {
             HorizontalPager(
                 count = pagerList.size,
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Gray3),
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.Top,
             ) { page ->
-                if (currentPage != this.currentPage) {
+                if(currentPage != this.currentPage){
                     myStudyViewModel.updatePage(this.currentPage)
                 }
-
                 LazyColumn(
                     modifier = Modifier.padding(vertical = 50.dp, horizontal = 20.dp),
                 ) {
@@ -104,7 +102,7 @@ fun MyStudyScreen(
                     }
 
                     items(myStudyData) { studyInfo ->
-                        if(pagerList[page] == studyInfo.detail) {
+                        if (pagerList[page] == studyInfo.detail) {
                             MyStudyViewItem(studyInfo)
                         }
                     }
@@ -113,7 +111,9 @@ fun MyStudyScreen(
 
             AnimatedVisibility(
                 visible = isVisible,
-                modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(10.dp),
                 enter = slideInHorizontally(initialOffsetX = {
                     +it
                 }),
@@ -122,7 +122,7 @@ fun MyStudyScreen(
                 })
             ) {
                 IconButton(
-                    onClick = { myStudyViewModel.deleteMyStudyInfo() },
+                    onClick = { myStudyViewModel.deleteMyStudyInfo(selectedItems) },
                 ) {
                     Icon(
                         imageVector = Icons.Filled.RemoveCircle,
@@ -134,6 +134,7 @@ fun MyStudyScreen(
                     )
                 }
             }
+
         }
-    }
+    } else MyStudyBlankView()
 }

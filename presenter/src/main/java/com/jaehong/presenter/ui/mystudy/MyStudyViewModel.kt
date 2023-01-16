@@ -1,12 +1,12 @@
 package com.jaehong.presenter.ui.mystudy
 
-import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetMyStudyInfoUseCase
+import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
-import com.jaehong.presenter.theme.Gray2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,27 +37,27 @@ class MyStudyViewModel @Inject constructor(
     val currentPage = _currentPage.asStateFlow()
 
     init {
-        getMyStudyData()
+        gatMyStudyData()
     }
 
-    fun updatePage(page: Int){
+    fun updatePage(page: Int) {
         _currentPage.value = page
         clearSelectedItems()
     }
 
-    fun changeSelectedItem(studyInfoItem: StudyInfoItem,check: Boolean){
-        if(check) _selectedItems.value.add(studyInfoItem)
-        else _selectedItems.value.remove(studyInfoItem)
+    fun changeSelectedItem(studyInfoItem: StudyInfoItem, check: Boolean) {
+        if (check) _selectedItems.value.remove(studyInfoItem)
+        else _selectedItems.value.add(studyInfoItem)
     }
 
     fun changeButtonState() {
         _isVisible.value = selectedItems.value.size > 0
     }
 
-    fun deleteMyStudyInfo() {
+    fun deleteMyStudyInfo(selected: MutableList<StudyInfoItem>) {
         viewModelScope.launch {
-            myStudyInfoUseCase.deleteMyStudyInfo(selectedItems.value)
-            getMyStudyData()
+            myStudyInfoUseCase.deleteMyStudyInfo(selected)
+            gatMyStudyData()
             clearSelectedItems()
         }
     }
@@ -71,17 +71,18 @@ class MyStudyViewModel @Inject constructor(
         _isVisible.value = false
     }
 
-    private fun getMyStudyData() {
+    private fun gatMyStudyData(){
         viewModelScope.launch {
             val myStudyList = myStudyInfoUseCase()
             _myStudyInfoList.value = myStudyList
-            _pagerList.value = getPagerList()
+            _pagerList.value = getPagerList(myStudyList)
         }
     }
 
-    private fun getPagerList(): List<String> {
+
+    private fun getPagerList(myStudyList: List<StudyInfoItem>): List<String> {
         val pagerList = mutableListOf<String>()
-        myStudyInfoList.value.forEach {
+        myStudyList.forEach {
             if (pagerList.contains(it.detail).not()) {
                 pagerList.add(it.detail)
             }
