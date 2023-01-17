@@ -1,88 +1,82 @@
 package com.jaehong.presenter.ui.dynasty
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.jaehong.presenter.theme.BaseColor1
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaehong.presenter.R
+import com.jaehong.presenter.theme.Gray1
+import com.jaehong.presenter.theme.Gray3
+import com.jaehong.presenter.theme.Typography
+import com.jaehong.presenter.util.Constants.GUIDE_CHECKED_TEXT
+import com.jaehong.presenter.util.Constants.GUIDE_OUT_TEXT
+import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
-fun GuideDialogContent(){
+fun GuideDialogContent(
+    dynastyViewModel: DynastyViewModel = hiltViewModel()
+){
+    val guideImage = painterResource(id = R.drawable.guide_image)
+    var checked by remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier = Modifier
-            .padding(vertical = 100.dp, horizontal = 50.dp)
+            .width(400.dp)
+            .height(630.dp)
+            .background(Gray1, RoundedCornerShape(10, 10, 0, 0))
     ) {
-        Box(modifier = Modifier
-            .background(BaseColor1, RoundedCornerShape(50, 50, 0, 0))
-            .fillMaxWidth()
-            .weight(1f),
-            contentAlignment = Alignment.Center
-        ){
-            Text(text = "앱 사용 설명서")
-        }
-        Box(modifier = Modifier
-            .background(Color.LightGray)
-            .fillMaxWidth()
-            .weight(10f),
-            contentAlignment = Alignment.Center
-        ){
-            Text("사진")
-        }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .weight(1f),
-            contentAlignment = Alignment.CenterStart
+        Image(
+            painter =guideImage,
+            contentDescription = null,
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .align(Alignment.TopCenter)
+        )
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(bottom = 60.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(checked = false, onCheckedChange = {})
-                Text(text = "다시 보시 않기")
-            }
+            Checkbox(
+                checked = checked,
+                onCheckedChange = { checked = checked.not() },
+                modifier = Modifier
+                    .size(20.dp)
+                    .padding(start = 20.dp),
+                colors = CheckboxDefaults.colors(
+                    uncheckedColor = Color.Black,
+                )
+            )
+            Text(
+                text = GUIDE_CHECKED_TEXT,
+                fontSize = 20.nonScaledSp,
+                modifier = Modifier.padding(start = 20.dp)
+            )
         }
-        
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1.5f)
+        Button(
+            onClick = { dynastyViewModel.onDialogDismiss(checked) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .background(Gray3, RectangleShape)
+                .align(Alignment.BottomCenter),
+            colors = ButtonDefaults.buttonColors(Gray3)
         ) {
-            Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .background(Color.White)
-                    .weight(1f),
-                colors = ButtonDefaults.buttonColors(BaseColor1),
-                shape = RectangleShape
-            ) {
-                Text(text = "확인")
-            }
-            Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f),
-                colors = ButtonDefaults.buttonColors(BaseColor1),
-                shape = RectangleShape
-            ) {
-                Text(text = "닫기")
-            }
+            Text(text = GUIDE_OUT_TEXT,
+                style = Typography.bodyLarge,
+                fontSize = 26.nonScaledSp,
+                color = Color.White
+            )
         }
-    }
-}
-
-@Composable
-@Preview
-fun DefaultPreView(){
-    Surface(modifier = Modifier.fillMaxSize()) {
-        GuideDialogContent()
     }
 }
