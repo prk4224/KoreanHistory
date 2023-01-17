@@ -9,6 +9,7 @@ import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
+import com.jaehong.presenter.util.Constants.USER_RULE_ALL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,6 +54,12 @@ class StudyPageViewModel @Inject constructor(
     private val _currentPage = MutableStateFlow(0)
     val currentPage = _currentPage.asStateFlow()
 
+    private val _guideLabel = MutableStateFlow(0)
+    val guideLabel = _guideLabel.asStateFlow()
+
+    private val _checkedUserRuleALL = MutableStateFlow(false)
+    val checkedUserRuleALL = _checkedUserRuleALL.asStateFlow()
+
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.StudyPage.DYNASTY_TYPE_KEY)
         val studyType = savedStateHandle.get<String>(Destination.StudyPage.STUDY_TYPE_KEY)
@@ -68,7 +75,19 @@ class StudyPageViewModel @Inject constructor(
                 _studyInfoList.value = studyInfoUseCase.getStudyIngo(dynastyType,studyType)
             }
             _pagerList.value = getPagerList()
+            _checkedUserRuleALL.value = studyInfoUseCase.getGuideInfo(USER_RULE_ALL)
+
         }
+    }
+
+    fun setUserRule(key: String) {
+        viewModelScope.launch {
+            studyInfoUseCase.setGuideInfo(key)
+        }
+    }
+
+    fun updateLabel(label: Int) {
+        _guideLabel.value = label
     }
 
     fun onOpenDialogClicked() {

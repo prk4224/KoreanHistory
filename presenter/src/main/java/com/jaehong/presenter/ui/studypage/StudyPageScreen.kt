@@ -26,6 +26,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Gray3
+import com.jaehong.presenter.ui.studypage.guide.UserRuleGuide
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
@@ -43,6 +44,12 @@ fun StudyPageScreen(
     val allHintState = studyPageViewModel.isAllHintVisible.collectAsState().value
     val currentPage = studyPageViewModel.currentPage.collectAsState().value
     val pagerList = studyPageViewModel.pagerList.collectAsState().value
+    val guideLabel = studyPageViewModel.guideLabel.collectAsState().value
+    val userRuleInfo = studyPageViewModel.checkedUserRuleALL.collectAsState().value
+
+    if(guideLabel < 3 && userRuleInfo){
+        UserRuleGuide(label = guideLabel)
+    }
 
     Box {
         HorizontalPager(
