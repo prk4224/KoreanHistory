@@ -13,4 +13,9 @@ interface LocalDataSource {
     suspend fun insertMyStudyInfo(studyList: List<MyStudyEntity>)
 
     suspend fun deleteMyStudyInfo(studyList: List<MyStudyEntity>)
+
+    suspend fun getGuideInfo(key: String): Boolean
+
+    suspend fun setGuideInfo(key: String)
+
 }

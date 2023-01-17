@@ -2,10 +2,12 @@ package com.jaehong.data.local.datasource
 
 import android.content.Context
 import com.google.gson.Gson
+import com.jaehong.data.local.GuidePreference
 import com.jaehong.data.local.databasse.KoreanHistoryDataBase
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
 import com.jaehong.data.local.model.StudyEntity
 import com.jaehong.data.util.Constants.GO_LYEO
+import com.jaehong.data.util.Constants.GUIDE_TOKEN
 import com.jaehong.data.util.Constants.JO_SEON
 import com.jaehong.data.util.Constants.SAM_GUG
 import com.jaehong.data.util.Constants.SIN_LA
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val koreanHistoryDataBase: KoreanHistoryDataBase
+    private val koreanHistoryDataBase: KoreanHistoryDataBase,
+    private val preference: GuidePreference
 ): LocalDataSource {
 
     override suspend fun getAllStudyInfo(dynastyType: String): StudyEntity {
@@ -53,5 +56,14 @@ class LocalDataSourceImpl @Inject constructor(
     override suspend fun deleteMyStudyInfo(studyList: List<MyStudyEntity>) {
         koreanHistoryDataBase.myStudyDao().deleteMyStudyWithListTransaction(studyList)
     }
+
+    override suspend fun getGuideInfo(key: String): Boolean {
+        return preference.getString(key)
+    }
+
+    override suspend fun setGuideInfo(key: String) {
+        preference.setString(key, GUIDE_TOKEN)
+    }
+
 
 }

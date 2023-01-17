@@ -13,4 +13,8 @@ interface LocalRepository {
     suspend fun insertMyStudyInfo(studyList: List<StudyInfoItem>)
 
     suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>)
+
+    suspend fun getGuideInfo(key: String): Boolean
+
+    suspend fun setGuideInfo(key: String)
 }

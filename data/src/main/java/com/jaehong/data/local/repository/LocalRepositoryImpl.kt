@@ -31,4 +31,12 @@ class LocalRepositoryImpl @Inject constructor(
     override suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>) {
         dataSource.deleteMyStudyInfo(studyList.domainToDataBase())
     }
+
+    override suspend fun getGuideInfo(key: String): Boolean {
+        return dataSource.getGuideInfo(key)
+    }
+
+    override suspend fun setGuideInfo(key: String) {
+        dataSource.setGuideInfo(key)
+    }
 }

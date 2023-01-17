@@ -13,10 +13,18 @@ class GetStudyInfoUseCase @Inject constructor(
     }
 
     suspend fun getStudyIngo(dynastyType: String, studyType: String): StudyInfo {
-        return localRepository.getStudyInfo(dynastyType,studyType)
+        return localRepository.getStudyInfo(dynastyType, studyType)
     }
 
-    suspend fun insertMyStudyInfo(studyInfo: List<StudyInfoItem>){
+    suspend fun insertMyStudyInfo(studyInfo: List<StudyInfoItem>) {
         localRepository.insertMyStudyInfo(studyInfo)
+    }
+
+    suspend fun getGuideInfo(key: String): Boolean {
+        return localRepository.getGuideInfo(key)
+    }
+
+    suspend fun setGuideInfo(key: String) {
+        localRepository.setGuideInfo(key)
     }
 }
