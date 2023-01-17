@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BaseColor1
@@ -29,8 +30,14 @@ fun DynastyScreen(
     dynastyViewModel: DynastyViewModel = hiltViewModel()
 ) {
     val isVisible = dynastyViewModel.isVisible.collectAsState().value
+    val dialogState = dynastyViewModel.showDialog.collectAsState().value
     val markImage = painterResource(id = R.drawable.woo_su_mark)
 
+    if(dialogState){
+        Dialog(onDismissRequest = {  }) {
+            GuideDialogContent()
+        }
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
