@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.studypage.all_view
+package com.jaehong.presenter.ui.studypage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +18,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
