@@ -2,7 +2,10 @@ package com.jaehong.presenter.util
 
 object Constants {
     const val GUIDE_KEY = "guide key"
-    const val USER_RULE_ALL = "user rule all"
+    const val USER_RULE_ORIGIN = "user rule origin"
+    const val USER_RULE_FIRST = "user rule first"
+    const val USER_RULE_BLANK = "user rule black"
+    const val USER_RULE_MY_STUDY = "user rule my study"
     const val SAM_GUG = "삼국시대"
     const val SIN_LA = "통일신라 & 후삼국"
     const val GO_LYEO = "고려시대"
