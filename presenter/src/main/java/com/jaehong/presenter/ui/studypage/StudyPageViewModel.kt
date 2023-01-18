@@ -8,8 +8,12 @@ import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
+import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
-import com.jaehong.presenter.util.Constants.USER_RULE_ALL
+import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
+import com.jaehong.presenter.util.Constants.USER_RULE_BLANK
+import com.jaehong.presenter.util.Constants.USER_RULE_FIRST
+import com.jaehong.presenter.util.Constants.USER_RULE_ORIGIN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,11 +58,25 @@ class StudyPageViewModel @Inject constructor(
     private val _currentPage = MutableStateFlow(0)
     val currentPage = _currentPage.asStateFlow()
 
-    private val _guideLabel = MutableStateFlow(0)
-    val guideLabel = _guideLabel.asStateFlow()
+    private val _originGuideLabel = MutableStateFlow(0)
+    val originGuideLabel = _originGuideLabel.asStateFlow()
 
-    private val _checkedUserRuleALL = MutableStateFlow(false)
-    val checkedUserRuleALL = _checkedUserRuleALL.asStateFlow()
+    private val _checkedUserRuleOrigin = MutableStateFlow(false)
+    val checkedUserRuleOrigin = _checkedUserRuleOrigin.asStateFlow()
+
+    private val _firstGuideLabel = MutableStateFlow(0)
+    val firstGuideLabel = _firstGuideLabel.asStateFlow()
+
+    private val _checkedUserRuleFirst = MutableStateFlow(false)
+    val checkedUserRuleFirst = _checkedUserRuleFirst.asStateFlow()
+
+    private val _blankGuideLabel = MutableStateFlow(true)
+    val blankGuideLabel = _blankGuideLabel.asStateFlow()
+
+    private val _checkedUserRuleBlank = MutableStateFlow(false)
+    val checkedUserRuleBlank = _checkedUserRuleBlank.asStateFlow()
+
+
 
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.StudyPage.DYNASTY_TYPE_KEY)
@@ -75,7 +93,9 @@ class StudyPageViewModel @Inject constructor(
                 _studyInfoList.value = studyInfoUseCase.getStudyIngo(dynastyType,studyType)
             }
             _pagerList.value = getPagerList()
-            _checkedUserRuleALL.value = studyInfoUseCase.getGuideInfo(USER_RULE_ALL)
+            _checkedUserRuleOrigin.value = studyInfoUseCase.getGuideInfo(USER_RULE_ORIGIN)
+            _checkedUserRuleFirst.value = studyInfoUseCase.getGuideInfo(USER_RULE_FIRST)
+            _checkedUserRuleBlank.value = studyInfoUseCase.getGuideInfo(USER_RULE_BLANK)
 
         }
     }
@@ -86,8 +106,12 @@ class StudyPageViewModel @Inject constructor(
         }
     }
 
-    fun updateLabel(label: Int) {
-        _guideLabel.value = label
+    fun updateLabel(label: Int, studyType: String) {
+        when(studyType) {
+            ORIGIN_STUDY -> _originGuideLabel.value = label
+            FIRST_REVIEW -> _firstGuideLabel.value = label
+            ALL_BLANK_REVIEW -> _blankGuideLabel.value = false
+        }
     }
 
     fun onOpenDialogClicked() {

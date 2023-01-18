@@ -1,17 +1,10 @@
 package com.jaehong.presenter.ui.studypage
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,8 +19,13 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Gray3
-import com.jaehong.presenter.ui.studypage.guide.UserRuleGuide
+import com.jaehong.presenter.ui.studypage.guide.blank.SelectRuleBlankDialog
+import com.jaehong.presenter.ui.studypage.guide.first.UserRuleFirstGuide
+import com.jaehong.presenter.ui.studypage.guide.origin.UserRuleOriginGuide
+import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
+import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
+import com.jaehong.presenter.util.DataChangeButton
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @OptIn(ExperimentalPagerApi::class)
@@ -44,12 +42,13 @@ fun StudyPageScreen(
     val allHintState = studyPageViewModel.isAllHintVisible.collectAsState().value
     val currentPage = studyPageViewModel.currentPage.collectAsState().value
     val pagerList = studyPageViewModel.pagerList.collectAsState().value
-    val guideLabel = studyPageViewModel.guideLabel.collectAsState().value
-    val userRuleInfo = studyPageViewModel.checkedUserRuleALL.collectAsState().value
+    val originGuideLabel = studyPageViewModel.originGuideLabel.collectAsState().value
+    val firstGuideLabel = studyPageViewModel.firstGuideLabel.collectAsState().value
+    val blankGuideLabel = studyPageViewModel.blankGuideLabel.collectAsState().value
+    val checkedUserRuleOrigin = studyPageViewModel.checkedUserRuleOrigin.collectAsState().value
+    val checkedUserRuleFirst = studyPageViewModel.checkedUserRuleFirst.collectAsState().value
+    val checkedUserRuleBlank = studyPageViewModel.checkedUserRuleBlank.collectAsState().value
 
-    if(guideLabel < 3 && userRuleInfo){
-        UserRuleGuide(label = guideLabel)
-    }
 
     Box {
         HorizontalPager(
@@ -71,21 +70,8 @@ fun StudyPageScreen(
                 } else {
                     allStudyData
                 }
-
                 item {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .background(BaseColor1, RoundedCornerShape(50, 50, 0, 0)),
-                         contentAlignment = Alignment.Center
-                    ){
-                        Text(
-                            text = "$dynastyState, ${pagerList[page]}",
-                            textAlign = TextAlign.Center,
-                            fontSize = 30.nonScaledSp,
-                            color = Color.White
-                        )
-                    }
+                    StudyPageHeaderItem(dynastyState,pagerList[page])
                 }
                 itemsIndexed(data) { index, studyInfo ->
                     if(studyInfo.detail == pagerList[page]){
@@ -95,36 +81,24 @@ fun StudyPageScreen(
             }
         }
 
-        AnimatedVisibility(
-            visible = isVisible,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(10.dp),
-            enter = slideInHorizontally(initialOffsetX = {
-                +it
-            }),
-            exit = slideOutHorizontally(targetOffsetX = {
-                +it
-            }),
-        ) {
-            IconButton(
-                onClick = { studyPageViewModel.onOpenDialogClicked() },
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.AddCircle,
-                    tint = BaseColor1,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(50.dp)
-                        .background(Color.White)
-                )
-            }
         DataChangeButton(true,isVisible) {
             studyPageViewModel.onOpenDialogClicked()
         }
 
         if (dialogState) {
             SaveCheckAlertDialog()
+        }
+    }
+
+    when(studyState) {
+        ORIGIN_STUDY -> if(originGuideLabel < 3 && checkedUserRuleOrigin) {
+            UserRuleOriginGuide(originGuideLabel)
+        }
+        FIRST_REVIEW -> if(firstGuideLabel < 2 && checkedUserRuleFirst) {
+            UserRuleFirstGuide(firstGuideLabel)
+        }
+        ALL_BLANK_REVIEW -> if(blankGuideLabel && checkedUserRuleBlank) {
+            SelectRuleBlankDialog()
         }
     }
 }
