@@ -119,6 +119,8 @@ fun StudyPageScreen(
                         .background(Color.White)
                 )
             }
+        DataChangeButton(true,isVisible) {
+            studyPageViewModel.onOpenDialogClicked()
         }
 
         if (dialogState) {

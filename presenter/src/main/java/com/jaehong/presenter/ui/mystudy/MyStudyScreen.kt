@@ -133,6 +133,8 @@ fun MyStudyScreen(
                             .background(Color.White)
                     )
                 }
+            DataChangeButton(false,isVisible) {
+                myStudyViewModel.deleteMyStudyInfo(selectedItems)
             }
 
         }
