@@ -7,6 +7,8 @@ import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetMyStudyInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
+import com.jaehong.presenter.util.Constants
+import com.jaehong.presenter.util.Constants.USER_RULE_MY_STUDY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +39,15 @@ class MyStudyViewModel @Inject constructor(
     val currentPage = _currentPage.asStateFlow()
 
     init {
-        gatMyStudyData()
+        getMyStudyData()
+    }
+
+    private fun getMyStudyData(){
+        viewModelScope.launch {
+            val myStudyList = myStudyInfoUseCase()
+            _myStudyInfoList.value = myStudyList
+            _pagerList.value = getPagerList(myStudyList)
+        }
     }
 
     fun updatePage(page: Int) {
@@ -57,7 +67,7 @@ class MyStudyViewModel @Inject constructor(
     fun deleteMyStudyInfo(selected: MutableList<StudyInfoItem>) {
         viewModelScope.launch {
             myStudyInfoUseCase.deleteMyStudyInfo(selected)
-            gatMyStudyData()
+            getMyStudyData()
             clearSelectedItems()
         }
     }
@@ -70,15 +80,6 @@ class MyStudyViewModel @Inject constructor(
         _selectedItems.value.clear()
         _isVisible.value = false
     }
-
-    private fun gatMyStudyData(){
-        viewModelScope.launch {
-            val myStudyList = myStudyInfoUseCase()
-            _myStudyInfoList.value = myStudyList
-            _pagerList.value = getPagerList(myStudyList)
-        }
-    }
-
 
     private fun getPagerList(myStudyList: List<StudyInfoItem>): List<String> {
         val pagerList = mutableListOf<String>()

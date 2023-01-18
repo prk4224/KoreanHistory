@@ -14,4 +14,12 @@ class GetMyStudyInfoUseCase @Inject constructor(
     suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>) {
         localRepository.deleteMyStudyInfo(studyList)
     }
+
+    suspend fun getGuideInfo(key: String): Boolean {
+        return localRepository.getGuideInfo(key)
+    }
+
+    suspend fun setGuideInfo(key: String) {
+        localRepository.setGuideInfo(key)
+    }
 }
