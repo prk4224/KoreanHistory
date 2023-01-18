@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.studypage.guide
+package com.jaehong.presenter.ui.studypage.guide.origin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,22 +18,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.ui.studypage.StudyPageViewModel
-import com.jaehong.presenter.util.Constants
-import com.jaehong.presenter.util.Constants.USER_RULE_ALL
+import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
+import com.jaehong.presenter.util.Constants.USER_RULE_ORIGIN
 
 @Composable
-fun SelectRuleDialog(
+fun SelectRuleOriginDialog(
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
-    val checkboxAllImage = painterResource(id = R.drawable.checkbox_all_image)
+    val checkboxAllImage = painterResource(id = R.drawable.checkbox_image)
     val guidePlusImage = painterResource(id = R.drawable.guide_plus_image)
 
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable(
             onClick = {
-                studyPageViewModel.updateLabel(3)
-                studyPageViewModel.setUserRule(USER_RULE_ALL)
+                studyPageViewModel.updateLabel(3, ORIGIN_STUDY)
+                studyPageViewModel.setUserRule(USER_RULE_ORIGIN)
             }
         )
     ) {
@@ -42,10 +42,10 @@ fun SelectRuleDialog(
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = 30.dp)
+                .padding(top = 100.dp)
                 .fillMaxWidth()
-                .height(150.dp)
-                .size(250.dp)
+                .size(165.dp)
+
         )
 
         Column(
@@ -57,7 +57,7 @@ fun SelectRuleDialog(
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .size(200.dp)
+                    .padding(bottom = 10.dp,end = 20.dp)
             )
 
             Icon(
@@ -65,9 +65,9 @@ fun SelectRuleDialog(
                 tint = BaseColor1,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(80.dp)
                     .align(Alignment.End)
-                    .padding(bottom = 20.dp, end = 20.dp)
+                    .padding(bottom = 40.dp, end = 40.dp)
                     .background(Color.White, CircleShape)
 
             )

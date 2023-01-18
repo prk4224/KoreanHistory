@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.studypage.guide
+package com.jaehong.presenter.ui.studypage.guide.origin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -14,19 +14,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.ui.studypage.StudyPageViewModel
+import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 
 @Composable
-fun ScrollRuleDialog(
+fun ScrollRuleOriginDialog(
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
-
     val scrollImage = painterResource(id = R.drawable.scroll_image)
 
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable(
             onClick = {
-                studyPageViewModel.updateLabel(2)
+                studyPageViewModel.updateLabel(2, ORIGIN_STUDY)
             }
         )
     ) {

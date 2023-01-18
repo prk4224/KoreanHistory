@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
+import com.jaehong.presenter.theme.BlackWithAlpha50
 import com.jaehong.presenter.theme.Gray1
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.theme.Typography
@@ -29,54 +30,61 @@ fun GuideDialogContent(
     var checked by remember { mutableStateOf(false) }
 
     Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
-            .width(400.dp)
-            .height(630.dp)
-            .background(Gray1, RoundedCornerShape(10, 10, 0, 0))
+            .fillMaxSize()
+            .background(BlackWithAlpha50)
     ) {
-        Image(
-            painter =guideImage,
-            contentDescription = null,
+        Box(
             modifier = Modifier
-                .padding(top = 20.dp)
-                .align(Alignment.TopCenter)
-        )
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(bottom = 60.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .width(340.dp)
+                .height(630.dp)
+                .background(Gray1, RoundedCornerShape(10, 10, 0, 0))
         ) {
-            Checkbox(
-                checked = checked,
-                onCheckedChange = { checked = checked.not() },
+            Image(
+                painter =guideImage,
+                contentDescription = null,
                 modifier = Modifier
-                    .size(20.dp)
-                    .padding(start = 20.dp),
-                colors = CheckboxDefaults.colors(
-                    uncheckedColor = Color.Black,
+                    .padding(top = 20.dp)
+                    .align(Alignment.TopCenter)
+            )
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(bottom = 60.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = checked,
+                    onCheckedChange = { checked = checked.not() },
+                    modifier = Modifier
+                        .size(20.dp)
+                        .padding(start = 20.dp),
+                    colors = CheckboxDefaults.colors(
+                        uncheckedColor = Color.Black,
+                    )
                 )
-            )
-            Text(
-                text = GUIDE_CHECKED_TEXT,
-                fontSize = 20.nonScaledSp,
-                modifier = Modifier.padding(start = 20.dp)
-            )
-        }
-        Button(
-            onClick = { dynastyViewModel.onDialogDismiss(checked) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(40.dp)
-                .background(Gray3, RectangleShape)
-                .align(Alignment.BottomCenter),
-            colors = ButtonDefaults.buttonColors(Gray3)
-        ) {
-            Text(text = GUIDE_OUT_TEXT,
-                style = Typography.bodyLarge,
-                fontSize = 26.nonScaledSp,
-                color = Color.White
-            )
+                Text(
+                    text = GUIDE_CHECKED_TEXT,
+                    fontSize = 20.nonScaledSp,
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+            }
+            Button(
+                onClick = { dynastyViewModel.onDialogDismiss(checked) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .background(Gray3, RectangleShape)
+                    .align(Alignment.BottomCenter),
+                colors = ButtonDefaults.buttonColors(Gray3)
+            ) {
+                Text(text = GUIDE_OUT_TEXT,
+                    style = Typography.bodyLarge,
+                    fontSize = 26.nonScaledSp,
+                    color = Color.White
+                )
+            }
         }
     }
 }
