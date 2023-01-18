@@ -38,7 +38,7 @@ fun MyStudyBlankView(
         ) {
             Image(
                 painter = blankImage,
-                contentDescription = "Blank Image",
+                contentDescription = null,
                 modifier = Modifier.size(230.dp)
             )
 
