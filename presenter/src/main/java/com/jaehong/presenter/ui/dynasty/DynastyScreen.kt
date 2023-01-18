@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BaseColor1
@@ -32,12 +31,6 @@ fun DynastyScreen(
     val isVisible = dynastyViewModel.isVisible.collectAsState().value
     val dialogState = dynastyViewModel.showDialog.collectAsState().value
     val markImage = painterResource(id = R.drawable.woo_su_mark)
-
-    if(dialogState){
-        Dialog(onDismissRequest = {  }) {
-            GuideDialogContent()
-        }
-    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -65,38 +58,8 @@ fun DynastyScreen(
         )
     }
     dynastyViewModel.startAnimation()
-}
 
-@Composable
-fun DynastyButton(
-    title: String,
-    isVisible: Boolean,
-    dynastyViewModel: DynastyViewModel = hiltViewModel()
-) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = slideInHorizontally(initialOffsetX = {
-            -it
-        }),
-        exit = slideOutHorizontally(targetOffsetX = {
-            -it
-        })
-    ) {
-        Button(
-            onClick = {
-                if (title == MY_KEYWORD) {
-                    dynastyViewModel.onNavigateToMyStudyClicked()
-                } else {
-                    dynastyViewModel.onNavigateToStudyTypeClicked(title)
-                }
-            },
-            Modifier
-                .width(300.dp)
-                .background(Color.White)
-                .padding(12.dp),
-            colors = ButtonDefaults.buttonColors(BaseColor1)
-        ) {
-            Text(text = title, style = Typography.bodyMedium, fontSize = 35.nonScaledSp)
-        }
+    if(dialogState){
+        GuideDialogContent()
     }
 }
