@@ -41,7 +41,7 @@ class StudyPageViewModel @Inject constructor(
 
     private val initList: MutableList<StudyInfoItem> = mutableListOf()
     private val _selectedItems = MutableStateFlow(initList)
-    private val selectedItems = _selectedItems.asStateFlow()
+    val selectedItems = _selectedItems.asStateFlow()
 
     private val _isVisible = MutableStateFlow(false)
     val isVisible = _isVisible.asStateFlow()
@@ -75,8 +75,6 @@ class StudyPageViewModel @Inject constructor(
 
     private val _checkedUserRuleBlank = MutableStateFlow(false)
     val checkedUserRuleBlank = _checkedUserRuleBlank.asStateFlow()
-
-
 
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.StudyPage.DYNASTY_TYPE_KEY)

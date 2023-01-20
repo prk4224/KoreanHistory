@@ -8,16 +8,21 @@ import androidx.compose.ui.Modifier
 import com.jaehong.presenter.theme.BlackWithAlpha50
 
 @Composable
-fun UserRuleOriginGuide(label: Int) {
+fun UserRuleOriginGuide(
+    label: Int,
+    swipe: @Composable () -> Unit,
+    scroll: @Composable () -> Unit,
+    select: @Composable () -> Unit,
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(BlackWithAlpha50)
     ) {
-        when(label) {
-            0 -> SwipeRuleOriginDialog()
-            1 -> ScrollRuleOriginDialog()
-            2 -> SelectRuleOriginDialog()
+        when (label) {
+            0 -> swipe()
+            1 -> scroll()
+            2 -> select()
         }
     }
 }
