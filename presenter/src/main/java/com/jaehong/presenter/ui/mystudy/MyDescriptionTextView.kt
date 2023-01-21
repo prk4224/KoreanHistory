@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -32,14 +30,16 @@ fun MyDescriptionTextView(
         studyInfo.king_name,
         arrayListOf(description)
     )
-    val selectedItems  = remember { mutableStateListOf<StudyInfoItem>() }
-    val selected = selectedItems.contains(selectedItem)
+
+    var selected by remember(selectedItem.id) { mutableStateOf(false) }
+
     val backgroundColor = if(selected) Gray2 else Color.White
 
     Text(
         fontSize = 25.nonScaledSp,
         lineHeight = 25.nonScaledSp,
         text = description,
+        color = Color.Black,
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, Color.LightGray, getTopLineShape())
@@ -47,11 +47,10 @@ fun MyDescriptionTextView(
             .background(backgroundColor)
             .clickable(
                 onClick = {
+                    selected = selected.not()
                     with(myStudyViewModel) {
                         changeSelectedItem(selectedItem, selected)
                         changeButtonState()
-                        if (selected) selectedItems.remove(selectedItem)
-                        else selectedItems.add(selectedItem)
                     }
                 },
             )

@@ -10,15 +10,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 import com.jaehong.presenter.util.Constants.USER_RULE_FIRST
 
 @Composable
 fun LongClickRuleFirstDialog(
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+    onClickUpdate: (Int,String,String) -> Unit,
 ) {
     val longClickImage = painterResource(id = R.drawable.long_click_image)
 
@@ -26,8 +24,7 @@ fun LongClickRuleFirstDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                studyPageViewModel.updateLabel(2, FIRST_REVIEW)
-                studyPageViewModel.setUserRule(USER_RULE_FIRST)
+                onClickUpdate(2,FIRST_REVIEW,USER_RULE_FIRST)
             }
         ),
         contentAlignment = Alignment.Center

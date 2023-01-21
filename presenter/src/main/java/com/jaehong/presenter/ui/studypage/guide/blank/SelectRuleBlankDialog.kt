@@ -9,16 +9,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BlackWithAlpha50
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
 import com.jaehong.presenter.util.Constants.USER_RULE_BLANK
 
 @Composable
 fun SelectRuleBlankDialog(
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+    onClickUpdate: (Int,String,String) -> Unit,
 ) {
     val checkboxBlankImage = painterResource(id = R.drawable.check_box_blank)
 
@@ -27,8 +25,7 @@ fun SelectRuleBlankDialog(
         .background(BlackWithAlpha50)
         .clickable(
             onClick = {
-                studyPageViewModel.updateLabel(0, ALL_BLANK_REVIEW)
-                studyPageViewModel.setUserRule(USER_RULE_BLANK)
+                onClickUpdate(0,ALL_BLANK_REVIEW,USER_RULE_BLANK)
             }
         )
     ) {

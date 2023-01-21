@@ -8,15 +8,19 @@ import androidx.compose.ui.Modifier
 import com.jaehong.presenter.theme.BlackWithAlpha50
 
 @Composable
-fun UserRuleFirstGuide(label: Int) {
+fun UserRuleFirstGuide(
+    label: Int,
+    select: @Composable () -> Unit,
+    longClick: @Composable () -> Unit,
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(BlackWithAlpha50)
     ) {
         when (label) {
-            0 -> SelectRuleFirstDialog()
-            1 -> LongClickRuleFirstDialog()
+            0 -> select()
+            1 -> longClick()
         }
     }
 }

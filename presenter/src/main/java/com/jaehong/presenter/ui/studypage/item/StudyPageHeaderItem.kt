@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.studypage
+package com.jaehong.presenter.ui.studypage.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

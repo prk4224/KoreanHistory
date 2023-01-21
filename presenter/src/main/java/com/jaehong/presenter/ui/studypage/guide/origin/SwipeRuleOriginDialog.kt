@@ -11,14 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 
 @Composable
 fun SwipeRuleOriginDialog(
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+    onClickUpdate: (Int,String) -> Unit
 ){
     val swipeImage = painterResource(id = R.drawable.swipe_image)
 
@@ -26,7 +24,7 @@ fun SwipeRuleOriginDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                studyPageViewModel.updateLabel(1, ORIGIN_STUDY)
+                onClickUpdate(1,ORIGIN_STUDY)
             }
         )
     ) {

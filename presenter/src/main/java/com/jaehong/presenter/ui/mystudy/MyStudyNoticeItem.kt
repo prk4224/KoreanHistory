@@ -2,7 +2,6 @@ package com.jaehong.presenter.ui.mystudy
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -18,18 +17,15 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun MyStudyNoticeItem() {
-    Box(
+    Text(
+        text = Constants.MY_STUDY_TEXT,
+        fontSize = 24.nonScaledSp,
+        color = Color.Black,
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, Color.LightGray, RectangleShape)
             .background(Gray2)
             .padding(8.dp)
-    ) {
-        Text(
-            text = Constants.MY_STUDY_TEXT,
-            fontSize = 24.nonScaledSp,
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-    }
+
+    )
 }

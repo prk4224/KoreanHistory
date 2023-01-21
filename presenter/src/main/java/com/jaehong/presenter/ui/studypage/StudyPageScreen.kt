@@ -1,34 +1,27 @@
 package com.jaehong.presenter.ui.studypage
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
-import com.jaehong.presenter.theme.BaseColor1
-import com.jaehong.presenter.theme.Gray3
+import com.jaehong.presenter.ui.studypage.description.DescriptionTextView
+import com.jaehong.presenter.ui.studypage.dialog.SaveCheckAlertDialog
 import com.jaehong.presenter.ui.studypage.guide.blank.SelectRuleBlankDialog
+import com.jaehong.presenter.ui.studypage.guide.first.LongClickRuleFirstDialog
+import com.jaehong.presenter.ui.studypage.guide.first.SelectRuleFirstDialog
 import com.jaehong.presenter.ui.studypage.guide.first.UserRuleFirstGuide
+import com.jaehong.presenter.ui.studypage.guide.origin.ScrollRuleOriginDialog
+import com.jaehong.presenter.ui.studypage.guide.origin.SelectRuleOriginDialog
+import com.jaehong.presenter.ui.studypage.guide.origin.SwipeRuleOriginDialog
 import com.jaehong.presenter.ui.studypage.guide.origin.UserRuleOriginGuide
+import com.jaehong.presenter.ui.studypage.item.StudyAllViewItem
+import com.jaehong.presenter.ui.studypage.item.StudyPageHeaderItem
+import com.jaehong.presenter.ui.studypage.pager.StudyPagePagerScreen
 import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 import com.jaehong.presenter.util.DataChangeButton
-import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun StudyPageScreen(
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
@@ -42,6 +35,7 @@ fun StudyPageScreen(
     val allHintState = studyPageViewModel.isAllHintVisible.collectAsState().value
     val currentPage = studyPageViewModel.currentPage.collectAsState().value
     val pagerList = studyPageViewModel.pagerList.collectAsState().value
+
     val originGuideLabel = studyPageViewModel.originGuideLabel.collectAsState().value
     val firstGuideLabel = studyPageViewModel.firstGuideLabel.collectAsState().value
     val blankGuideLabel = studyPageViewModel.blankGuideLabel.collectAsState().value
@@ -49,56 +43,98 @@ fun StudyPageScreen(
     val checkedUserRuleFirst = studyPageViewModel.checkedUserRuleFirst.collectAsState().value
     val checkedUserRuleBlank = studyPageViewModel.checkedUserRuleBlank.collectAsState().value
 
-
-    Box {
-        HorizontalPager(
-            count = pagerList.size,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Gray3),
-            verticalAlignment = Alignment.Top,
-            state = rememberPagerState(initialPage = currentPage)
-        ) { page ->
-            if(currentPage != this.currentPage){
-                studyPageViewModel.updatePage(this.currentPage)
+    Surface {
+        StudyPagePagerScreen(
+            pagerList = pagerList,
+            currentPage = currentPage,
+            updatePage = { studyPageViewModel.updatePage(it) },
+            studyState = studyState,
+            allHintState = allHintState,
+            studyData = studyData,
+            allStudyData = allStudyData,
+            header = { type, title -> StudyPageHeaderItem(type, title) },
+            dynastyState = dynastyState,
+            studyAllViewItem = { studyInfo, index ->
+                StudyAllViewItem(studyInfo) { descIndex, description ->
+                    DescriptionTextView(
+                        studyInfo = studyInfo,
+                        description = description,
+                        descriptionIndex = descIndex,
+                        originDescription = allStudyData[index].description[descIndex],
+                        studyState = studyState,
+                        changeSelectedItem = { selectedItem, selected ->
+                            studyPageViewModel.changeSelectedItem(selectedItem, selected)
+                        },
+                        changeButtonState = {
+                            studyPageViewModel.changeButtonState()
+                        },
+                        changeAllHintState = {
+                            studyPageViewModel.changeAllHintState()
+                        }
+                    )
+                }
             }
-            LazyColumn(
-                modifier = Modifier.padding(30.dp),
-            ) {
-                val data = if (studyState == FIRST_REVIEW && allHintState.not()) {
-                    studyData
-                } else {
-                    allStudyData
-                }
-                item {
-                    StudyPageHeaderItem(dynastyState,pagerList[page])
-                }
-                itemsIndexed(data) { index, studyInfo ->
-                    if(studyInfo.detail == pagerList[page]){
-                        StudyAllViewItem(studyInfo, index, allStudyData, studyState)
-                    }
-                }
-            }
-        }
+        )
 
-        DataChangeButton(true,isVisible) {
+        DataChangeButton(true, isVisible) {
             studyPageViewModel.onOpenDialogClicked()
         }
 
         if (dialogState) {
-            SaveCheckAlertDialog()
+            SaveCheckAlertDialog(
+                onDialogConfirm = {
+                    studyPageViewModel.onDialogConfirm()
+                },
+                onDialogDismiss = {
+                    studyPageViewModel.onDialogDismiss()
+                }
+            )
         }
     }
 
     when(studyState) {
         ORIGIN_STUDY -> if(originGuideLabel < 3 && checkedUserRuleOrigin) {
-            UserRuleOriginGuide(originGuideLabel)
+            UserRuleOriginGuide(
+                label = originGuideLabel,
+                swipe = {
+                    SwipeRuleOriginDialog { label, type ->
+                        studyPageViewModel.updateLabel(label, type)
+                    }
+                },
+                scroll = {
+                    ScrollRuleOriginDialog { label, type ->
+                        studyPageViewModel.updateLabel(label, type)
+                    }
+                },
+                select = {
+                    SelectRuleOriginDialog { label, type, rule ->
+                        studyPageViewModel.updateLabel(label, type)
+                        studyPageViewModel.setUserRule(rule)
+                    }
+                }
+            )
         }
         FIRST_REVIEW -> if(firstGuideLabel < 2 && checkedUserRuleFirst) {
-            UserRuleFirstGuide(firstGuideLabel)
+            UserRuleFirstGuide(
+                firstGuideLabel,
+                select = {
+                    SelectRuleFirstDialog { label, type ->
+                        studyPageViewModel.updateLabel(label, type)
+                    }
+                },
+                longClick = {
+                    LongClickRuleFirstDialog { label, type, rule ->
+                        studyPageViewModel.updateLabel(label, type)
+                        studyPageViewModel.setUserRule(rule)
+                    }
+                }
+            )
         }
         ALL_BLANK_REVIEW -> if(blankGuideLabel && checkedUserRuleBlank) {
-            SelectRuleBlankDialog()
+            SelectRuleBlankDialog { label, type, rule ->
+                studyPageViewModel.updateLabel(label, type)
+                studyPageViewModel.setUserRule(rule)
+            }
         }
     }
 }

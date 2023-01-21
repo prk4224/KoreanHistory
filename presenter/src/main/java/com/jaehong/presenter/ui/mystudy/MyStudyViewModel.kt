@@ -1,14 +1,10 @@
 package com.jaehong.presenter.ui.mystudy
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetMyStudyInfoUseCase
-import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
-import com.jaehong.presenter.util.Constants
-import com.jaehong.presenter.util.Constants.USER_RULE_MY_STUDY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -56,8 +52,8 @@ class MyStudyViewModel @Inject constructor(
     }
 
     fun changeSelectedItem(studyInfoItem: StudyInfoItem, check: Boolean) {
-        if (check) _selectedItems.value.remove(studyInfoItem)
-        else _selectedItems.value.add(studyInfoItem)
+        if (check) _selectedItems.value.add(studyInfoItem)
+        else _selectedItems.value.remove(studyInfoItem)
     }
 
     fun changeButtonState() {

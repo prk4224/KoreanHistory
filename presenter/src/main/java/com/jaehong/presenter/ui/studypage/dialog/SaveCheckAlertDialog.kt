@@ -1,10 +1,9 @@
-package com.jaehong.presenter.ui.studypage
+package com.jaehong.presenter.ui.studypage.dialog
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.Constants.CANCEL_TEXT
 import com.jaehong.presenter.util.Constants.SAVE_DIALOG_MESSAGE
@@ -13,12 +12,13 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun SaveCheckAlertDialog(
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+    onDialogConfirm: () -> Unit,
+    onDialogDismiss: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = { },
         confirmButton = {
-            TextButton(onClick = { studyPageViewModel.onDialogConfirm() }) {
+            TextButton(onClick = { onDialogConfirm() }) {
                 Text(
                     text = SAVE_TEXT,
                     style = Typography.bodyLarge,
@@ -27,7 +27,7 @@ fun SaveCheckAlertDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = { studyPageViewModel.onDialogDismiss() }) {
+            TextButton(onClick = { onDialogDismiss() }) {
                 Text(
                     text = CANCEL_TEXT,
                     style = Typography.bodyLarge,

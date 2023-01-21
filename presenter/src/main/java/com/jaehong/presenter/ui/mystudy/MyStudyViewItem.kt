@@ -27,6 +27,7 @@ fun MyStudyViewItem(
             text = studyInfo.king_name,
             fontSize = 25.nonScaledSp,
             lineHeight = 25.nonScaledSp,
+            color = Color.Black,
             modifier = Modifier
                 .border(1.dp, Color.LightGray, RectangleShape)
                 .weight(0.5f)

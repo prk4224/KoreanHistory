@@ -8,14 +8,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.Constants.FIRST_REVIEW
 
 @Composable
 fun SelectRuleFirstDialog(
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+    onClickUpdate: (Int,String) -> Unit,
 ) {
     val checkboxFirstImage = painterResource(id = R.drawable.checkbox_image_first)
 
@@ -23,7 +21,7 @@ fun SelectRuleFirstDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                studyPageViewModel.updateLabel(1, FIRST_REVIEW)
+                onClickUpdate(1,FIRST_REVIEW)
             }
         )
     ) {

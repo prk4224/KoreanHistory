@@ -11,14 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 
 @Composable
 fun ScrollRuleOriginDialog(
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+    onClickUpdate: (Int,String) -> Unit,
 ) {
     val scrollImage = painterResource(id = R.drawable.scroll_image)
 
@@ -26,7 +24,7 @@ fun ScrollRuleOriginDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                studyPageViewModel.updateLabel(2, ORIGIN_STUDY)
+                onClickUpdate(2,ORIGIN_STUDY)
             }
         )
     ) {

@@ -48,7 +48,12 @@ fun DynastyButton(
                 .padding(12.dp),
             colors = ButtonDefaults.buttonColors(BaseColor1)
         ) {
-            Text(text = title, style = Typography.bodyMedium, fontSize = 35.nonScaledSp)
+            Text(
+                text = title,
+                style = Typography.bodyMedium,
+                fontSize = 35.nonScaledSp,
+                color = Color.White
+            )
         }
     }
 }

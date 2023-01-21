@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.studypage
+package com.jaehong.presenter.ui.studypage.description
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,8 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
@@ -27,11 +25,16 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 fun DescriptionTextView(
     studyInfo: StudyInfoItem,
     description: String,
-    studyIndex: Int,
     descriptionIndex: Int,
-    allStudyData: StudyInfo,
+    originDescription: String,
     studyState: String,
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+    changeSelectedItem: (StudyInfoItem,Boolean) -> Unit,
+    changeButtonState: () -> Unit,
+    changeAllHintState: () -> Unit,
+    selected: Boolean = remember(studyInfo.description[descriptionIndex]) { mutableStateOf(false) }.value,
+    changeSelected: (Boolean) -> Boolean = {
+        selected.not()
+    }
 ) {
     val selectedItem = StudyInfoItem(
             studyInfo.id + descriptionIndex,
@@ -39,15 +42,16 @@ fun DescriptionTextView(
             studyInfo.king_name,
             arrayListOf(description)
     )
-    var selected by remember { mutableStateOf(false) }
+
     val backgroundColor = if (selected) Gray2 else Color.White
     val alphaText = if(selected || studyState != ALL_BLANK_REVIEW) 1f else 0f
-    val hintText = if (selected) allStudyData[studyIndex].description[descriptionIndex] else description
+    val hintText = if (selected) originDescription else description
 
     Text(
         fontSize = 25.nonScaledSp,
         lineHeight = 25.nonScaledSp,
         text = hintText,
+        color = Color.Black,
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, Color.LightGray, getTopLineShape())
@@ -57,20 +61,28 @@ fun DescriptionTextView(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        selected = selected.not()
-                        studyPageViewModel.changeSelectedItem(selectedItem, selected)
+                        changeSelected(selected)
+                        changeSelectedItem(selectedItem,selected)
                         if (studyState == ORIGIN_STUDY) {
-                            studyPageViewModel.changeButtonState()
+                            changeButtonState()
                         }
                     },
                     onLongPress = {
                         if (studyState == FIRST_REVIEW) {
-                            studyPageViewModel.changeAllHintState()
+                            changeAllHintState()
                         }
                     }
                 )
             },
         )
+}
+
+@Composable
+fun TextField(
+    selected: Boolean,
+    changeSelected: (Boolean) -> Unit
+) {
+
 }
 
 private fun getTopLineShape() : Shape {

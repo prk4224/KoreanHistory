@@ -62,4 +62,4 @@ fun DynastyScreen(
     if(dialogState){
         GuideDialogContent()
     }
-}
+} 

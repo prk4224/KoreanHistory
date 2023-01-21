@@ -14,16 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BaseColor1
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 import com.jaehong.presenter.util.Constants.USER_RULE_ORIGIN
 
 @Composable
 fun SelectRuleOriginDialog(
-    studyPageViewModel: StudyPageViewModel = hiltViewModel()
+    onClickUpdate: (Int,String,String) -> Unit
 ) {
     val checkboxAllImage = painterResource(id = R.drawable.checkbox_image)
     val guidePlusImage = painterResource(id = R.drawable.guide_plus_image)
@@ -32,8 +30,7 @@ fun SelectRuleOriginDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                studyPageViewModel.updateLabel(3, ORIGIN_STUDY)
-                studyPageViewModel.setUserRule(USER_RULE_ORIGIN)
+                onClickUpdate(3,ORIGIN_STUDY,USER_RULE_ORIGIN)
             }
         )
     ) {
