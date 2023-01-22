@@ -1,28 +1,11 @@
 package com.jaehong.presenter.ui.dynasty
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
-import com.jaehong.presenter.theme.BaseColor1
-import com.jaehong.presenter.theme.Typography
-import com.jaehong.presenter.ui.MainActivity
-import com.jaehong.presenter.util.Constants.MY_KEYWORD
-import com.jaehong.presenter.util.FontFixed.nonScaledSp
+import com.jaehong.presenter.util.LogoImage
 
 @Composable
 fun DynastyScreen(
@@ -32,34 +15,31 @@ fun DynastyScreen(
     val dialogState = dynastyViewModel.showDialog.collectAsState().value
     val markImage = painterResource(id = R.drawable.woo_su_mark)
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White),
-    ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.Center),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-
-            MainActivity.dynastyList.forEach {
-                DynastyButton(title = it, isVisible)
-            }
+    DynastyButton(
+        isVisible = isVisible,
+        markImage = markImage,
+        dynastyButtonItem = { title, visible ->
+            DynastyButtonItem(
+                title = title,
+                visible = visible,
+                toMyStudyClicked = {
+                    dynastyViewModel.onNavigateToMyStudyClicked()
+                },
+                toStudyTypeClicked = {
+                    dynastyViewModel.onNavigateToStudyTypeClicked(title)
+                }
+            )
+        },
+        logoImage = {
+            LogoImage(it)
         }
+    )
 
-        Image(
-            painter = markImage,
-            contentDescription = "Signature Mark",
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .size(100.dp)
-                .padding(bottom = 30.dp)
-        )
-    }
     dynastyViewModel.startAnimation()
 
     if(dialogState){
-        GuideDialogContent()
+        GuideDialogContent() {
+            dynastyViewModel.onDialogDismiss(it)
+        }
     }
 } 

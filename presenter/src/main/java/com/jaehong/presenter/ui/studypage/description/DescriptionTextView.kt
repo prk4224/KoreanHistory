@@ -31,10 +31,6 @@ fun DescriptionTextView(
     changeSelectedItem: (StudyInfoItem,Boolean) -> Unit,
     changeButtonState: () -> Unit,
     changeAllHintState: () -> Unit,
-    selected: Boolean = remember(studyInfo.description[descriptionIndex]) { mutableStateOf(false) }.value,
-    changeSelected: (Boolean) -> Boolean = {
-        selected.not()
-    }
 ) {
     val selectedItem = StudyInfoItem(
             studyInfo.id + descriptionIndex,
@@ -42,6 +38,7 @@ fun DescriptionTextView(
             studyInfo.king_name,
             arrayListOf(description)
     )
+    var selected by remember(studyInfo.description[descriptionIndex]) { mutableStateOf(false) }
 
     val backgroundColor = if (selected) Gray2 else Color.White
     val alphaText = if(selected || studyState != ALL_BLANK_REVIEW) 1f else 0f
@@ -61,7 +58,7 @@ fun DescriptionTextView(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        changeSelected(selected)
+                        selected = selected.not()
                         changeSelectedItem(selectedItem,selected)
                         if (studyState == ORIGIN_STUDY) {
                             changeButtonState()

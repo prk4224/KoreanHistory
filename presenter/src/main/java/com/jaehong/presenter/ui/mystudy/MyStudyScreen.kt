@@ -1,23 +1,17 @@
 package com.jaehong.presenter.ui.mystudy
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.jaehong.presenter.theme.Gray3
+import com.jaehong.presenter.ui.mystudy.blank.MyStudyBlankView
+import com.jaehong.presenter.ui.mystudy.description.MyDescriptionTextView
+import com.jaehong.presenter.ui.mystudy.item.MyStudyHeaderItem
+import com.jaehong.presenter.ui.mystudy.item.MyStudyNoticeItem
+import com.jaehong.presenter.ui.mystudy.item.MyStudyViewItem
+import com.jaehong.presenter.ui.mystudy.pager.MyStudyPagerScreen
 import com.jaehong.presenter.util.DataChangeButton
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MyStudyScreen(
     myStudyViewModel: MyStudyViewModel = hiltViewModel()
@@ -30,35 +24,39 @@ fun MyStudyScreen(
 
     if(pagerList.isNotEmpty()){
         Surface {
-            HorizontalPager(
-                count = pagerList.size,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Gray3),
-                verticalAlignment = Alignment.Top,
-            ) { page ->
-                if(currentPage != this.currentPage){
-                    myStudyViewModel.updatePage(this.currentPage)
+            MyStudyPagerScreen(
+                pagerList = pagerList,
+                myStudyData = myStudyData,
+                currentPage = currentPage,
+                updatePage = {
+                    myStudyViewModel.updatePage(it)
+                },
+                myStudyHeader = {
+                    MyStudyHeaderItem(it)
+                },
+                myStudyNotice = {
+                    MyStudyNoticeItem()
+                },
+                myStudyView = {
+                    MyStudyViewItem(it) { studyInfo, description, index ->
+                        MyDescriptionTextView(
+                            studyInfo = studyInfo,
+                            description = description,
+                            descriptionIndex = index,
+                            onTextClicked = { selectedItem, selected ->
+                                myStudyViewModel.changeSelectedItem(selectedItem, selected)
+                                myStudyViewModel.changeButtonState()
+                            }
+                        )
+                    }
                 }
-                LazyColumn(
-                    modifier = Modifier.padding(vertical = 50.dp, horizontal = 20.dp),
-                ) {
-                    item {
-                        MyStudyHeaderItem(pagerList[page])
-                    }
-                    item{
-                        MyStudyNoticeItem()
-                    }
-                    items(myStudyData) { studyInfo ->
-                        if (pagerList[page] == studyInfo.detail) {
-                            MyStudyViewItem(studyInfo)
-                        }
-                    }
-                }
-            }
-            DataChangeButton(false,isVisible) {
+            )
+
+            DataChangeButton(false, isVisible) {
                 myStudyViewModel.deleteMyStudyInfo(selectedItems)
             }
         }
-    } else MyStudyBlankView()
+    } else MyStudyBlankView {
+        myStudyViewModel.onBackButtonClicked()
+    }
 }

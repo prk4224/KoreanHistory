@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.mystudy
+package com.jaehong.presenter.ui.mystudy.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +17,7 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 @Composable
 fun MyStudyViewItem(
     studyInfo: StudyInfoItem,
+    myDescription: @Composable (StudyInfoItem,String,Int) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -41,7 +42,7 @@ fun MyStudyViewItem(
                 .fillMaxHeight(),
         ) {
             studyInfo.description.forEachIndexed { index, description ->
-                MyDescriptionTextView(studyInfo, description, index)
+                myDescription(studyInfo,description,index)
             }
         }
     }

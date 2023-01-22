@@ -1,34 +1,29 @@
-package com.jaehong.presenter.ui.studypage.pager
+package com.jaehong.presenter.ui.mystudy.pager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray3
-import com.jaehong.presenter.util.Constants
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun StudyPagePagerScreen(
+fun MyStudyPagerScreen(
     pagerList: List<String>,
+    myStudyData: List<StudyInfoItem>,
     currentPage: Int,
     updatePage: (Int) -> Unit,
-    dynastyState: String,
-    studyState: String,
-    allHintState: Boolean,
-    studyData: List<StudyInfoItem>,
-    allStudyData: List<StudyInfoItem>,
-    header: @Composable (String, String) -> Unit,
-    studyAllViewItem: @Composable (StudyInfoItem, Int) -> Unit
+    myStudyHeader: @Composable (String) -> Unit,
+    myStudyNotice: @Composable () -> Unit,
+    myStudyView: @Composable (StudyInfoItem) -> Unit,
 ) {
     HorizontalPager(
         count = pagerList.size,
@@ -36,27 +31,22 @@ fun StudyPagePagerScreen(
             .fillMaxSize()
             .background(Gray3),
         verticalAlignment = Alignment.Top,
-        state = rememberPagerState(initialPage = currentPage)
     ) { page ->
         if (currentPage != this.currentPage) {
             updatePage(this.currentPage)
         }
-
         LazyColumn(
-            modifier = Modifier.padding(30.dp)
+            modifier = Modifier.padding(vertical = 50.dp, horizontal = 20.dp),
         ) {
-            val data = if (studyState == Constants.FIRST_REVIEW && allHintState.not()) {
-                studyData
-            } else {
-                allStudyData
+            item {
+                myStudyHeader(pagerList[page])
             }
             item {
-                header(dynastyState, pagerList[page])
+                myStudyNotice()
             }
-
-            itemsIndexed(data) { index, studyInfo ->
-                if (studyInfo.detail == pagerList[page]) {
-                    studyAllViewItem(studyInfo, index)
+            items(myStudyData) { studyInfo ->
+                if (pagerList[page] == studyInfo.detail) {
+                    myStudyView(studyInfo)
                 }
             }
         }

@@ -1,59 +1,39 @@
 package com.jaehong.presenter.ui.dynasty
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.presenter.theme.BaseColor1
-import com.jaehong.presenter.theme.Typography
-import com.jaehong.presenter.util.Constants
-import com.jaehong.presenter.util.FontFixed.nonScaledSp
+import androidx.compose.ui.graphics.painter.Painter
+import com.jaehong.presenter.ui.MainActivity
 
 @Composable
 fun DynastyButton(
-    title: String,
     isVisible: Boolean,
-    dynastyViewModel: DynastyViewModel = hiltViewModel()
+    markImage: Painter,
+    logoImage: @Composable (Painter) -> Unit,
+    dynastyButtonItem: @Composable (String,Boolean) -> Unit
 ) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = slideInHorizontally(initialOffsetX = {
-            -it
-        }),
-        exit = slideOutHorizontally(targetOffsetX = {
-            -it
-        })
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White),
     ) {
-        Button(
-            onClick = {
-                if (title == Constants.MY_KEYWORD) {
-                    dynastyViewModel.onNavigateToMyStudyClicked()
-                } else {
-                    dynastyViewModel.onNavigateToStudyTypeClicked(title)
-                }
-            },
-            Modifier
-                .width(300.dp)
-                .background(Color.White)
-                .padding(12.dp),
-            colors = ButtonDefaults.buttonColors(BaseColor1)
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = title,
-                style = Typography.bodyMedium,
-                fontSize = 35.nonScaledSp,
-                color = Color.White
-            )
+
+            MainActivity.dynastyList.forEach {
+                dynastyButtonItem(it,isVisible)
+            }
         }
+        logoImage(markImage)
     }
 }

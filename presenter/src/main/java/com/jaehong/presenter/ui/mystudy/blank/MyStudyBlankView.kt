@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.mystudy
+package com.jaehong.presenter.ui.mystudy.blank
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +23,7 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun MyStudyBlankView(
-    myStudyViewModel: MyStudyViewModel = hiltViewModel()
+   onBackButtonClicked: () -> Unit
 ) {
     val blankImage = painterResource(id = R.drawable.black_image)
 
@@ -52,7 +52,7 @@ fun MyStudyBlankView(
             )
 
             Button(
-                onClick = { myStudyViewModel.onBackButtonClicked() },
+                onClick = { onBackButtonClicked() },
                 colors = ButtonDefaults.buttonColors(Color.White)
             ) {
                 Text(

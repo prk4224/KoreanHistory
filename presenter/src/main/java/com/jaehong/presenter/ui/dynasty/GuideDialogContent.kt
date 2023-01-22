@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BlackWithAlpha50
 import com.jaehong.presenter.theme.Gray1
@@ -24,7 +23,7 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun GuideDialogContent(
-    dynastyViewModel: DynastyViewModel = hiltViewModel()
+    onGuideClicked: (Boolean) -> Unit
 ){
     val guideImage = painterResource(id = R.drawable.guide_image)
     var checked by remember { mutableStateOf(false) }
@@ -71,7 +70,7 @@ fun GuideDialogContent(
                 )
             }
             Button(
-                onClick = { dynastyViewModel.onDialogDismiss(checked) },
+                onClick = { onGuideClicked(checked) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp)

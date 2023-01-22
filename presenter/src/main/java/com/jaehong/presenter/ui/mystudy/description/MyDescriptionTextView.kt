@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.mystudy
+package com.jaehong.presenter.ui.mystudy.description
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
@@ -22,7 +21,7 @@ fun MyDescriptionTextView(
     studyInfo: StudyInfoItem,
     description: String,
     descriptionIndex: Int,
-    myStudyViewModel: MyStudyViewModel = hiltViewModel(),
+    onTextClicked: (StudyInfoItem,Boolean) -> Unit
 ) {
     val selectedItem = StudyInfoItem(
         studyInfo.id + descriptionIndex,
@@ -32,7 +31,6 @@ fun MyDescriptionTextView(
     )
 
     var selected by remember(selectedItem.id) { mutableStateOf(false) }
-
     val backgroundColor = if(selected) Gray2 else Color.White
 
     Text(
@@ -48,10 +46,7 @@ fun MyDescriptionTextView(
             .clickable(
                 onClick = {
                     selected = selected.not()
-                    with(myStudyViewModel) {
-                        changeSelectedItem(selectedItem, selected)
-                        changeButtonState()
-                    }
+                    onTextClicked(selectedItem,selected)
                 },
             )
     )
