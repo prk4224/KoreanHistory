@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
-import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
+import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun SwipeRuleOriginDialog(
@@ -24,7 +24,7 @@ fun SwipeRuleOriginDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                onClickUpdate(1,ORIGIN_STUDY)
+                onClickUpdate(1,StudyType.ORIGIN_STUDY.value)
             }
         )
     ) {

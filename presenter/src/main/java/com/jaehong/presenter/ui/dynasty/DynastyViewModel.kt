@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.usecase.GetGuideInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
-import com.jaehong.presenter.util.Constants.GUIDE_KEY
+import com.jaehong.presenter.util.enum.GuideKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +27,7 @@ class DynastyViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _showDialog.value = getGuideInfoUseCase(GUIDE_KEY)
+            _showDialog.value = getGuideInfoUseCase(GuideKey.GUIDE_KEY.value)
         }
     }
 
@@ -41,7 +41,7 @@ class DynastyViewModel @Inject constructor(
     fun onDialogDismiss(check: Boolean) {
         _showDialog.value = false
         viewModelScope.launch {
-            if(check) getGuideInfoUseCase.setGuideInfo(GUIDE_KEY)
+            if(check) getGuideInfoUseCase.setGuideInfo(GuideKey.GUIDE_KEY.value)
         }
     }
 

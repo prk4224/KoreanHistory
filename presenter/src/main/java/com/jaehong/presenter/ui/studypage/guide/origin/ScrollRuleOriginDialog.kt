@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
-import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
+import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun ScrollRuleOriginDialog(
@@ -24,7 +24,7 @@ fun ScrollRuleOriginDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                onClickUpdate(2,ORIGIN_STUDY)
+                onClickUpdate(2,StudyType.ORIGIN_STUDY.value)
             }
         )
     ) {

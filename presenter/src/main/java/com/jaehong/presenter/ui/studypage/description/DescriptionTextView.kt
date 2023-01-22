@@ -16,10 +16,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
-import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
-import com.jaehong.presenter.util.Constants.FIRST_REVIEW
-import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
+import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun DescriptionTextView(
@@ -41,7 +39,7 @@ fun DescriptionTextView(
     var selected by remember(studyInfo.description[descriptionIndex]) { mutableStateOf(false) }
 
     val backgroundColor = if (selected) Gray2 else Color.White
-    val alphaText = if(selected || studyState != ALL_BLANK_REVIEW) 1f else 0f
+    val alphaText = if(selected || studyState != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f
     val hintText = if (selected) originDescription else description
 
     Text(
@@ -60,12 +58,12 @@ fun DescriptionTextView(
                     onTap = {
                         selected = selected.not()
                         changeSelectedItem(selectedItem,selected)
-                        if (studyState == ORIGIN_STUDY) {
+                        if (studyState == StudyType.ORIGIN_STUDY.value) {
                             changeButtonState()
                         }
                     },
                     onLongPress = {
-                        if (studyState == FIRST_REVIEW) {
+                        if (studyState == StudyType.FIRST_REVIEW.value) {
                             changeAllHintState()
                         }
                     }

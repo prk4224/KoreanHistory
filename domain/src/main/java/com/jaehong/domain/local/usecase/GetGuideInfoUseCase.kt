@@ -1,6 +1,5 @@
 package com.jaehong.domain.local.usecase
 
-import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.repository.LocalRepository
 import javax.inject.Inject
 

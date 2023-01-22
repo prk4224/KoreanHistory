@@ -1,4 +1,4 @@
-package com.jaehong.presenter.util
+package com.jaehong.presenter.util.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

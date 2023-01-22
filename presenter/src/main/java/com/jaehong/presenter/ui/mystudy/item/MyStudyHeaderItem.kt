@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.theme.MyStudyColor
-import com.jaehong.presenter.util.Constants
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
+import com.jaehong.presenter.util.enum.DynastyType
 
 @Composable
 fun MyStudyHeaderItem(title: String) {
@@ -25,7 +25,7 @@ fun MyStudyHeaderItem(title: String) {
             .background(MyStudyColor, RoundedCornerShape(50, 50, 0, 0))
     ){
         Text(
-            text = Constants.MY_KEYWORD,
+            text = DynastyType.MY_KEYWORD.value,
             modifier = Modifier
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,

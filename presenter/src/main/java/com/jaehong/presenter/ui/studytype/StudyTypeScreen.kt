@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
-import com.jaehong.presenter.util.LogoImage
+import com.jaehong.presenter.util.composable.LogoImage
 
 @Composable
 fun StudyTypeScreen(

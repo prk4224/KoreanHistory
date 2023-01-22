@@ -16,8 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BaseColor1
-import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
-import com.jaehong.presenter.util.Constants.USER_RULE_ORIGIN
+import com.jaehong.presenter.util.enum.GuideKey
+import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun SelectRuleOriginDialog(
@@ -30,7 +30,7 @@ fun SelectRuleOriginDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                onClickUpdate(3,ORIGIN_STUDY,USER_RULE_ORIGIN)
+                onClickUpdate(3,StudyType.ORIGIN_STUDY.value, GuideKey.USER_RULE_ORIGIN.value)
             }
         )
     ) {

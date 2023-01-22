@@ -1,13 +1,7 @@
 package com.jaehong.presenter.ui.studypage
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.ui.studypage.description.DescriptionTextView
 import com.jaehong.presenter.ui.studypage.dialog.SaveCheckAlertDialog
@@ -22,10 +16,8 @@ import com.jaehong.presenter.ui.studypage.guide.origin.UserRuleOriginGuide
 import com.jaehong.presenter.ui.studypage.item.StudyAllViewItem
 import com.jaehong.presenter.ui.studypage.item.StudyPageHeaderItem
 import com.jaehong.presenter.ui.studypage.pager.StudyPagePagerScreen
-import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
-import com.jaehong.presenter.util.Constants.FIRST_REVIEW
-import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
-import com.jaehong.presenter.util.DataChangeButton
+import com.jaehong.presenter.util.composable.DataChangeButton
+import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun StudyPageScreen(
@@ -96,7 +88,7 @@ fun StudyPageScreen(
 
 
     when(studyState) {
-        ORIGIN_STUDY -> if(originGuideLabel < 3 && checkedUserRuleOrigin) {
+        StudyType.ORIGIN_STUDY.value -> if(originGuideLabel < 3 && checkedUserRuleOrigin) {
             UserRuleOriginGuide(
                 label = originGuideLabel,
                 swipe = {
@@ -117,7 +109,7 @@ fun StudyPageScreen(
                 }
             )
         }
-        FIRST_REVIEW -> if(firstGuideLabel < 2 && checkedUserRuleFirst) {
+        StudyType.FIRST_REVIEW.value -> if(firstGuideLabel < 2 && checkedUserRuleFirst) {
             UserRuleFirstGuide(
                 firstGuideLabel,
                 select = {
@@ -133,7 +125,7 @@ fun StudyPageScreen(
                 }
             )
         }
-        ALL_BLANK_REVIEW -> if(blankGuideLabel && checkedUserRuleBlank) {
+        StudyType.ALL_BLANK_REVIEW.value -> if(blankGuideLabel && checkedUserRuleBlank) {
             SelectRuleBlankDialog { label, type, rule ->
                 studyPageViewModel.updateLabel(label, type)
                 studyPageViewModel.setUserRule(rule)

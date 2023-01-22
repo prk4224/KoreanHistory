@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
-import com.jaehong.presenter.util.Constants.FIRST_REVIEW
+import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun SelectRuleFirstDialog(
@@ -21,7 +21,7 @@ fun SelectRuleFirstDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                onClickUpdate(1,FIRST_REVIEW)
+                onClickUpdate(1,StudyType.FIRST_REVIEW.value)
             }
         )
     ) {

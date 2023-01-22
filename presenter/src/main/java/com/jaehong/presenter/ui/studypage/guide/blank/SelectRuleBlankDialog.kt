@@ -11,8 +11,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BlackWithAlpha50
-import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
-import com.jaehong.presenter.util.Constants.USER_RULE_BLANK
+import com.jaehong.presenter.util.enum.GuideKey
+import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun SelectRuleBlankDialog(
@@ -25,7 +25,11 @@ fun SelectRuleBlankDialog(
         .background(BlackWithAlpha50)
         .clickable(
             onClick = {
-                onClickUpdate(0,ALL_BLANK_REVIEW,USER_RULE_BLANK)
+                onClickUpdate(
+                    0,
+                    StudyType.ALL_BLANK_REVIEW.value,
+                    GuideKey.USER_RULE_BLANK.value
+                )
             }
         )
     ) {

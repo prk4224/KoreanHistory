@@ -14,7 +14,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray3
-import com.jaehong.presenter.util.Constants
+import com.jaehong.presenter.util.enum.StudyType
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -45,7 +45,7 @@ fun StudyPagePagerScreen(
         LazyColumn(
             modifier = Modifier.padding(30.dp)
         ) {
-            val data = if (studyState == Constants.FIRST_REVIEW && allHintState.not()) {
+            val data = if (studyState == StudyType.FIRST_REVIEW.value && allHintState.not()) {
                 studyData
             } else {
                 allStudyData

@@ -10,11 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.Constants.PLUS_KEYWORD_TEXT
@@ -23,10 +21,9 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun MyStudyBlankView(
-   onBackButtonClicked: () -> Unit
+    blankImage: Painter,
+    onBackButtonClicked: () -> Unit
 ) {
-    val blankImage = painterResource(id = R.drawable.black_image)
-
     Box(
         modifier = Modifier
             .fillMaxSize()

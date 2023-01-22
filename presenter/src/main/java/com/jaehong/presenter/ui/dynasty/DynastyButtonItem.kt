@@ -13,11 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Typography
-import com.jaehong.presenter.util.Constants
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
+import com.jaehong.presenter.util.enum.DynastyType
 
 @Composable
 fun DynastyButtonItem(
@@ -36,8 +35,9 @@ fun DynastyButtonItem(
         })
     ) {
         Button(
+
             onClick = {
-                if (title == Constants.MY_KEYWORD) {
+                if (title == DynastyType.MY_KEYWORD.value) {
                     toMyStudyClicked()
                 } else {
                     toStudyTypeClicked()

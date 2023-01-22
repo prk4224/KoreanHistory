@@ -3,14 +3,16 @@ package com.jaehong.presenter.ui.mystudy
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaehong.presenter.R
 import com.jaehong.presenter.ui.mystudy.blank.MyStudyBlankView
 import com.jaehong.presenter.ui.mystudy.description.MyDescriptionTextView
 import com.jaehong.presenter.ui.mystudy.item.MyStudyHeaderItem
 import com.jaehong.presenter.ui.mystudy.item.MyStudyNoticeItem
 import com.jaehong.presenter.ui.mystudy.item.MyStudyViewItem
 import com.jaehong.presenter.ui.mystudy.pager.MyStudyPagerScreen
-import com.jaehong.presenter.util.DataChangeButton
+import com.jaehong.presenter.util.composable.DataChangeButton
 
 @Composable
 fun MyStudyScreen(
@@ -21,6 +23,8 @@ fun MyStudyScreen(
     val currentPage = myStudyViewModel.currentPage.collectAsState().value
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
     val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
+
+    val blankImage = painterResource(id = R.drawable.black_image)
 
     if(pagerList.isNotEmpty()){
         Surface {
@@ -56,7 +60,8 @@ fun MyStudyScreen(
                 myStudyViewModel.deleteMyStudyInfo(selectedItems)
             }
         }
-    } else MyStudyBlankView {
-        myStudyViewModel.onBackButtonClicked()
-    }
+    } else MyStudyBlankView(
+        blankImage = blankImage,
+        onBackButtonClicked = { myStudyViewModel.onBackButtonClicked() }
+    )
 }

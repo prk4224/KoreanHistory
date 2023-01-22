@@ -4,14 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.jaehong.presenter.ui.home.HomeScreen
-import com.jaehong.presenter.util.Constants.ALL_BLANK_REVIEW
-import com.jaehong.presenter.util.Constants.FIRST_REVIEW
-import com.jaehong.presenter.util.Constants.GO_LYEO
-import com.jaehong.presenter.util.Constants.JO_SEON
-import com.jaehong.presenter.util.Constants.MY_KEYWORD
-import com.jaehong.presenter.util.Constants.ORIGIN_STUDY
-import com.jaehong.presenter.util.Constants.SAM_GUG
-import com.jaehong.presenter.util.Constants.SIN_LA
+import com.jaehong.presenter.util.enum.DynastyType
+import com.jaehong.presenter.util.enum.StudyType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +19,20 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        val dynastyList = listOf(SAM_GUG, SIN_LA, GO_LYEO, JO_SEON, MY_KEYWORD)
-        val studyList = listOf(ORIGIN_STUDY, FIRST_REVIEW, ALL_BLANK_REVIEW)
+        val dynastyList =
+            listOf(
+                DynastyType.SAM_GUG.value,
+                DynastyType.SIN_LA.value,
+                DynastyType.GO_LYEO.value,
+                DynastyType.JO_SEON.value,
+                DynastyType.MY_KEYWORD.value
+            )
+
+        val studyList =
+            listOf(
+                StudyType.ORIGIN_STUDY.value,
+                StudyType.FIRST_REVIEW.value,
+                StudyType.ALL_BLANK_REVIEW.value
+            )
     }
 }

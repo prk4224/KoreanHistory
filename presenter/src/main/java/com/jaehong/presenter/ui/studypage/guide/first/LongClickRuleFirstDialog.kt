@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
-import com.jaehong.presenter.util.Constants.FIRST_REVIEW
-import com.jaehong.presenter.util.Constants.USER_RULE_FIRST
+import com.jaehong.presenter.util.enum.GuideKey
+import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun LongClickRuleFirstDialog(
@@ -24,7 +24,11 @@ fun LongClickRuleFirstDialog(
         .fillMaxSize()
         .clickable(
             onClick = {
-                onClickUpdate(2,FIRST_REVIEW,USER_RULE_FIRST)
+                onClickUpdate(
+                    2,
+                    StudyType.FIRST_REVIEW.value,
+                    GuideKey.USER_RULE_FIRST.value
+                )
             }
         ),
         contentAlignment = Alignment.Center
