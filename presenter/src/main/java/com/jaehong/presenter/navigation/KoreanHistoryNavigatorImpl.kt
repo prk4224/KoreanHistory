@@ -23,18 +23,6 @@ class KoreanHistoryNavigatorImpl @Inject constructor() : KoreanHistoryNavigator 
         )
     }
 
-    override fun tryNavigateBack(
-        route: String?,
-        inclusive: Boolean,
-    ) {
-        navigationChannel.trySend(
-            NavigationIntent.NavigateBack(
-                route = route,
-                inclusive = inclusive
-            )
-        )
-    }
-
     override suspend fun navigateTo(
         route: String,
         popUpToRoute: String?,
@@ -42,22 +30,6 @@ class KoreanHistoryNavigatorImpl @Inject constructor() : KoreanHistoryNavigator 
         isSingleTop: Boolean,
     ) {
         navigationChannel.send(
-            NavigationIntent.NavigateTo(
-                route = route,
-                popUpToRoute = popUpToRoute,
-                inclusive = inclusive,
-                isSingleTop = isSingleTop,
-            )
-        )
-    }
-
-    override fun tryNavigateTo(
-        route: String,
-        popUpToRoute: String?,
-        inclusive: Boolean,
-        isSingleTop: Boolean,
-    ) {
-        navigationChannel.trySend(
             NavigationIntent.NavigateTo(
                 route = route,
                 popUpToRoute = popUpToRoute,

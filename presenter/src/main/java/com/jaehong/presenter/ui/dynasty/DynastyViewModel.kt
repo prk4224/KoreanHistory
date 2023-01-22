@@ -46,10 +46,14 @@ class DynastyViewModel @Inject constructor(
     }
 
     fun onNavigateToStudyTypeClicked(dynastyType: String) {
-        koreanHistoryNavigator.tryNavigateTo(Destination.StudyType(dynastyType))
+        viewModelScope.launch {
+            koreanHistoryNavigator.navigateTo(Destination.StudyType(dynastyType))
+        }
     }
 
     fun onNavigateToMyStudyClicked() {
-        koreanHistoryNavigator.tryNavigateTo(Destination.MyStudy())
+        viewModelScope.launch {
+            koreanHistoryNavigator.navigateTo(Destination.MyStudy())
+        }
     }
 }

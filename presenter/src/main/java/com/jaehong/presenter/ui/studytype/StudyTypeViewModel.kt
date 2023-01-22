@@ -35,11 +35,9 @@ class StudyTypeViewModel @Inject constructor(
         }
     }
 
-    fun onBackButtonClicked() {
-        koreanHistoryNavigator.tryNavigateBack()
-    }
-
     fun onNavigateToStudyPageClicked(dynastyType: String, studyType: String) {
-        koreanHistoryNavigator.tryNavigateTo(Destination.StudyPage(dynastyType,studyType,"0"))
+        viewModelScope.launch {
+            koreanHistoryNavigator.navigateTo(Destination.StudyPage(dynastyType,studyType,"0"))
+        }
     }
 }

@@ -47,6 +47,7 @@ fun HomeScreen(
         }
     }
 }
+
 @Composable
 fun NavigationEffects(
     navigationChannel: Channel<NavigationIntent>,

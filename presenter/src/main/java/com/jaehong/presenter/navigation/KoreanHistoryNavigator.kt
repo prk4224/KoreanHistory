@@ -10,11 +10,6 @@ interface KoreanHistoryNavigator {
         inclusive: Boolean = false,
     )
 
-    fun tryNavigateBack(
-        route: String? = null,
-        inclusive: Boolean = false,
-    )
-
     suspend fun navigateTo(
         route: String,
         popUpToRoute: String? = null,
@@ -22,12 +17,6 @@ interface KoreanHistoryNavigator {
         isSingleTop: Boolean = false,
     )
 
-    fun tryNavigateTo(
-        route: String,
-        popUpToRoute: String? = null,
-        inclusive: Boolean = false,
-        isSingleTop: Boolean = false,
-    )
 }
 sealed class NavigationIntent {
     data class NavigateBack(

@@ -14,6 +14,7 @@ fun DynastyScreen(
     val isVisible = dynastyViewModel.isVisible.collectAsState().value
     val dialogState = dynastyViewModel.showDialog.collectAsState().value
     val markImage = painterResource(id = R.drawable.woo_su_mark)
+    val guideImage = painterResource(id = R.drawable.guide_image)
 
     DynastyButton(
         isVisible = isVisible,
@@ -38,8 +39,9 @@ fun DynastyScreen(
     dynastyViewModel.startAnimation()
 
     if(dialogState){
-        GuideDialogContent() {
-            dynastyViewModel.onDialogDismiss(it)
-        }
+        GuideDialogContent(
+            guideImage = guideImage,
+            onGuideClicked = { dynastyViewModel.onDialogDismiss(it) }
+        )
     }
 } 

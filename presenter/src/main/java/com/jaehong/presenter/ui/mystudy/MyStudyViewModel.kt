@@ -69,7 +69,9 @@ class MyStudyViewModel @Inject constructor(
     }
 
     fun onBackButtonClicked() {
-        koreanHistoryNavigator.tryNavigateBack()
+        viewModelScope.launch {
+            koreanHistoryNavigator.navigateBack()
+        }
     }
 
     private fun clearSelectedItems(){

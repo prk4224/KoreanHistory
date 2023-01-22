@@ -163,9 +163,11 @@ class StudyPageViewModel @Inject constructor(
     }
 
     private fun onNavigateRefreshClicked() {
-        koreanHistoryNavigator.tryNavigateBack()
-        koreanHistoryNavigator.tryNavigateTo(
-            Destination.StudyPage(dynastyState.value,studyState.value,"${currentPage.value}")
-        )
+        viewModelScope.launch {
+            koreanHistoryNavigator.navigateBack()
+            koreanHistoryNavigator.navigateTo(
+                Destination.StudyPage(dynastyState.value,studyState.value,"${currentPage.value}")
+            )
+        }
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
@@ -23,9 +24,9 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun GuideDialogContent(
-    onGuideClicked: (Boolean) -> Unit
+    guideImage: Painter,
+    onGuideClicked: (Boolean) -> Unit,
 ){
-    val guideImage = painterResource(id = R.drawable.guide_image)
     var checked by remember { mutableStateOf(false) }
 
     Box(
