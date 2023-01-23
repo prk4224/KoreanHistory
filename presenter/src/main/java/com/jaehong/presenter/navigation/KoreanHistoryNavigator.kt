@@ -3,8 +3,8 @@ package com.jaehong.presenter.navigation
 import kotlinx.coroutines.channels.Channel
 
 interface KoreanHistoryNavigator {
-
     val navigationChannel : Channel<NavigationIntent>
+
     suspend fun navigateBack(
         route: String? = null,
         inclusive: Boolean = false,

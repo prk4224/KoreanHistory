@@ -11,8 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.Constants.PLUS_KEYWORD_TEXT
@@ -21,7 +23,7 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun MyStudyBlankView(
-    blankImage: Painter,
+    blankImage: Painter = painterResource(id = R.drawable.black_image),
     onBackButtonClicked: () -> Unit
 ) {
     Box(

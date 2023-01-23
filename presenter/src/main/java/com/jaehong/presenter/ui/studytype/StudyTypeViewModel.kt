@@ -20,6 +20,7 @@ class StudyTypeViewModel @Inject constructor(
 
     private val _dynastyState = MutableStateFlow("")
     val dynastyState = _dynastyState.asStateFlow()
+
     private val _isVisible = MutableStateFlow(false)
     val isVisible = _isVisible.asStateFlow()
 

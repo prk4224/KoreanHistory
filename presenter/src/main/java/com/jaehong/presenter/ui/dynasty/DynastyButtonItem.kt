@@ -35,7 +35,6 @@ fun DynastyButtonItem(
         })
     ) {
         Button(
-
             onClick = {
                 if (title == DynastyType.MY_KEYWORD.value) {
                     toMyStudyClicked()

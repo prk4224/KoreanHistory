@@ -41,8 +41,8 @@ fun MyStudyViewItem(
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
-            studyInfo.description.forEachIndexed { index, description ->
-                myDescription(studyInfo,description,index)
+            studyInfo.description.forEachIndexed { descIndex, description ->
+                myDescription(studyInfo,description,descIndex)
             }
         }
     }
