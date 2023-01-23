@@ -12,6 +12,8 @@ import com.jaehong.data.util.Constants.JO_SEON
 import com.jaehong.data.util.Constants.SAM_GUG
 import com.jaehong.data.util.Constants.SIN_LA
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(
@@ -20,7 +22,9 @@ class LocalDataSourceImpl @Inject constructor(
     private val preference: GuidePreference
 ): LocalDataSource {
 
-    override suspend fun getAllStudyInfo(dynastyType: String): StudyEntity {
+    override suspend fun getAllStudyInfo(
+        dynastyType: String
+    ): Flow<StudyEntity> = flow {
 
         val json = when(dynastyType) {
             SAM_GUG -> context.assets.open("samkok_all.json").reader().readText()
@@ -30,7 +34,7 @@ class LocalDataSourceImpl @Inject constructor(
             else -> throw IllegalArgumentException("Dynasty Type Error")
         }
 
-        return Gson().fromJson(json, StudyEntity::class.java)
+        emit(Gson().fromJson(json, StudyEntity::class.java))
     }
 
     override suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyEntity {

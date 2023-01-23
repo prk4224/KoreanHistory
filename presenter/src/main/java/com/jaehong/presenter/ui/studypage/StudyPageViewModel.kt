@@ -1,5 +1,6 @@
 package com.jaehong.presenter.ui.studypage
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import com.jaehong.presenter.util.enum.StudyType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -82,7 +84,11 @@ class StudyPageViewModel @Inject constructor(
         _currentPage.value = startPage?.toInt() ?: throw IllegalArgumentException("Start Page Error")
 
         viewModelScope.launch {
-            _allStudyInfoList.value = studyInfoUseCase(dynastyType)
+            studyInfoUseCase(dynastyType)
+                .catch { Log.d("Get All Data", "result: $it") }
+                .collect {
+                    _allStudyInfoList.value = it
+                }
             if(studyType == StudyType.FIRST_REVIEW.value) {
                 _studyInfoList.value = studyInfoUseCase.getStudyIngo(dynastyType,studyType)
             }
