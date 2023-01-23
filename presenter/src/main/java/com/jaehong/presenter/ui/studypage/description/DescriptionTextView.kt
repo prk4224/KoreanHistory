@@ -19,6 +19,7 @@ import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 import com.jaehong.presenter.util.enum.StudyType
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DescriptionTextView(
     studyInfo: StudyInfoItem,
