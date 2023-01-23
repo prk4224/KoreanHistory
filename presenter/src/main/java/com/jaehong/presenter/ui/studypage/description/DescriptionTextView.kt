@@ -53,22 +53,20 @@ fun DescriptionTextView(
             .padding(5.dp)
             .background(backgroundColor)
             .alpha(alphaText)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = {
-                        selected = selected.not()
-                        changeSelectedItem(selectedItem,selected)
-                        if (studyState == StudyType.ORIGIN_STUDY.value) {
-                            changeButtonState()
-                        }
-                    },
-                    onLongPress = {
-                        if (studyState == StudyType.FIRST_REVIEW.value) {
-                            changeAllHintState()
-                        }
+            .combinedClickable(
+                onClick = {
+                    setSelected(selected.not())
+                    changeSelectedItem(selectedItem,selected.not())
+                    if (studyState == StudyType.ORIGIN_STUDY.value) {
+                        changeButtonState()
                     }
-                )
-            },
+                },
+                onLongClick = {
+                    if (studyState == StudyType.FIRST_REVIEW.value) {
+                        changeAllHintState()
+                    }
+                }
+            ),
         )
 }
 
