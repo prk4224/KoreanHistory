@@ -16,7 +16,6 @@ fun StudyTypeScreen(
 ) {
     val dynastyType = studyTypeViewModel.dynastyState.collectAsState().value
     val isVisible = studyTypeViewModel.isVisible.collectAsState().value
-    val markImage = painterResource(id = R.drawable.woo_su_mark)
 
     val animationHeight by animateIntAsState(
         targetValue = if(isVisible) 400 else 50,
@@ -35,7 +34,6 @@ fun StudyTypeScreen(
         dynastyType = dynastyType,
         animationHeight = animationHeight,
         animationRadius = animationRadius,
-        logo = markImage,
         studyTypeButtonItem = {
             StudyTypeButtonItem(
                 dynastyType = dynastyType,

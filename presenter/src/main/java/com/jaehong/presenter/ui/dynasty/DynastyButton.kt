@@ -10,12 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import com.jaehong.presenter.R
 import com.jaehong.presenter.ui.MainActivity
 
 @Composable
 fun DynastyButton(
     isVisible: Boolean,
-    markImage: Painter,
+    markImage: Painter = painterResource(id = R.drawable.woo_su_mark),
     logoImage: @Composable (Painter) -> Unit,
     dynastyButtonItem: @Composable (String,Boolean) -> Unit
 ) {

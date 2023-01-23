@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
@@ -21,10 +22,10 @@ import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun SelectRuleOriginDialog(
+    checkboxAllImage: Painter = painterResource(id = R.drawable.checkbox_image),
+    guidePlusImage: Painter = painterResource(id = R.drawable.guide_plus_image),
     onClickUpdate: (Int,String,String) -> Unit
 ) {
-    val checkboxAllImage = painterResource(id = R.drawable.checkbox_image)
-    val guidePlusImage = painterResource(id = R.drawable.guide_plus_image)
 
     Box(modifier = Modifier
         .fillMaxSize()

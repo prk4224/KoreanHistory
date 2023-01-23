@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
@@ -16,10 +17,9 @@ import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun SelectRuleBlankDialog(
+    checkboxBlankImage: Painter = painterResource(id = R.drawable.check_box_blank),
     onClickUpdate: (Int,String,String) -> Unit,
 ) {
-    val checkboxBlankImage = painterResource(id = R.drawable.check_box_blank)
-
     Box(modifier = Modifier
         .fillMaxSize()
         .background(BlackWithAlpha50)

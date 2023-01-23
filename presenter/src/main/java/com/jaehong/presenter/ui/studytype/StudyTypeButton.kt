@@ -10,7 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.Gray1
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.ui.MainActivity
@@ -21,7 +23,7 @@ fun StudyTypeButton(
     dynastyType: String,
     animationHeight: Int,
     animationRadius: Int,
-    logo: Painter,
+    logo: Painter = painterResource(id = R.drawable.woo_su_mark),
     studyTypeButtonItem: @Composable (String) -> Unit,
     studyTypeTitleItem: @Composable (String,Int) -> Unit,
     logoImage: @Composable (Painter) -> Unit

@@ -13,12 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.Typography
@@ -44,7 +43,9 @@ class SplashScreenActivity: ComponentActivity() {
 }
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    splashImage: Painter = painterResource(id = R.drawable.koreanhistory_splash_screen)
+) {
     Surface(modifier = Modifier.fillMaxSize()) {
 
         Text(text = "즐거운 역사 공부",
@@ -55,7 +56,7 @@ fun SplashScreen() {
         )
 
         Image(
-            painter = painterResource(id = R.drawable.koreanhistory_splash_screen),
+            painter = splashImage,
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             alignment = Alignment.BottomCenter

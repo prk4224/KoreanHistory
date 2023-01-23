@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
@@ -16,9 +17,9 @@ import com.jaehong.presenter.util.enum.StudyType
 
 @Composable
 fun SwipeRuleOriginDialog(
+    swipeImage: Painter = painterResource(id = R.drawable.swipe_image),
     onClickUpdate: (Int,String) -> Unit
 ){
-    val swipeImage = painterResource(id = R.drawable.swipe_image)
 
     Box(modifier = Modifier
         .fillMaxSize()
