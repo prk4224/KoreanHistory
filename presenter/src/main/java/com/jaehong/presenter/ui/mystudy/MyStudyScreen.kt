@@ -3,9 +3,10 @@ package com.jaehong.presenter.ui.mystudy
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.presenter.R
+import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.ui.mystudy.blank.MyStudyBlankView
 import com.jaehong.presenter.ui.mystudy.description.MyDescriptionTextView
 import com.jaehong.presenter.ui.mystudy.item.MyStudyHeaderItem
@@ -24,8 +25,6 @@ fun MyStudyScreen(
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
     val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
 
-    val blankImage = painterResource(id = R.drawable.black_image)
-
     if(pagerList.isNotEmpty()){
         Surface {
             MyStudyPagerScreen(
@@ -42,13 +41,20 @@ fun MyStudyScreen(
                     MyStudyNoticeItem()
                 },
                 myStudyView = {
-                    MyStudyViewItem(it) { studyInfo, description, index ->
+                    MyStudyViewItem(it) { studyInfo, description, descIndex ->
+                        val (selected,setSelected) = remember(description) { mutableStateOf(false) }
                         MyDescriptionTextView(
-                            studyInfo = studyInfo,
                             description = description,
-                            descriptionIndex = index,
-                            onTextClicked = { selectedItem, selected ->
-                                myStudyViewModel.changeSelectedItem(selectedItem, selected)
+                            selectedItem = StudyInfoItem(
+                                studyInfo.id + descIndex,
+                                studyInfo.detail,
+                                studyInfo.king_name,
+                                arrayListOf(description)
+                            ),
+                            selected = selected,
+                            onSelectChange = setSelected,
+                            onTextClicked = { selectedItem, select ->
+                                myStudyViewModel.changeSelectedItem(selectedItem, select)
                                 myStudyViewModel.changeButtonState()
                             }
                         )
@@ -60,8 +66,5 @@ fun MyStudyScreen(
                 myStudyViewModel.deleteMyStudyInfo(selectedItems)
             }
         }
-    } else MyStudyBlankView(
-        blankImage = blankImage,
-        onBackButtonClicked = { myStudyViewModel.onBackButtonClicked() }
-    )
+    } else MyStudyBlankView { myStudyViewModel.onBackButtonClicked() }
 }

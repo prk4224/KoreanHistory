@@ -18,21 +18,13 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun MyDescriptionTextView(
-    studyInfo: StudyInfoItem,
     description: String,
-    descriptionIndex: Int,
+    selectedItem: StudyInfoItem,
+    selected: Boolean,
+    onSelectChange: (Boolean) -> Unit,
+    backgroundColor: Color = if(selected) Gray2 else Color.White,
     onTextClicked: (StudyInfoItem,Boolean) -> Unit
 ) {
-    val selectedItem = StudyInfoItem(
-        studyInfo.id + descriptionIndex,
-        studyInfo.detail,
-        studyInfo.king_name,
-        arrayListOf(description)
-    )
-
-    var selected by remember(selectedItem.id) { mutableStateOf(false) }
-    val backgroundColor = if(selected) Gray2 else Color.White
-
     Text(
         fontSize = 25.nonScaledSp,
         lineHeight = 25.nonScaledSp,
@@ -43,12 +35,10 @@ fun MyDescriptionTextView(
             .border(1.dp, Color.LightGray, getTopLineShape())
             .padding(5.dp)
             .background(backgroundColor)
-            .clickable(
-                onClick = {
-                    selected = selected.not()
-                    onTextClicked(selectedItem,selected)
-                },
-            )
+            .clickable {
+                onSelectChange(selected.not())
+                onTextClicked(selectedItem,selected.not())
+            }
     )
 }
 

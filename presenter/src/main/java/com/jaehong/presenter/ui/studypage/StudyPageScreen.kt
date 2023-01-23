@@ -2,7 +2,10 @@ package com.jaehong.presenter.ui.studypage
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.ui.studypage.description.DescriptionTextView
 import com.jaehong.presenter.ui.studypage.dialog.SaveCheckAlertDialog
 import com.jaehong.presenter.ui.studypage.guide.blank.SelectRuleBlankDialog
@@ -50,15 +53,22 @@ fun StudyPageScreen(
         header = { type, title -> StudyPageHeaderItem(type, title) },
         dynastyState = dynastyState,
         studyAllViewItem = { studyInfo, index ->
-            StudyAllViewItem(studyInfo,) { descIndex, description ->
+            StudyAllViewItem(studyInfo) { descIndex, description ->
+                val (selected,setSelected) = remember(description) { mutableStateOf(false) }
                 DescriptionTextView(
-                    studyInfo = studyInfo,
                     description = description,
-                    descriptionIndex = descIndex,
                     originDescription = allStudyData[index].description[descIndex],
                     studyState = studyState,
-                    changeSelectedItem = { selectedItem, selected ->
-                        studyPageViewModel.changeSelectedItem(selectedItem, selected)
+                    selectedItem = StudyInfoItem(
+                        studyInfo.id + descIndex,
+                        studyInfo.detail,
+                        studyInfo.king_name,
+                        arrayListOf(description)
+                    ),
+                    selected = selected,
+                    setSelected = setSelected,
+                    changeSelectedItem = { selectedItem, select ->
+                        studyPageViewModel.changeSelectedItem(selectedItem, select)
                     },
                     changeButtonState = {
                         studyPageViewModel.changeButtonState()

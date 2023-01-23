@@ -24,10 +24,11 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun GuideDialogContent(
-    guideImage: Painter,
+    guideImage: Painter = painterResource(id = R.drawable.guide_image),
     onGuideClicked: (Boolean) -> Unit,
+    checked: Boolean,
+    onCheckChange: (Boolean) -> Unit
 ){
-    var checked by remember { mutableStateOf(false) }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -56,7 +57,7 @@ fun GuideDialogContent(
             ) {
                 Checkbox(
                     checked = checked,
-                    onCheckedChange = { checked = checked.not() },
+                    onCheckedChange = { onCheckChange(checked.not()) },
                     modifier = Modifier
                         .size(20.dp)
                         .padding(start = 20.dp),

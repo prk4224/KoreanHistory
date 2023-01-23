@@ -1,18 +1,18 @@
 package com.jaehong.presenter.ui.studypage.description
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
@@ -22,27 +22,19 @@ import com.jaehong.presenter.util.enum.StudyType
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DescriptionTextView(
-    studyInfo: StudyInfoItem,
     description: String,
-    descriptionIndex: Int,
     originDescription: String,
     studyState: String,
+    selectedItem: StudyInfoItem,
+    selected: Boolean,
+    setSelected: (Boolean) -> Unit,
+    backgroundColor: Color = if (selected) Gray2 else Color.White,
+    alphaText: Float = if(selected || studyState != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f,
+    hintText: String = if (selected) originDescription else description,
     changeSelectedItem: (StudyInfoItem,Boolean) -> Unit,
     changeButtonState: () -> Unit,
     changeAllHintState: () -> Unit,
 ) {
-    val selectedItem = StudyInfoItem(
-            studyInfo.id + descriptionIndex,
-            studyInfo.detail,
-            studyInfo.king_name,
-            arrayListOf(description)
-    )
-    var selected by remember(studyInfo.description[descriptionIndex]) { mutableStateOf(false) }
-
-    val backgroundColor = if (selected) Gray2 else Color.White
-    val alphaText = if(selected || studyState != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f
-    val hintText = if (selected) originDescription else description
-
     Text(
         fontSize = 25.nonScaledSp,
         lineHeight = 25.nonScaledSp,
@@ -69,14 +61,6 @@ fun DescriptionTextView(
                 }
             ),
         )
-}
-
-@Composable
-fun TextField(
-    selected: Boolean,
-    changeSelected: (Boolean) -> Unit
-) {
-
 }
 
 private fun getTopLineShape() : Shape {
