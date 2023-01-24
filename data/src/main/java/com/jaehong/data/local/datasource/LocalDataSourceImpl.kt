@@ -37,8 +37,10 @@ class LocalDataSourceImpl @Inject constructor(
         emit(Gson().fromJson(json, StudyEntity::class.java))
     }
 
-    override suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyEntity {
-
+    override suspend fun getStudyInfo(
+        dynastyType: String,
+        studyType: String
+    ): Flow<StudyEntity> = flow {
         val json = when(dynastyType) {
             SAM_GUG -> context.assets.open("samkok_first_letter.json").reader().readText()
             SIN_LA  -> context.assets.open("hoosamkok_first_letter.json").reader().readText()
@@ -46,11 +48,11 @@ class LocalDataSourceImpl @Inject constructor(
             JO_SEON -> context.assets.open("joseon_first_letter.json").reader().readText()
             else -> throw IllegalArgumentException("Dynasty Type Error")
         }
-        return Gson().fromJson(json, StudyEntity::class.java)
+        emit(Gson().fromJson(json, StudyEntity::class.java))
     }
 
-    override suspend fun gatMyStudyInfo(): List<MyStudyEntity> {
-        return koreanHistoryDataBase.myStudyDao().getMyStudyList()
+    override suspend fun gatMyStudyInfo(): Flow<List<MyStudyEntity>> = flow {
+         emit(koreanHistoryDataBase.myStudyDao().getMyStudyList())
     }
 
     override suspend fun insertMyStudyInfo(studyList: List<MyStudyEntity>) {
@@ -61,8 +63,10 @@ class LocalDataSourceImpl @Inject constructor(
         koreanHistoryDataBase.myStudyDao().deleteMyStudyWithListTransaction(studyList)
     }
 
-    override suspend fun getGuideInfo(key: String): Boolean {
-        return preference.getString(key)
+    override suspend fun getGuideInfo(
+        key: String
+    ): Flow<Boolean> = flow {
+        emit(preference.getString(key))
     }
 
     override suspend fun setGuideInfo(key: String) {

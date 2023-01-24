@@ -14,7 +14,9 @@ import com.jaehong.presenter.ui.mystudy.item.MyStudyNoticeItem
 import com.jaehong.presenter.ui.mystudy.item.MyStudyViewItem
 import com.jaehong.presenter.ui.mystudy.pager.MyStudyPagerScreen
 import com.jaehong.presenter.util.composable.DataChangeButton
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun MyStudyScreen(
     myStudyViewModel: MyStudyViewModel = hiltViewModel()

@@ -1,11 +1,15 @@
 package com.jaehong.presenter.ui.dynasty
 
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.presenter.R
 import com.jaehong.presenter.util.composable.LogoImage
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun DynastyScreen(
     dynastyViewModel: DynastyViewModel = hiltViewModel()

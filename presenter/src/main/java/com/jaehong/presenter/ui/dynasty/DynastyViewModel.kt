@@ -1,5 +1,6 @@
 package com.jaehong.presenter.ui.dynasty
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.usecase.GetGuideInfoUseCase
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +29,11 @@ class DynastyViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _showDialog.value = getGuideInfoUseCase(GuideKey.GUIDE_KEY.value)
+            getGuideInfoUseCase(GuideKey.GUIDE_KEY.value)
+                .catch { Log.d("Guide Date", "result : $it") }
+                .collect {
+                    _showDialog.value = it
+                }
         }
     }
 

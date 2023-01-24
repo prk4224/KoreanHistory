@@ -81,7 +81,8 @@ class StudyPageViewModel @Inject constructor(
 
         _dynastyState.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
         _studyState.value = studyType ?: throw IllegalArgumentException("Study Type Error")
-        _currentPage.value = startPage?.toInt() ?: throw IllegalArgumentException("Start Page Error")
+        _currentPage.value =
+            startPage?.toInt() ?: throw IllegalArgumentException("Start Page Error")
 
         viewModelScope.launch {
             studyInfoUseCase(dynastyType)
@@ -89,15 +90,32 @@ class StudyPageViewModel @Inject constructor(
                 .collect {
                     _allStudyInfoList.value = it
                 }
-            if(studyType == StudyType.FIRST_REVIEW.value) {
-                _studyInfoList.value = studyInfoUseCase.getStudyIngo(dynastyType,studyType)
+            if (studyType == StudyType.FIRST_REVIEW.value) {
+                studyInfoUseCase.getStudyIngo(dynastyType, studyType)
+                    .catch { }
+                    .collect {
+                        _studyInfoList.value = it
+                        _pagerList.value = getPagerList(it)
+                    }
             }
-            _pagerList.value = getPagerList()
-
-            _checkedUserRuleOrigin.value = studyInfoUseCase.getGuideInfo(GuideKey.USER_RULE_ORIGIN.value)
-            _checkedUserRuleFirst.value = studyInfoUseCase.getGuideInfo(GuideKey.USER_RULE_FIRST.value)
-            _checkedUserRuleBlank.value = studyInfoUseCase.getGuideInfo(GuideKey.USER_RULE_BLANK.value)
-
+            
+            with(studyInfoUseCase) {
+                getGuideInfo(GuideKey.USER_RULE_ORIGIN.value)
+                    .catch { }
+                    .collect {
+                        _checkedUserRuleOrigin.value = it
+                    }
+                getGuideInfo(GuideKey.USER_RULE_FIRST.value)
+                    .catch { }
+                    .collect {
+                        _checkedUserRuleFirst.value = it
+                    }
+                getGuideInfo(GuideKey.USER_RULE_BLANK.value)
+                    .catch { }
+                    .collect {
+                        _checkedUserRuleBlank.value = it
+                    }
+            }
         }
     }
 
@@ -108,7 +126,7 @@ class StudyPageViewModel @Inject constructor(
     }
 
     fun updateLabel(label: Int, studyType: String) {
-        when(studyType) {
+        when (studyType) {
             StudyType.ORIGIN_STUDY.value -> _originGuideLabel.value = label
             StudyType.FIRST_REVIEW.value -> _firstGuideLabel.value = label
             StudyType.ALL_BLANK_REVIEW.value -> _blankGuideLabel.value = false
@@ -129,17 +147,17 @@ class StudyPageViewModel @Inject constructor(
         _showDialog.value = false
     }
 
-    fun updatePage(page: Int){
+    fun updatePage(page: Int) {
         _currentPage.value = page
         clearSelectedItems()
     }
 
-    fun changeSelectedItem(studyInfoItem: StudyInfoItem, check: Boolean){
+    fun changeSelectedItem(studyInfoItem: StudyInfoItem, check: Boolean) {
         if (check) _selectedItems.value.add(studyInfoItem)
         else _selectedItems.value.remove(studyInfoItem)
     }
 
-    fun changeButtonState(){
+    fun changeButtonState() {
         _isVisible.value = selectedItems.value.size > 0
     }
 
@@ -147,21 +165,21 @@ class StudyPageViewModel @Inject constructor(
         _isAllHintVisible.value = _isAllHintVisible.value.not()
     }
 
-    private fun clearSelectedItems(){
+    private fun clearSelectedItems() {
         _isVisible.value = false
         _selectedItems.value.clear()
     }
 
-    private fun addMyStudyInfo(studyInfo: List<StudyInfoItem>){
+    private fun addMyStudyInfo(studyInfo: List<StudyInfoItem>) {
         viewModelScope.launch {
             studyInfoUseCase.insertMyStudyInfo(studyInfo)
         }
     }
 
-    private fun getPagerList(): List<String> {
+    private fun getPagerList(studyInfo : StudyInfo): List<String> {
         val pagerList = mutableListOf<String>()
-        allStudyInfoList.value.forEach {
-            if(pagerList.contains(it.detail).not()){
+        studyInfo.forEach {
+            if (pagerList.contains(it.detail).not()) {
                 pagerList.add(it.detail)
             }
         }
@@ -172,7 +190,7 @@ class StudyPageViewModel @Inject constructor(
         viewModelScope.launch {
             koreanHistoryNavigator.navigateBack()
             koreanHistoryNavigator.navigateTo(
-                Destination.StudyPage(dynastyState.value,studyState.value,"${currentPage.value}")
+                Destination.StudyPage(dynastyState.value, studyState.value, "${currentPage.value}")
             )
         }
     }

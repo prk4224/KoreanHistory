@@ -1,5 +1,6 @@
 package com.jaehong.presenter.ui.mystudy
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
@@ -8,6 +9,7 @@ import com.jaehong.presenter.navigation.KoreanHistoryNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,9 +42,13 @@ class MyStudyViewModel @Inject constructor(
 
     private fun getMyStudyData(){
         viewModelScope.launch {
-            val myStudyList = myStudyInfoUseCase()
-            _myStudyInfoList.value = myStudyList
-            _pagerList.value = getPagerList(myStudyList)
+
+            myStudyInfoUseCase()
+                .catch { Log.d("My Study Data","result : $it") }
+                .collect {
+                    _myStudyInfoList.value = it
+                    _pagerList.value = getPagerList(it)
+                }
         }
     }
 

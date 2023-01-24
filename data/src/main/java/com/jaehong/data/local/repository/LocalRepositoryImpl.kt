@@ -7,6 +7,7 @@ import com.jaehong.data.mapper.Mapper.domainToDataBase
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -22,12 +23,19 @@ class LocalRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getStudyInfo(dynastyType: String, studyType: String): StudyInfo {
-        return dataSource.getStudyInfo(dynastyType,studyType).dataToDomain()
+    override suspend fun getStudyInfo(
+        dynastyType: String,
+        studyType: String
+    ): Flow<StudyInfo> = flow {
+        dataSource.getStudyInfo(dynastyType,studyType).collect {
+            emit(it. dataToDomain())
+        }
     }
 
-    override suspend fun gatMyStudyInfo(): List<StudyInfoItem> {
-        return dataSource.gatMyStudyInfo().dataBaseToDomain()
+    override suspend fun gatMyStudyInfo(): Flow<List<StudyInfoItem>> = flow {
+        dataSource.gatMyStudyInfo().collect {
+            emit(it.dataBaseToDomain())
+        }
     }
 
     override suspend fun insertMyStudyInfo(studyList: List<StudyInfoItem>) {
@@ -38,8 +46,10 @@ class LocalRepositoryImpl @Inject constructor(
         dataSource.deleteMyStudyInfo(studyList.domainToDataBase())
     }
 
-    override suspend fun getGuideInfo(key: String): Boolean {
-        return dataSource.getGuideInfo(key)
+    override suspend fun getGuideInfo(key: String): Flow<Boolean> = flow {
+        dataSource.getGuideInfo(key).collect {
+            emit(it)
+        }
     }
 
     override suspend fun setGuideInfo(key: String) {

@@ -9,7 +9,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.R
 import com.jaehong.presenter.util.composable.LogoImage
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun StudyTypeScreen(
     studyTypeViewModel: StudyTypeViewModel = hiltViewModel()
