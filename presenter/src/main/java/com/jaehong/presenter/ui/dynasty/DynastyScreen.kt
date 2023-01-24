@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.util.composable.LogoImage
+import com.jaehong.domain.local.model.enum_type.DynastyType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
@@ -28,7 +29,10 @@ fun DynastyScreen(
                     dynastyViewModel.onNavigateToMyStudyClicked()
                 },
                 toStudyTypeClicked = {
-                    dynastyViewModel.onNavigateToStudyTypeClicked(title)
+                    with(dynastyViewModel) {
+                        if(checkedType(title)) onNavigateToTypeCheckClicked(title)
+                        else onNavigateToStudyTypeClicked(title)
+                    }
                 }
             )
         },
@@ -46,4 +50,10 @@ fun DynastyScreen(
             onCheckChange = setChecked
         )
     }
-} 
+}
+
+private fun checkedType(type: String): Boolean {
+    return type == DynastyType.MODERN.value ||
+            type == DynastyType.JAPANESE.value ||
+            type == DynastyType.CONTEMPORARY.value
+}

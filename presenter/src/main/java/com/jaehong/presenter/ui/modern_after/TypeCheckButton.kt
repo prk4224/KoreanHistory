@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.studytype
+package com.jaehong.presenter.ui.modern_after
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,15 +13,16 @@ import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.Gray1
 import com.jaehong.presenter.ui.MainActivity
+import com.jaehong.domain.local.model.enum_type.DynastyType
 
 @Composable
-fun StudyTypeButton(
+fun TypeCheckButton(
     dynastyType: String,
     animationHeight: Int,
     animationRadius: Int,
     logo: Painter = painterResource(id = R.drawable.woo_su_mark),
-    studyTypeButtonItem: @Composable (String) -> Unit,
-    studyTypeTitleItem: @Composable (String,Int) -> Unit,
+    typeCheckButtonItem: @Composable (String) -> Unit,
+    typeCheckTitleItem: @Composable (String,Int) -> Unit,
     logoImage: @Composable (Painter) -> Unit
 ) {
     Box(
@@ -39,11 +40,27 @@ fun StudyTypeButton(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            MainActivity.studyList.forEach {
-                studyTypeButtonItem(it)
+
+            val list = when(dynastyType) {
+                DynastyType.MODERN.value -> {
+                    MainActivity.modernList
+                }
+                DynastyType.JAPANESE.value -> {
+                    MainActivity.japaneseList
+                }
+                DynastyType.CONTEMPORARY.value -> {
+                    MainActivity.contemporaryList
+                }
+                else -> {
+                    throw IllegalArgumentException("Dynasty Type Error (Modern After)")
+                }
+            }
+
+            list.forEachIndexed { index, data ->
+                typeCheckButtonItem("${index+1}.$data")
             }
         }
-        studyTypeTitleItem(dynastyType, animationHeight)
+        typeCheckTitleItem(dynastyType, animationHeight)
         logoImage(logo)
     }
 }

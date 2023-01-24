@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.usecase.GetGuideInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
-import com.jaehong.presenter.util.enum.GuideKey
+import com.jaehong.domain.local.model.GuideKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,6 +54,12 @@ class DynastyViewModel @Inject constructor(
     fun onNavigateToStudyTypeClicked(dynastyType: String) {
         viewModelScope.launch {
             koreanHistoryNavigator.navigateTo(Destination.StudyType(dynastyType))
+        }
+    }
+
+    fun onNavigateToTypeCheckClicked(dynastyType: String) {
+        viewModelScope.launch {
+            koreanHistoryNavigator.navigateTo(Destination.TypeCheck(dynastyType))
         }
     }
 

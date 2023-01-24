@@ -9,12 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.theme.MyStudyColor
 import com.jaehong.presenter.util.Constants.DELETE_ALL_DATA_TEXT
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
-import com.jaehong.presenter.util.enum.DynastyType
+import com.jaehong.domain.local.model.enum_type.DynastyType
 
 @Composable
 fun MyStudyHeaderItem(

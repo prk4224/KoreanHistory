@@ -1,7 +1,10 @@
-package com.jaehong.presenter.ui.studytype
+package com.jaehong.presenter.ui.modern_after
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +17,7 @@ import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
-fun StudyTypeTitleItem(
+fun TypeCheckTitleItem(
     dynastyType: String,
     animationHeight: Int,
 ) {
@@ -22,7 +25,8 @@ fun StudyTypeTitleItem(
         modifier = Modifier
             .offset(y = (-(animationHeight / 2)).dp)
             .background(BaseColor1, CircleShape)
-            .width(250.dp),
+            .width(250.dp)
+            .height(40.dp),
         contentAlignment = Alignment.Center
 
     ) {
@@ -31,8 +35,6 @@ fun StudyTypeTitleItem(
             textAlign = TextAlign.Center,
             fontSize = 35.nonScaledSp,
             color = Color.White,
-            lineHeight = 35.nonScaledSp,
-            modifier = Modifier.padding(vertical = 7.dp)
         )
     }
 }

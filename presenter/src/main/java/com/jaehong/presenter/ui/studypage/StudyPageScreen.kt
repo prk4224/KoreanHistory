@@ -20,7 +20,7 @@ import com.jaehong.presenter.ui.studypage.item.StudyAllViewItem
 import com.jaehong.presenter.ui.studypage.item.StudyPageHeaderItem
 import com.jaehong.presenter.ui.studypage.pager.StudyPagePagerScreen
 import com.jaehong.presenter.util.composable.DataChangeButton
-import com.jaehong.presenter.util.enum.StudyType
+import com.jaehong.domain.local.model.enum_type.StudyType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)

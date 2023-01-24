@@ -13,6 +13,7 @@ import com.jaehong.presenter.navigation.NavigationIntent
 import com.jaehong.presenter.navigation.composable
 import com.jaehong.presenter.theme.KoreanHistoryTheme
 import com.jaehong.presenter.ui.dynasty.DynastyScreen
+import com.jaehong.presenter.ui.modern_after.TypeCheckScreen
 import com.jaehong.presenter.ui.mystudy.MyStudyScreen
 import com.jaehong.presenter.ui.studypage.StudyPageScreen
 import com.jaehong.presenter.ui.studytype.StudyTypeScreen
@@ -43,6 +44,9 @@ fun HomeScreen(
             }
             composable(Destination.StudyPage) {
                 StudyPageScreen()
+            }
+            composable(Destination.TypeCheck) {
+                TypeCheckScreen()
             }
         }
     }

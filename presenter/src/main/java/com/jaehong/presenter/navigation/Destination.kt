@@ -1,6 +1,6 @@
 package com.jaehong.presenter.navigation
 
-import com.jaehong.presenter.util.enum.DestinationType
+import com.jaehong.domain.local.model.enum_type.DestinationType
 
 sealed class Destination(protected val route: String, vararg params: String) {
 
@@ -23,6 +23,14 @@ sealed class Destination(protected val route: String, vararg params: String) {
             DYNASTY_TYPE_KEY to dynastyType
         )
     }
+    object TypeCheck : Destination(DestinationType.TYPE_CHECK.value, "dynastyType") {
+        const val DYNASTY_TYPE_KEY = "dynastyType"
+
+        operator fun invoke(dynastyType: String): String = route.appendParams(
+            DYNASTY_TYPE_KEY to dynastyType
+        )
+    }
+
     object StudyPage : Destination(DestinationType.STUDY_PAGE.value, "dynastyType", "studyType","startPage") {
         const val DYNASTY_TYPE_KEY = "dynastyType"
         const val STUDY_TYPE_KEY = "studyType"

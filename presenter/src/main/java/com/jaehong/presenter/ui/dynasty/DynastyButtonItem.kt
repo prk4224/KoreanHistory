@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
-import com.jaehong.presenter.util.enum.DynastyType
+import com.jaehong.domain.local.model.enum_type.DynastyType
 
 @Composable
 fun DynastyButtonItem(
