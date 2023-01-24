@@ -14,6 +14,7 @@ import com.jaehong.presenter.ui.mystudy.item.MyStudyNoticeItem
 import com.jaehong.presenter.ui.mystudy.item.MyStudyViewItem
 import com.jaehong.presenter.ui.mystudy.pager.MyStudyPagerScreen
 import com.jaehong.presenter.util.composable.DataChangeButton
+import com.jaehong.presenter.util.dialog.SaveCheckAlertDialog
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -26,6 +27,7 @@ fun MyStudyScreen(
     val currentPage = myStudyViewModel.currentPage.collectAsState().value
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
     val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
+    val dialogState = myStudyViewModel.showDialog.collectAsState().value
 
     if(pagerList.isNotEmpty()){
         Surface {
@@ -37,7 +39,12 @@ fun MyStudyScreen(
                     myStudyViewModel.updatePage(it)
                 },
                 myStudyHeader = {
-                    MyStudyHeaderItem(it)
+                    MyStudyHeaderItem(
+                        title = it,
+                        showDialog = {
+                            myStudyViewModel.onOpenDialogClicked()
+                        }
+                    )
                 },
                 myStudyNotice = {
                     MyStudyNoticeItem()
@@ -66,6 +73,18 @@ fun MyStudyScreen(
 
             DataChangeButton(false, isVisible) {
                 myStudyViewModel.deleteMyStudyInfo(selectedItems)
+            }
+
+            if (dialogState) {
+                SaveCheckAlertDialog(
+                    dialogType = false,
+                    onDialogConfirm = {
+                        myStudyViewModel.onDialogConfirm()
+                    },
+                    onDialogDismiss = {
+                        myStudyViewModel.onDialogDismiss()
+                    }
+                )
             }
         }
     } else MyStudyBlankView { myStudyViewModel.onBackButtonClicked() }

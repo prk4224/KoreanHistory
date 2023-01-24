@@ -1,9 +1,8 @@
 package com.jaehong.presenter.ui.mystudy.item
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,32 +12,50 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.theme.MyStudyColor
+import com.jaehong.presenter.util.Constants.DELETE_ALL_DATA_TEXT
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 import com.jaehong.presenter.util.enum.DynastyType
 
 @Composable
-fun MyStudyHeaderItem(title: String) {
+fun MyStudyHeaderItem(
+    title: String,
+    showDialog: () -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .height(60.dp)
+            .height(70.dp)
             .background(MyStudyColor, RoundedCornerShape(50, 50, 0, 0))
     ){
         Text(
             text = DynastyType.MY_KEYWORD.value,
-            modifier = Modifier
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center,
             fontSize = 35.nonScaledSp,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.padding(top = 10.dp)
         )
-        Text(
-            text =title,
-            modifier = Modifier
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            fontSize = 24.nonScaledSp,
-            color = Color.White
-        )
+
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text ="($title)",
+                fontSize = 24.nonScaledSp,
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.Center)
+
+            )
+            Text(
+                text = DELETE_ALL_DATA_TEXT,
+                fontSize = 22.nonScaledSp,
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 10.dp)
+                    .clickable {
+                        showDialog()
+                    }
+            )
+        }
     }
 }

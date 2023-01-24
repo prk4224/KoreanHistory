@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.ui.studypage.description.DescriptionTextView
-import com.jaehong.presenter.ui.studypage.dialog.SaveCheckAlertDialog
+import com.jaehong.presenter.util.dialog.SaveCheckAlertDialog
 import com.jaehong.presenter.ui.studypage.guide.blank.SelectRuleBlankDialog
 import com.jaehong.presenter.ui.studypage.guide.first.LongClickRuleFirstDialog
 import com.jaehong.presenter.ui.studypage.guide.first.SelectRuleFirstDialog
@@ -89,6 +89,7 @@ fun StudyPageScreen(
 
     if (dialogState) {
         SaveCheckAlertDialog(
+            dialogType = true,
             onDialogConfirm = {
                 studyPageViewModel.onDialogConfirm()
             },

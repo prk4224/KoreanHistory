@@ -1,4 +1,4 @@
-package com.jaehong.presenter.ui.studypage.dialog
+package com.jaehong.presenter.util.dialog
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -6,12 +6,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.Constants.CANCEL_TEXT
+import com.jaehong.presenter.util.Constants.REMOVE_DIALOG_MESSAGE
+import com.jaehong.presenter.util.Constants.REMOVE_TEXT
 import com.jaehong.presenter.util.Constants.SAVE_DIALOG_MESSAGE
 import com.jaehong.presenter.util.Constants.SAVE_TEXT
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun SaveCheckAlertDialog(
+    dialogType: Boolean,
+    textButton: String = if (dialogType) SAVE_TEXT else REMOVE_TEXT,
+    textTitle: String = if (dialogType) SAVE_DIALOG_MESSAGE else REMOVE_DIALOG_MESSAGE,
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
 ) {
@@ -20,7 +25,7 @@ fun SaveCheckAlertDialog(
         confirmButton = {
             TextButton(onClick = { onDialogConfirm() }) {
                 Text(
-                    text = SAVE_TEXT,
+                    text = textButton,
                     style = Typography.bodyLarge,
                     fontSize = 22.nonScaledSp
                 )
@@ -37,7 +42,7 @@ fun SaveCheckAlertDialog(
         },
         title = {
             Text(
-                text = SAVE_DIALOG_MESSAGE,
+                text = textTitle,
                 style = Typography.bodyLarge,
                 fontSize = 22.nonScaledSp
             )

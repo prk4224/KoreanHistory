@@ -36,6 +36,9 @@ class MyStudyViewModel @Inject constructor(
     private val _currentPage = MutableStateFlow(0)
     val currentPage = _currentPage.asStateFlow()
 
+    private val _showDialog = MutableStateFlow(false)
+    val showDialog = _showDialog.asStateFlow()
+
     init {
         getMyStudyData()
     }
@@ -50,6 +53,19 @@ class MyStudyViewModel @Inject constructor(
                     _pagerList.value = getPagerList(it)
                 }
         }
+    }
+
+    fun onOpenDialogClicked() {
+        _showDialog.value = true
+    }
+
+    fun onDialogConfirm() {
+        deleteAllData()
+        _showDialog.value = false
+    }
+
+    fun onDialogDismiss() {
+        _showDialog.value = false
     }
 
     fun updatePage(page: Int) {
@@ -77,6 +93,13 @@ class MyStudyViewModel @Inject constructor(
     fun onBackButtonClicked() {
         viewModelScope.launch {
             koreanHistoryNavigator.navigateBack()
+        }
+    }
+
+    fun deleteAllData() {
+        viewModelScope.launch {
+            myStudyInfoUseCase.deleteMyStudyInfo(myStudyInfoList.value)
+            getMyStudyData()
         }
     }
 
