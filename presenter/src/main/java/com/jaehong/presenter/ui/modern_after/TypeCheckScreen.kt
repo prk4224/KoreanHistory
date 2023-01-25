@@ -39,8 +39,8 @@ fun TypeCheckScreen(
             TypeCheckButtonItem(
                 dynastyType = dynastyType,
                 detailType = it,
-                toStudyTypeClicked = { dynasty, detailType ->
-                    typeCheckViewModel.onNavigateToStudyTypeClicked("$dynasty\n$detailType")
+                toStudyTypeClicked = { dynasty, detail ->
+                    typeCheckViewModel.onNavigateToStudyTypeClicked("$dynasty\n$detail")
                 }
             )
         },

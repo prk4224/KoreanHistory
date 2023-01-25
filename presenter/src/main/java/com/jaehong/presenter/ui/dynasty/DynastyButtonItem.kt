@@ -20,7 +20,7 @@ import com.jaehong.domain.local.model.enum_type.DynastyType
 
 @Composable
 fun DynastyButtonItem(
-    title: String,
+    title: DynastyType,
     visible: Boolean,
     toMyStudyClicked: () -> Unit,
     toStudyTypeClicked: () -> Unit
@@ -36,7 +36,7 @@ fun DynastyButtonItem(
     ) {
         Button(
             onClick = {
-                if (title == DynastyType.MY_KEYWORD.value) {
+                if (title == DynastyType.MY_KEYWORD) {
                     toMyStudyClicked()
                 } else {
                     toStudyTypeClicked()
@@ -49,7 +49,7 @@ fun DynastyButtonItem(
             colors = ButtonDefaults.buttonColors(BaseColor1)
         ) {
             Text(
-                text = title,
+                text = title.value,
                 style = Typography.bodyMedium,
                 fontSize = 35.nonScaledSp,
                 color = Color.White

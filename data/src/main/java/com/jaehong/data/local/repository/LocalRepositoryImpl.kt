@@ -1,6 +1,7 @@
 package com.jaehong.data.local.repository
 
 import com.jaehong.data.local.datasource.LocalDataSource
+import com.jaehong.data.mapper.Mapper.checkedType
 import com.jaehong.data.mapper.Mapper.dataBaseToDomain
 import com.jaehong.data.mapper.Mapper.dataToDomain
 import com.jaehong.data.mapper.Mapper.domainToDataBase
@@ -18,16 +19,15 @@ class LocalRepositoryImpl @Inject constructor(
     override suspend fun getAllStudyInfo(
         dynastyType: String
     ): Flow<StudyInfo> = flow {
-        dataSource.getAllStudyInfo(dynastyType).collect {
+        dataSource.getAllStudyInfo(dynastyType.checkedType()).collect {
             emit(it.dataToDomain())
         }
     }
 
     override suspend fun getStudyInfo(
         dynastyType: String,
-        studyType: String
     ): Flow<StudyInfo> = flow {
-        dataSource.getStudyInfo(dynastyType,studyType).collect {
+        dataSource.getStudyInfo(dynastyType.checkedType()).collect {
             emit(it. dataToDomain())
         }
     }

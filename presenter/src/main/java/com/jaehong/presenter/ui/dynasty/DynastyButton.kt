@@ -23,7 +23,7 @@ fun DynastyButton(
     isVisible: Boolean,
     markImage: Painter = painterResource(id = R.drawable.woo_su_mark),
     logoImage: @Composable (Painter) -> Unit,
-    dynastyButtonItem: @Composable (String,Boolean) -> Unit
+    dynastyButtonItem: @Composable (DynastyType,Boolean) -> Unit
 ) {
     Box(modifier = Modifier
         .fillMaxSize()
@@ -37,7 +37,7 @@ fun DynastyButton(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             items(MainActivity.dynastyList) {
-                dynastyButtonItem(it.value,isVisible)
+                dynastyButtonItem(it,isVisible)
             }
         }
         logoImage(markImage)

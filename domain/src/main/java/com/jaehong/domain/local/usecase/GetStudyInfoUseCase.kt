@@ -20,10 +20,9 @@ class GetStudyInfoUseCase @Inject constructor(
     }
 
     suspend fun getStudyIngo(
-        dynastyType: String,
-        studyType: String
+        dynastyType: String
     ): Flow<StudyInfo> = flow {
-        localRepository.getStudyInfo(dynastyType, studyType).collect {
+        localRepository.getStudyInfo(dynastyType).collect {
             emit(it)
         }
     }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocalRepository {
     suspend fun getAllStudyInfo(dynastyType: String): Flow<StudyInfo>
 
-    suspend fun getStudyInfo(dynastyType: String, studyType: String): Flow<StudyInfo>
+    suspend fun getStudyInfo(dynastyType: String): Flow<StudyInfo>
 
     suspend fun gatMyStudyInfo(): Flow<List<StudyInfoItem>>
 

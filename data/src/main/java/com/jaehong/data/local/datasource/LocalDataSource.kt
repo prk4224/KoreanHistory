@@ -2,12 +2,13 @@ package com.jaehong.data.local.datasource
 
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
 import com.jaehong.data.local.model.StudyEntity
+import com.jaehong.data.util.enum_type.DynastyDetailType
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
-    suspend fun getAllStudyInfo(dynastyType: String): Flow<StudyEntity>
+    suspend fun getAllStudyInfo(dynastyType: DynastyDetailType): Flow<StudyEntity>
 
-    suspend fun getStudyInfo(dynastyType: String, studyType: String): Flow<StudyEntity>
+    suspend fun getStudyInfo(dynastyType: DynastyDetailType): Flow<StudyEntity>
 
     suspend fun gatMyStudyInfo(): Flow<List<MyStudyEntity>>
 

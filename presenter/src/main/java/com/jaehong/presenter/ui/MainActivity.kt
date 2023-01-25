@@ -38,24 +38,24 @@ class MainActivity : ComponentActivity() {
             )
         val modernList =
             listOf(
-                ModernType.ONE,
-                ModernType.TWO,
-                ModernType.THREE,
-                ModernType.FOUR,
+                DynastyType.MODERN.detail(1),
+                DynastyType.MODERN.detail(2),
+                DynastyType.MODERN.detail(3),
+                DynastyType.MODERN.detail(4),
             )
 
         val japaneseList =
             listOf(
-                JapaneseType.ONE,
-                JapaneseType.TWO,
-                JapaneseType.THREE,
+                DynastyType.JAPANESE.detail(1),
+                DynastyType.JAPANESE.detail(2),
+                DynastyType.JAPANESE.detail(3),
             )
 
         val contemporaryList =
             listOf(
-                ContemporaryType.ONE,
-                ContemporaryType.TWO,
-                ContemporaryType.THREE,
+                DynastyType.CONTEMPORARY.detail(1),
+                DynastyType.CONTEMPORARY.detail(2),
+                DynastyType.CONTEMPORARY.detail(3),
             )
     }
 }

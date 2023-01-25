@@ -92,7 +92,7 @@ class StudyPageViewModel @Inject constructor(
                     _pagerList.value = getPagerList(it)
                 }
             if (studyType == StudyType.FIRST_REVIEW.value) {
-                studyInfoUseCase.getStudyIngo(dynastyType, studyType)
+                studyInfoUseCase.getStudyIngo(dynastyType)
                     .catch { }
                     .collect {
                         _studyInfoList.value = it

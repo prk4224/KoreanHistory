@@ -5,6 +5,8 @@ import com.jaehong.data.local.model.StudyEntity
 import com.jaehong.data.local.model.StudyEntityItem
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.data.util.enum_type.DynastyDetailType
+import com.jaehong.domain.local.model.enum_type.DynastyType
 
 object Mapper {
 
@@ -67,5 +69,25 @@ object Mapper {
         }
 
         return myStudyItems
+    }
+
+    fun String.checkedType(): DynastyDetailType {
+        return when(this) {
+            DynastyType.SAM_GUG.value -> DynastyDetailType.SAM_GUG
+            DynastyType.SIN_LA.value -> DynastyDetailType.SIN_LA
+            DynastyType.GO_LYEO.value -> DynastyDetailType.GO_LYEO
+            DynastyType.JO_SEON.value -> DynastyDetailType.JO_SEON
+            DynastyType.MODERN.combineValue(1) -> DynastyDetailType.MODERN_ONE
+            DynastyType.MODERN.combineValue(2) -> DynastyDetailType.MODERN_TWO
+            DynastyType.MODERN.combineValue(3) -> DynastyDetailType.MODERN_THREE
+            DynastyType.MODERN.combineValue(4) -> DynastyDetailType.MODERN_FOUR
+            DynastyType.JAPANESE.combineValue(1) -> DynastyDetailType.JAPANESE_ONE
+            DynastyType.JAPANESE.combineValue(2) -> DynastyDetailType.JAPANESE_TWO
+            DynastyType.JAPANESE.combineValue(3) -> DynastyDetailType.JAPANESE_THREE
+            DynastyType.CONTEMPORARY.combineValue(1) -> DynastyDetailType.CONTEMPORARY_ONE
+            DynastyType.CONTEMPORARY.combineValue(2) -> DynastyDetailType.CONTEMPORARY_TWO
+            DynastyType.CONTEMPORARY.combineValue(3) -> DynastyDetailType.CONTEMPORARY_THREE
+            else -> throw IllegalArgumentException("Dynasty Type Error")
+        }
     }
 }

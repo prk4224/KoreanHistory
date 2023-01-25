@@ -30,8 +30,8 @@ fun DynastyScreen(
                 },
                 toStudyTypeClicked = {
                     with(dynastyViewModel) {
-                        if(checkedType(title)) onNavigateToTypeCheckClicked(title)
-                        else onNavigateToStudyTypeClicked(title)
+                        if(title.checkedModernAfter()) onNavigateToTypeCheckClicked(title.value)
+                        else onNavigateToStudyTypeClicked(title.value)
                     }
                 }
             )
@@ -50,10 +50,4 @@ fun DynastyScreen(
             onCheckChange = setChecked
         )
     }
-}
-
-private fun checkedType(type: String): Boolean {
-    return type == DynastyType.MODERN.value ||
-            type == DynastyType.JAPANESE.value ||
-            type == DynastyType.CONTEMPORARY.value
 }
