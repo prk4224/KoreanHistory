@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.usecase.GetGuideInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
-import com.jaehong.domain.local.model.GuideKey
+import com.jaehong.domain.local.model.enum_type.GuideKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

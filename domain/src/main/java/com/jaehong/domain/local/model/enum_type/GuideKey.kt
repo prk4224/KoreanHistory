@@ -1,4 +1,4 @@
-package com.jaehong.presenter.util.enum
+package com.jaehong.domain.local.model.enum_type
 
 enum class GuideKey(val value: String) {
     GUIDE_KEY("guide key"),

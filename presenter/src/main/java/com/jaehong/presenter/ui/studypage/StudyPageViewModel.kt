@@ -9,7 +9,7 @@ import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
-import com.jaehong.domain.local.model.GuideKey
+import com.jaehong.domain.local.model.enum_type.GuideKey
 import com.jaehong.domain.local.model.enum_type.StudyType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

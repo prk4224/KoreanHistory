@@ -40,7 +40,7 @@ fun StudyTypeButton(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MainActivity.studyList.forEach {
-                studyTypeButtonItem(it)
+                studyTypeButtonItem(it.value)
             }
         }
         studyTypeTitleItem(dynastyType, animationHeight)

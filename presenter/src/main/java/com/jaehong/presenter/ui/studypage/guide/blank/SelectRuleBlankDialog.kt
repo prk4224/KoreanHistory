@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BlackWithAlpha50
-import com.jaehong.domain.local.model.GuideKey
+import com.jaehong.domain.local.model.enum_type.GuideKey
 import com.jaehong.domain.local.model.enum_type.StudyType
 
 @Composable

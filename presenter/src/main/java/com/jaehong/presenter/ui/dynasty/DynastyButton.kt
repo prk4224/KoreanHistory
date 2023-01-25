@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.jaehong.domain.local.model.enum_type.DynastyType
 import com.jaehong.presenter.R
 import com.jaehong.presenter.ui.MainActivity
 
@@ -36,7 +37,7 @@ fun DynastyButton(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             items(MainActivity.dynastyList) {
-                dynastyButtonItem(it,isVisible)
+                dynastyButtonItem(it.value,isVisible)
             }
         }
         logoImage(markImage)

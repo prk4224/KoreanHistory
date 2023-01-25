@@ -5,8 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.jaehong.domain.local.model.enum_type.*
 import com.jaehong.presenter.ui.home.HomeScreen
-import com.jaehong.presenter.util.enum.DynastyType
-import com.jaehong.presenter.util.enum.StudyType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,42 +20,42 @@ class MainActivity : ComponentActivity() {
     companion object {
         val dynastyList =
             listOf(
-                DynastyType.SAM_GUG.value,
-                DynastyType.SIN_LA.value,
-                DynastyType.GO_LYEO.value,
-                DynastyType.JO_SEON.value,
-                DynastyType.MODERN.value,
-                DynastyType.JAPANESE.value,
-                DynastyType.CONTEMPORARY.value,
-                DynastyType.MY_KEYWORD.value,
+                DynastyType.SAM_GUG,
+                DynastyType.SIN_LA,
+                DynastyType.GO_LYEO,
+                DynastyType.JO_SEON,
+                DynastyType.MODERN,
+                DynastyType.JAPANESE,
+                DynastyType.CONTEMPORARY,
+                DynastyType.MY_KEYWORD,
             )
 
         val studyList =
             listOf(
-                StudyType.ORIGIN_STUDY.value,
-                StudyType.FIRST_REVIEW.value,
-                StudyType.ALL_BLANK_REVIEW.value
+                StudyType.ORIGIN_STUDY,
+                StudyType.FIRST_REVIEW,
+                StudyType.ALL_BLANK_REVIEW
             )
         val modernList =
             listOf(
-                ModernType.ONE.value,
-                ModernType.TWO.value,
-                ModernType.THREE.value,
-                ModernType.FOUR.value,
+                ModernType.ONE,
+                ModernType.TWO,
+                ModernType.THREE,
+                ModernType.FOUR,
             )
 
         val japaneseList =
             listOf(
-                JapaneseType.ONE.value,
-                JapaneseType.TWO.value,
-                JapaneseType.THREE.value,
+                JapaneseType.ONE,
+                JapaneseType.TWO,
+                JapaneseType.THREE,
             )
 
         val contemporaryList =
             listOf(
-                ContemporaryType.ONE.value,
-                ContemporaryType.TWO.value,
-                ContemporaryType.THREE.value,
+                ContemporaryType.ONE,
+                ContemporaryType.TWO,
+                ContemporaryType.THREE,
             )
     }
 }
