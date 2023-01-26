@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +17,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray3
 import com.jaehong.domain.local.model.enum_type.StudyType
+import com.jaehong.presenter.util.composable.verticalScrollbar
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
