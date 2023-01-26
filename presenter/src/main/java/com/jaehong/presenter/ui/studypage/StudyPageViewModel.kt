@@ -12,6 +12,7 @@ import com.jaehong.presenter.navigation.KoreanHistoryNavigator
 import com.jaehong.domain.local.model.enum_type.GuideKey
 import com.jaehong.domain.local.model.enum_type.StudyType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -132,7 +133,6 @@ class StudyPageViewModel @Inject constructor(
 
     fun onDialogConfirm() {
         addMyStudyInfo(allStudyInfoList.value)
-        onNavigateRefreshClicked()
         _showDialog.value = false
     }
 
@@ -142,7 +142,6 @@ class StudyPageViewModel @Inject constructor(
 
     fun addSelectedItems(selectedItems: List<StudyInfoItem>) {
         addMyStudyInfo(selectedItems)
-        onNavigateRefreshClicked()
     }
 
     fun updatePage(page: Int) {
@@ -171,6 +170,8 @@ class StudyPageViewModel @Inject constructor(
     private fun addMyStudyInfo(studyInfo: List<StudyInfoItem>) {
         viewModelScope.launch {
             studyInfoUseCase.insertMyStudyInfo(studyInfo)
+            delay(1000L)
+            onNavigateRefreshClicked()
         }
     }
 

@@ -69,6 +69,7 @@ fun MyStudyScreen(
             DataChangeButton(
                 iconType = false,
                 isVisible = isVisible,
+                size = selectedItems.size,
                 onIconClicked = { myStudyViewModel.deleteMyStudyInfo(selectedItems) },
                 onIconLongClicked = { myStudyViewModel.onOpenDialogClicked() }
             )

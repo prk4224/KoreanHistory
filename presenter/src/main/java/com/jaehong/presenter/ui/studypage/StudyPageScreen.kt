@@ -1,13 +1,12 @@
 package com.jaehong.presenter.ui.studypage
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.enum_type.StudyType
 import com.jaehong.presenter.ui.studypage.description.DescriptionTextView
-import com.jaehong.presenter.util.dialog.SaveCheckAlertDialog
 import com.jaehong.presenter.ui.studypage.guide.blank.SelectRuleBlankDialog
 import com.jaehong.presenter.ui.studypage.guide.first.LongClickRuleFirstDialog
 import com.jaehong.presenter.ui.studypage.guide.first.SelectRuleFirstDialog
@@ -20,8 +19,10 @@ import com.jaehong.presenter.ui.studypage.item.StudyAllViewItem
 import com.jaehong.presenter.ui.studypage.item.StudyPageHeaderItem
 import com.jaehong.presenter.ui.studypage.pager.StudyPagePagerScreen
 import com.jaehong.presenter.util.composable.DataChangeButton
-import com.jaehong.domain.local.model.enum_type.StudyType
+import com.jaehong.presenter.util.dialog.SaveCheckAlertDialog
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -57,29 +58,29 @@ fun StudyPageScreen(
         dynastyState = dynastyState,
         studyAllViewItem = { studyInfo, index ->
             StudyAllViewItem(studyInfo) { descIndex, description ->
-                val (selected,setSelected) = remember(description) { mutableStateOf(false) }
+                val (selected, setSelected) = remember(description) { mutableStateOf(false) }
+                val selectedItem = StudyInfoItem(
+                    studyInfo.id + descIndex,
+                    studyInfo.detail,
+                    studyInfo.king_name,
+                    arrayListOf(description)
+                )
                 DescriptionTextView(
                     description = description,
                     originDescription = allStudyData[index].description[descIndex],
                     studyState = studyState,
-                    selectedItem = StudyInfoItem(
-                        studyInfo.id + descIndex,
-                        studyInfo.detail,
-                        studyInfo.king_name,
-                        arrayListOf(description)
-                    ),
+                    selectedItem = selectedItem,
                     selected = selected,
                     setSelected = setSelected,
-                    changeSelectedItem = { selectedItem, select ->
-                        studyPageViewModel.changeSelectedItem(selectedItem, select)
+                    changeSelectedItem = { item, select ->
+                        studyPageViewModel.changeSelectedItem(item, select)
                     },
                     changeButtonState = {
                         studyPageViewModel.changeButtonState(selectedItems.size)
                     },
                     changeAllHintState = {
                         studyPageViewModel.changeAllHintState()
-                    }
-                )
+                    })
             }
         }
     )
@@ -87,8 +88,9 @@ fun StudyPageScreen(
     DataChangeButton(
         iconType = true,
         isVisible = isVisible,
+        size = selectedItems.size,
         onIconClicked = { studyPageViewModel.addSelectedItems(selectedItems) },
-        onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() }
+        onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() },
     )
 
     if (dialogState) {
