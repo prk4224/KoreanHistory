@@ -138,13 +138,18 @@ class StudyPageViewModel @Inject constructor(
     }
 
     fun onDialogConfirm() {
-        addMyStudyInfo(selectedItems.value)
+        addMyStudyInfo(allStudyInfoList.value)
         onNavigateRefreshClicked()
         _showDialog.value = false
     }
 
     fun onDialogDismiss() {
         _showDialog.value = false
+    }
+
+    fun addSelectedItems() {
+        addMyStudyInfo(selectedItems.value)
+        onNavigateRefreshClicked()
     }
 
     fun updatePage(page: Int) {

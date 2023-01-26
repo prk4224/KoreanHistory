@@ -39,12 +39,7 @@ fun MyStudyScreen(
                     myStudyViewModel.updatePage(it)
                 },
                 myStudyHeader = {
-                    MyStudyHeaderItem(
-                        title = it,
-                        showDialog = {
-                            myStudyViewModel.onOpenDialogClicked()
-                        }
-                    )
+                    MyStudyHeaderItem(it)
                 },
                 myStudyNotice = {
                     MyStudyNoticeItem()
@@ -71,10 +66,12 @@ fun MyStudyScreen(
                 }
             )
 
-            DataChangeButton(false, isVisible) {
-                myStudyViewModel.deleteMyStudyInfo(selectedItems)
-            }
-
+            DataChangeButton(
+                iconType = false,
+                isVisible = isVisible,
+                onIconClicked = { myStudyViewModel.deleteMyStudyInfo(selectedItems) },
+                onIconLongClicked = { myStudyViewModel.onOpenDialogClicked() }
+            )
             if (dialogState) {
                 SaveCheckAlertDialog(
                     dialogType = false,

@@ -83,9 +83,12 @@ fun StudyPageScreen(
         }
     )
 
-    DataChangeButton(true, isVisible) {
-        studyPageViewModel.onOpenDialogClicked()
-    }
+    DataChangeButton(
+        iconType = true,
+        isVisible = isVisible,
+        onIconClicked = { studyPageViewModel.addSelectedItems() },
+        onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() }
+    )
 
     if (dialogState) {
         SaveCheckAlertDialog(

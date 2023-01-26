@@ -45,7 +45,6 @@ class MyStudyViewModel @Inject constructor(
 
     private fun getMyStudyData(){
         viewModelScope.launch {
-
             myStudyInfoUseCase()
                 .catch { Log.d("My Study Data","result : $it") }
                 .collect {

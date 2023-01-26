@@ -18,7 +18,6 @@ import com.jaehong.domain.local.model.enum_type.DynastyType
 @Composable
 fun MyStudyHeaderItem(
     title: String,
-    showDialog: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -32,29 +31,11 @@ fun MyStudyHeaderItem(
             color = Color.White,
             modifier = Modifier.padding(top = 10.dp)
         )
-
-        Box(
+        Text(
+            text ="($title)",
+            fontSize = 24.nonScaledSp,
+            color = Color.White,
             modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text ="($title)",
-                fontSize = 24.nonScaledSp,
-                color = Color.White,
-                modifier = Modifier
-                    .align(Alignment.Center)
-
-            )
-            Text(
-                text = DELETE_ALL_DATA_TEXT,
-                fontSize = 22.nonScaledSp,
-                color = Color.White,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 10.dp)
-                    .clickable {
-                        showDialog()
-                    }
-            )
-        }
+        )
     }
 }
