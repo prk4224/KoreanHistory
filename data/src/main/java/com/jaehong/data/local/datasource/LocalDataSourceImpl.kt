@@ -38,7 +38,6 @@ class LocalDataSourceImpl @Inject constructor(
             DynastyDetailType.CONTEMPORARY_ONE -> context.assets.open("contemporary_all_1.json").reader().readText()
             DynastyDetailType.CONTEMPORARY_TWO -> context.assets.open("contemporary_all_2.json").reader().readText()
             DynastyDetailType.CONTEMPORARY_THREE -> context.assets.open("contemporary_all_4.json").reader().readText()
-            else -> throw IllegalArgumentException("Dynasty Type Error")
         }
 
         emit(Gson().fromJson(json, StudyEntity::class.java))
@@ -62,7 +61,6 @@ class LocalDataSourceImpl @Inject constructor(
             DynastyDetailType.CONTEMPORARY_ONE -> context.assets.open("contemporary_first_letter_1.json").reader().readText()
             DynastyDetailType.CONTEMPORARY_TWO -> context.assets.open("contemporary_first_letter_2.json").reader().readText()
             DynastyDetailType.CONTEMPORARY_THREE -> context.assets.open("contemporary_first_letter    _4.json").reader().readText()
-            else -> throw IllegalArgumentException("Dynasty Type Error")
         }
         emit(Gson().fromJson(json, StudyEntity::class.java))
     }

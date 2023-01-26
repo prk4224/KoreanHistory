@@ -29,7 +29,6 @@ fun GuideDialogContent(
     checked: Boolean,
     onCheckChange: (Boolean) -> Unit
 ){
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
