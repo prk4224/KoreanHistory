@@ -86,14 +86,14 @@ class StudyPageViewModel @Inject constructor(
 
         viewModelScope.launch {
             studyInfoUseCase(dynastyType)
-                .catch { Log.d("Get All Data", "result: $it") }
+                .catch { Log.d("Get All Data", "result: ${it.message}") }
                 .collect {
                     _allStudyInfoList.value = it
                     _pagerList.value = getPagerList(it)
                 }
             if (studyType == StudyType.FIRST_REVIEW.value) {
                 studyInfoUseCase.getStudyIngo(dynastyType)
-                    .catch { }
+                    .catch { Log.d("Study Type", "result: ${it.message}") }
                     .collect {
                         _studyInfoList.value = it
                     }
@@ -101,17 +101,17 @@ class StudyPageViewModel @Inject constructor(
             
             with(studyInfoUseCase) {
                 getGuideInfo(GuideKey.USER_RULE_ORIGIN.value)
-                    .catch { }
+                    .catch { Log.d("First Guide Rule", "result: ${it.message}") }
                     .collect {
                         _checkedUserRuleOrigin.value = it
                     }
                 getGuideInfo(GuideKey.USER_RULE_FIRST.value)
-                    .catch { }
+                    .catch { Log.d("Second Guide Rule", "result: ${it.message}") }
                     .collect {
                         _checkedUserRuleFirst.value = it
                     }
                 getGuideInfo(GuideKey.USER_RULE_BLANK.value)
-                    .catch { }
+                    .catch { Log.d("Third Guide Rule", "result: ${it.message}") }
                     .collect {
                         _checkedUserRuleBlank.value = it
                     }

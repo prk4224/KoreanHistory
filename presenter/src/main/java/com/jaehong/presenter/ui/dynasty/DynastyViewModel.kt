@@ -30,7 +30,7 @@ class DynastyViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getGuideInfoUseCase(GuideKey.GUIDE_KEY.value)
-                .catch { Log.d("Guide Date", "result : $it") }
+                .catch { Log.d("Guide Date", "result : ${it.message}") }
                 .collect {
                     _showDialog.value = it
                 }
