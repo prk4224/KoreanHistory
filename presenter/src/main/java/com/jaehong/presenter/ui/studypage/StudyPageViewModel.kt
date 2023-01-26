@@ -39,7 +39,7 @@ class StudyPageViewModel @Inject constructor(
 
     private val initList: MutableList<StudyInfoItem> = mutableListOf()
     private val _selectedItems = MutableStateFlow(initList)
-    private val selectedItems = _selectedItems.asStateFlow()
+    val selectedItems = _selectedItems.asStateFlow()
 
     private val _isVisible = MutableStateFlow(false)
     val isVisible = _isVisible.asStateFlow()
@@ -85,36 +85,29 @@ class StudyPageViewModel @Inject constructor(
             startPage?.toInt() ?: throw IllegalArgumentException("Start Page Error")
 
         viewModelScope.launch {
-            studyInfoUseCase(dynastyType)
-                .catch { Log.d("Get All Data", "result: ${it.message}") }
-                .collect {
-                    _allStudyInfoList.value = it
-                    _pagerList.value = getPagerList(it)
-                }
-            if (studyType == StudyType.FIRST_REVIEW.value) {
-                studyInfoUseCase.getStudyIngo(dynastyType)
-                    .catch { Log.d("Study Type", "result: ${it.message}") }
-                    .collect {
-                        _studyInfoList.value = it
-                    }
-            }
-            
             with(studyInfoUseCase) {
+                this(dynastyType)
+                    .catch { Log.d("Get All Data", "result: ${it.message}") }
+                    .collect {
+                        _allStudyInfoList.value = it
+                        _pagerList.value = getPagerList(it)
+                    }
+
+                if (studyType == StudyType.FIRST_REVIEW.value) {
+                    getStudyIngo(dynastyType)
+                        .catch { Log.d("Study Type", "result: ${it.message}") }
+                        .collect { _studyInfoList.value = it }
+                    }
+
                 getGuideInfo(GuideKey.USER_RULE_ORIGIN.value)
                     .catch { Log.d("First Guide Rule", "result: ${it.message}") }
-                    .collect {
-                        _checkedUserRuleOrigin.value = it
-                    }
+                    .collect { _checkedUserRuleOrigin.value = it }
                 getGuideInfo(GuideKey.USER_RULE_FIRST.value)
                     .catch { Log.d("Second Guide Rule", "result: ${it.message}") }
-                    .collect {
-                        _checkedUserRuleFirst.value = it
-                    }
+                    .collect { _checkedUserRuleFirst.value = it }
                 getGuideInfo(GuideKey.USER_RULE_BLANK.value)
                     .catch { Log.d("Third Guide Rule", "result: ${it.message}") }
-                    .collect {
-                        _checkedUserRuleBlank.value = it
-                    }
+                    .collect { _checkedUserRuleBlank.value = it }
             }
         }
     }
@@ -147,8 +140,8 @@ class StudyPageViewModel @Inject constructor(
         _showDialog.value = false
     }
 
-    fun addSelectedItems() {
-        addMyStudyInfo(selectedItems.value)
+    fun addSelectedItems(selectedItems: List<StudyInfoItem>) {
+        addMyStudyInfo(selectedItems)
         onNavigateRefreshClicked()
     }
 
@@ -162,8 +155,8 @@ class StudyPageViewModel @Inject constructor(
         else _selectedItems.value.remove(studyInfoItem)
     }
 
-    fun changeButtonState() {
-        _isVisible.value = selectedItems.value.size > 0
+    fun changeButtonState(itemsSize: Int) {
+        _isVisible.value = itemsSize > 0
     }
 
     fun changeAllHintState() {

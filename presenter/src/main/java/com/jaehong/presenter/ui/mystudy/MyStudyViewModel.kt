@@ -58,8 +58,8 @@ class MyStudyViewModel @Inject constructor(
         _showDialog.value = true
     }
 
-    fun onDialogConfirm() {
-        deleteAllData()
+    fun onDialogConfirm(myStudyItems: List<StudyInfoItem>) {
+        deleteAllData(myStudyItems)
         _showDialog.value = false
     }
 
@@ -77,11 +77,11 @@ class MyStudyViewModel @Inject constructor(
         else _selectedItems.value.remove(studyInfoItem)
     }
 
-    fun changeButtonState() {
-        _isVisible.value = selectedItems.value.size > 0
+    fun changeButtonState(itemSize: Int) {
+        _isVisible.value = itemSize > 0
     }
 
-    fun deleteMyStudyInfo(selected: MutableList<StudyInfoItem>) {
+    fun deleteMyStudyInfo(selected: List<StudyInfoItem>) {
         viewModelScope.launch {
             myStudyInfoUseCase.deleteMyStudyInfo(selected)
             getMyStudyData()
@@ -95,9 +95,9 @@ class MyStudyViewModel @Inject constructor(
         }
     }
 
-    fun deleteAllData() {
+    private fun deleteAllData(myStudyItems: List<StudyInfoItem>) {
         viewModelScope.launch {
-            myStudyInfoUseCase.deleteMyStudyInfo(myStudyInfoList.value)
+            myStudyInfoUseCase.deleteMyStudyInfo(myStudyItems)
             getMyStudyData()
         }
     }

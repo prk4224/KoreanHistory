@@ -5,9 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.presenter.R
 import com.jaehong.presenter.util.composable.LogoImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 

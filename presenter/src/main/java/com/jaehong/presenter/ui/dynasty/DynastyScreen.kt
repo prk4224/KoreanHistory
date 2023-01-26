@@ -6,9 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presenter.util.composable.LogoImage
-import com.jaehong.domain.local.model.enum_type.DynastyType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable

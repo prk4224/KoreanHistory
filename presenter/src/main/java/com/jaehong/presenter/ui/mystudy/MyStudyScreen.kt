@@ -59,7 +59,7 @@ fun MyStudyScreen(
                             onSelectChange = setSelected,
                             onTextClicked = { selectedItem, select ->
                                 myStudyViewModel.changeSelectedItem(selectedItem, select)
-                                myStudyViewModel.changeButtonState()
+                                myStudyViewModel.changeButtonState(selectedItems.size)
                             }
                         )
                     }
@@ -76,7 +76,7 @@ fun MyStudyScreen(
                 SaveCheckAlertDialog(
                     dialogType = false,
                     onDialogConfirm = {
-                        myStudyViewModel.onDialogConfirm()
+                        myStudyViewModel.onDialogConfirm(myStudyData)
                     },
                     onDialogDismiss = {
                         myStudyViewModel.onDialogDismiss()

@@ -31,6 +31,7 @@ fun StudyPageScreen(
     val dynastyState = studyPageViewModel.dynastyState.collectAsState().value
     val studyState = studyPageViewModel.studyState.collectAsState().value
     val studyData = studyPageViewModel.studyInfoList.collectAsState().value
+    val selectedItems = studyPageViewModel.selectedItems.collectAsState().value
     val isVisible = studyPageViewModel.isVisible.collectAsState().value
     val allStudyData = studyPageViewModel.allStudyInfoList.collectAsState().value
     val dialogState = studyPageViewModel.showDialog.collectAsState().value
@@ -73,7 +74,7 @@ fun StudyPageScreen(
                         studyPageViewModel.changeSelectedItem(selectedItem, select)
                     },
                     changeButtonState = {
-                        studyPageViewModel.changeButtonState()
+                        studyPageViewModel.changeButtonState(selectedItems.size)
                     },
                     changeAllHintState = {
                         studyPageViewModel.changeAllHintState()
@@ -86,7 +87,7 @@ fun StudyPageScreen(
     DataChangeButton(
         iconType = true,
         isVisible = isVisible,
-        onIconClicked = { studyPageViewModel.addSelectedItems() },
+        onIconClicked = { studyPageViewModel.addSelectedItems(selectedItems) },
         onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() }
     )
 
