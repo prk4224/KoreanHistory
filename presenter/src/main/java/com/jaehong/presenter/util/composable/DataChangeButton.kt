@@ -39,8 +39,8 @@ fun DataChangeButton(
     iconType: Boolean,
     isVisible: Boolean,
     size: Int,
-    snackBarState: SnackbarHostState = remember { SnackbarHostState() },
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    snackBarState: SnackbarHostState,
+    coroutineScope: CoroutineScope,
     snackBarMessage: String = if (iconType) SAVE_SNACKBAR_MESSAGE else REMOVE_SNACKBAR_MESSAGE,
     onIconClicked: () -> Unit,
     onIconLongClicked: () -> Unit,
@@ -67,21 +67,30 @@ fun DataChangeButton(
                     .combinedClickable(
                         onClick = {
                             onIconClicked()
-                            coroutineScope.launch {
-                                val scope = coroutineScope.launch {
-                                    snackBarState.showSnackbar(
-                                        message = "${size}개의 $snackBarMessage",
-                                        duration = SnackbarDuration.Indefinite
-                                    )
-                                }
-                                delay(1000L)
-                                scope.cancel()
-                            }
+                            showSnackBarOneSecond(snackBarState,coroutineScope,size,snackBarMessage)
                         },
                         onLongClick = { onIconLongClicked() }
                     )
             )
         }
         SnackbarHost(hostState = snackBarState, modifier = Modifier.align(Alignment.BottomCenter))
+    }
+}
+
+private fun showSnackBarOneSecond(
+    snackBarState: SnackbarHostState,
+    coroutineScope: CoroutineScope,
+    size: Int,
+    message: String
+) {
+    coroutineScope.launch {
+        val scope = coroutineScope.launch {
+            snackBarState.showSnackbar(
+                message = "$size 개 $message",
+                duration = SnackbarDuration.Indefinite
+            )
+        }
+        delay(1000L)
+        scope.cancel()
     }
 }

@@ -1,10 +1,8 @@
 package com.jaehong.presenter.ui.mystudy
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.ui.mystudy.blank.MyStudyBlankView
@@ -28,6 +26,9 @@ fun MyStudyScreen(
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
     val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
     val dialogState = myStudyViewModel.showDialog.collectAsState().value
+
+    val snackBarState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     if(pagerList.isNotEmpty()){
         Surface {
@@ -70,6 +71,8 @@ fun MyStudyScreen(
                 iconType = false,
                 isVisible = isVisible,
                 size = selectedItems.size,
+                snackBarState = snackBarState,
+                coroutineScope = coroutineScope,
                 onIconClicked = { myStudyViewModel.deleteMyStudyInfo(selectedItems) },
                 onIconLongClicked = { myStudyViewModel.onOpenDialogClicked() }
             )

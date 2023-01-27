@@ -45,6 +45,8 @@ fun StudyPageScreen(
     val checkedUserRuleOrigin = studyPageViewModel.checkedUserRuleOrigin.collectAsState().value
     val checkedUserRuleFirst = studyPageViewModel.checkedUserRuleFirst.collectAsState().value
     val checkedUserRuleBlank = studyPageViewModel.checkedUserRuleBlank.collectAsState().value
+    val snackBarState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     StudyPagePagerScreen(
         pagerList = pagerList,
@@ -89,6 +91,8 @@ fun StudyPageScreen(
         iconType = true,
         isVisible = isVisible,
         size = selectedItems.size,
+        snackBarState = snackBarState,
+        coroutineScope = coroutineScope,
         onIconClicked = { studyPageViewModel.addSelectedItems(selectedItems) },
         onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() },
     )
