@@ -16,13 +16,13 @@ fun TypeCheckButtonItem(
     detailType: String,
     toStudyTypeClicked: (String,String) -> Unit
 ) {
-    TextButton(onClick = {
-        toStudyTypeClicked(dynastyType,detailType)
-    }) {
+    TextButton(
+        onClick = { toStudyTypeClicked(dynastyType,detailType) },
+        modifier = Modifier.padding(15.dp),
+    ) {
         Text(
             text = detailType,
             fontSize = 38.nonScaledSp,
-            modifier = Modifier.padding(15.dp),
             style = Typography.bodyMedium,
             color = Color.Black,
         )

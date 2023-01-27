@@ -20,17 +20,17 @@ enum class DynastyType(
     }),
     JAPANESE("일제강점기", {
         when (it) {
-            1 -> "국권피탈 vs 우리민족의 대항"
-            2 -> "시대별 일제 통치체제 & 국내독립운동"
-            3 -> "시대별 국외독립운동"
+            1 -> "국권피탈 vs 민족대항"
+            2 -> "일제통치체제&국내독립운동"
+            3 -> "국외독립운동"
             else -> throw IllegalArgumentException("Dynasty Type Japanese Detail Error")
         }
     }),
     CONTEMPORARY("현대사",{
         when(it) {
             1 -> "광복 & 6.25 전쟁"
-            2 -> "이승만정부 ~ 박정희정부"
-            3 -> "정두환정부 ~ 노무현정부"
+            2 -> "이승만~박정희"
+            3 -> "정두환~노무현"
             else -> throw IllegalArgumentException("Dynasty Type Contemporary Detail Error")
         }
     });

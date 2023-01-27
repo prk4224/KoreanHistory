@@ -60,7 +60,6 @@ fun MyStudyScreen(
                             onTextClicked = { item ->
                                 if(selected) selectedItems.remove(item)
                                 else selectedItems.add(item)
-
                                 myStudyViewModel.changeButtonState(selectedItems.size)
                             }
                         )
