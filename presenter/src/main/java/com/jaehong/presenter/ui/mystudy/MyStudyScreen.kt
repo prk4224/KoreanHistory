@@ -70,7 +70,7 @@ fun MyStudyScreen(
             DataChangeButton(
                 iconType = false,
                 isVisible = isVisible,
-                size = selectedItems.size,
+                size = { myStudyViewModel.getSelectedItemsSize() },
                 snackBarState = snackBarState,
                 coroutineScope = coroutineScope,
                 onIconClicked = { myStudyViewModel.deleteMyStudyInfo(selectedItems) },

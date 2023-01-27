@@ -77,6 +77,10 @@ class MyStudyViewModel @Inject constructor(
         else _selectedItems.value.remove(studyInfoItem)
     }
 
+    fun getSelectedItemsSize(): Int {
+        return selectedItems.value.size
+    }
+
     fun changeButtonState(itemSize: Int) {
         _isVisible.value = itemSize > 0
     }

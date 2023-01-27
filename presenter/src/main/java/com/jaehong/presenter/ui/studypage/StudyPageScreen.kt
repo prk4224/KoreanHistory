@@ -1,6 +1,5 @@
 package com.jaehong.presenter.ui.studypage
 
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,9 +19,7 @@ import com.jaehong.presenter.ui.studypage.item.StudyPageHeaderItem
 import com.jaehong.presenter.ui.studypage.pager.StudyPagePagerScreen
 import com.jaehong.presenter.util.composable.DataChangeButton
 import com.jaehong.presenter.util.dialog.SaveCheckAlertDialog
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -45,6 +42,7 @@ fun StudyPageScreen(
     val checkedUserRuleOrigin = studyPageViewModel.checkedUserRuleOrigin.collectAsState().value
     val checkedUserRuleFirst = studyPageViewModel.checkedUserRuleFirst.collectAsState().value
     val checkedUserRuleBlank = studyPageViewModel.checkedUserRuleBlank.collectAsState().value
+
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -57,40 +55,40 @@ fun StudyPageScreen(
         studyData = studyData,
         allStudyData = allStudyData,
         header = { type, title -> StudyPageHeaderItem(type, title) },
-        dynastyState = dynastyState,
-        studyAllViewItem = { studyInfo, index ->
-            StudyAllViewItem(studyInfo) { descIndex, description ->
-                val (selected, setSelected) = remember(description) { mutableStateOf(false) }
-                val selectedItem = StudyInfoItem(
-                    studyInfo.id + descIndex,
-                    studyInfo.detail,
-                    studyInfo.king_name,
-                    arrayListOf(description)
-                )
-                DescriptionTextView(
-                    description = description,
-                    originDescription = allStudyData[index].description[descIndex],
-                    studyState = studyState,
-                    selectedItem = selectedItem,
-                    selected = selected,
-                    setSelected = setSelected,
-                    changeSelectedItem = { item, select ->
-                        studyPageViewModel.changeSelectedItem(item, select)
-                    },
-                    changeButtonState = {
-                        studyPageViewModel.changeButtonState(selectedItems.size)
-                    },
-                    changeAllHintState = {
-                        studyPageViewModel.changeAllHintState()
-                    })
-            }
+        dynastyState = dynastyState
+    ) { studyInfo, index ->
+        StudyAllViewItem(studyInfo) { descIndex, description ->
+            val (selected, setSelected) = remember { mutableStateOf(false) }
+            val selectedItem = StudyInfoItem(
+                studyInfo.id + descIndex,
+                studyInfo.detail,
+                studyInfo.king_name,
+                arrayListOf(description)
+            )
+
+            DescriptionTextView(
+                description = description,
+                originDescription = allStudyData[index].description[descIndex],
+                studyState = studyState,
+                selectedItem = selectedItem,
+                selected = selected,
+                setSelected = setSelected,
+                changeSelectedItem = { item, select ->
+                    studyPageViewModel.changeSelectedItem(item, select)
+                },
+                changeButtonState = {
+                    studyPageViewModel.changeButtonState(selectedItems.size)
+                },
+                changeAllHintState = {
+                    studyPageViewModel.changeAllHintState()
+                })
         }
-    )
+    }
 
     DataChangeButton(
         iconType = true,
         isVisible = isVisible,
-        size = selectedItems.size,
+        size = {studyPageViewModel.getSelectedItemsSize()},
         snackBarState = snackBarState,
         coroutineScope = coroutineScope,
         onIconClicked = { studyPageViewModel.addSelectedItems(selectedItems) },

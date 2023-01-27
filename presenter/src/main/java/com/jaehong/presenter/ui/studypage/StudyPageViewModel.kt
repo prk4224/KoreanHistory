@@ -91,7 +91,7 @@ class StudyPageViewModel @Inject constructor(
                     .catch { Log.d("Get All Data", "result: ${it.message}") }
                     .collect {
                         _allStudyInfoList.value = it
-                        _pagerList.value = getPagerList(it)
+                        _pagerList.value = getPagerAndSelectedList(it)
                     }
 
                 if (studyType == StudyType.FIRST_REVIEW.value) {
@@ -154,6 +154,10 @@ class StudyPageViewModel @Inject constructor(
         else _selectedItems.value.remove(studyInfoItem)
     }
 
+    fun getSelectedItemsSize(): Int {
+        return selectedItems.value.size
+    }
+
     fun changeButtonState(itemsSize: Int) {
         _isVisible.value = itemsSize > 0
     }
@@ -175,7 +179,7 @@ class StudyPageViewModel @Inject constructor(
         }
     }
 
-    private fun getPagerList(studyInfo : StudyInfo): List<String> {
+    private fun getPagerAndSelectedList(studyInfo : StudyInfo): List<String> {
         val pagerList = mutableListOf<String>()
         studyInfo.forEach {
             if (pagerList.contains(it.detail).not()) {

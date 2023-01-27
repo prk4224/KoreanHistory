@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.util.Constants.REMOVE_SNACKBAR_MESSAGE
 import com.jaehong.presenter.util.Constants.SAVE_SNACKBAR_MESSAGE
@@ -38,7 +39,7 @@ import kotlinx.coroutines.launch
 fun DataChangeButton(
     iconType: Boolean,
     isVisible: Boolean,
-    size: Int,
+    size: () -> Int,
     snackBarState: SnackbarHostState,
     coroutineScope: CoroutineScope,
     snackBarMessage: String = if (iconType) SAVE_SNACKBAR_MESSAGE else REMOVE_SNACKBAR_MESSAGE,
@@ -67,7 +68,7 @@ fun DataChangeButton(
                     .combinedClickable(
                         onClick = {
                             onIconClicked()
-                            showSnackBarOneSecond(snackBarState,coroutineScope,size,snackBarMessage)
+                            showSnackBarOneSecond(snackBarState,coroutineScope,size(),snackBarMessage)
                         },
                         onLongClick = { onIconLongClicked() }
                     )

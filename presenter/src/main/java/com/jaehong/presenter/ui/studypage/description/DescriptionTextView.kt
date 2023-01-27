@@ -8,18 +8,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.enum_type.StudyType
 import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
-import com.jaehong.domain.local.model.enum_type.StudyType
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -37,7 +35,6 @@ fun DescriptionTextView(
     changeButtonState: () -> Unit,
     changeAllHintState: () -> Unit,
 ) {
-
     Text(
         fontSize = 25.nonScaledSp,
         lineHeight = 25.nonScaledSp,
@@ -52,7 +49,7 @@ fun DescriptionTextView(
             .combinedClickable(
                 onClick = {
                     setSelected(selected.not())
-                    changeSelectedItem(selectedItem, selected.not())
+                    changeSelectedItem(selectedItem,selected.not())
                     if (studyState == StudyType.ORIGIN_STUDY.value) {
                         changeButtonState()
                     }
