@@ -1,5 +1,6 @@
 package com.jaehong.presenter.ui.studypage.description
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,32 +9,32 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.StudyType
 import com.jaehong.presenter.theme.Gray2
+import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun DescriptionTextView(
-    description: String,
-    originDescription: String,
     studyState: String,
     selectedItem: StudyInfoItem,
-    selected: Boolean,
-    setSelected: (Boolean) -> Unit,
-    backgroundColor: Color = if (selected) Gray2 else Color.White,
-    alphaText: Float = if(selected || studyState != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f,
-    hintText: String = if (selected) originDescription else description,
-    changeSelectedItem: (StudyInfoItem,Boolean) -> Unit,
+    backgroundColor: Color,
+    alphaText: Float,
+    hintText: String,
+    changeSelectedItem: (StudyInfoItem) -> Unit,
     changeButtonState: () -> Unit,
     changeAllHintState: () -> Unit,
+
 ) {
     Text(
         fontSize = 25.nonScaledSp,
@@ -48,8 +49,7 @@ fun DescriptionTextView(
             .alpha(alphaText)
             .combinedClickable(
                 onClick = {
-                    setSelected(selected.not())
-                    changeSelectedItem(selectedItem,selected.not())
+                    changeSelectedItem(selectedItem)
                     if (studyState == StudyType.ORIGIN_STUDY.value) {
                         changeButtonState()
                     }

@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 fun DataChangeButton(
     iconType: Boolean,
     isVisible: Boolean,
-    size: () -> Int,
+    size: Int,
     snackBarState: SnackbarHostState,
     coroutineScope: CoroutineScope,
     snackBarMessage: String = if (iconType) SAVE_SNACKBAR_MESSAGE else REMOVE_SNACKBAR_MESSAGE,
@@ -68,7 +68,7 @@ fun DataChangeButton(
                     .combinedClickable(
                         onClick = {
                             onIconClicked()
-                            showSnackBarOneSecond(snackBarState,coroutineScope,size(),snackBarMessage)
+                            showSnackBarOneSecond(snackBarState,coroutineScope,size,snackBarMessage)
                         },
                         onLongClick = { onIconLongClicked() }
                     )

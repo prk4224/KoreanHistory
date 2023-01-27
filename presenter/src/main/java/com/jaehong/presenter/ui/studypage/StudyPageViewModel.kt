@@ -6,13 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
-import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
-import com.jaehong.presenter.navigation.Destination
-import com.jaehong.presenter.navigation.KoreanHistoryNavigator
 import com.jaehong.domain.local.model.enum_type.GuideKey
 import com.jaehong.domain.local.model.enum_type.StudyType
+import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
+import com.jaehong.presenter.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -21,7 +19,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StudyPageViewModel @Inject constructor(
-    private val koreanHistoryNavigator: KoreanHistoryNavigator,
     savedStateHandle: SavedStateHandle,
     private val studyInfoUseCase: GetStudyInfoUseCase
 ) : ViewModel() {
@@ -38,10 +35,6 @@ class StudyPageViewModel @Inject constructor(
     private val _studyInfoList = MutableStateFlow(StudyInfo())
     val studyInfoList = _studyInfoList.asStateFlow()
 
-    private val initList: MutableList<StudyInfoItem> = mutableListOf()
-    private val _selectedItems = MutableStateFlow(initList)
-    val selectedItems = _selectedItems.asStateFlow()
-
     private val _isVisible = MutableStateFlow(false)
     val isVisible = _isVisible.asStateFlow()
 
@@ -53,9 +46,6 @@ class StudyPageViewModel @Inject constructor(
 
     private val _pagerList = MutableStateFlow(listOf(""))
     val pagerList = _pagerList.asStateFlow()
-
-    private val _currentPage = MutableStateFlow(0)
-    val currentPage = _currentPage.asStateFlow()
 
     private val _originGuideLabel = MutableStateFlow(0)
     val originGuideLabel = _originGuideLabel.asStateFlow()
@@ -78,13 +68,9 @@ class StudyPageViewModel @Inject constructor(
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.StudyPage.DYNASTY_TYPE_KEY)
         val studyType = savedStateHandle.get<String>(Destination.StudyPage.STUDY_TYPE_KEY)
-        val startPage = savedStateHandle.get<String>(Destination.StudyPage.START_PAGE_KEY)
 
         _dynastyState.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
         _studyState.value = studyType ?: throw IllegalArgumentException("Study Type Error")
-        _currentPage.value =
-            startPage?.toInt() ?: throw IllegalArgumentException("Start Page Error")
-
         viewModelScope.launch {
             with(studyInfoUseCase) {
                 this(dynastyType)
@@ -144,20 +130,6 @@ class StudyPageViewModel @Inject constructor(
         addMyStudyInfo(selectedItems)
     }
 
-    fun updatePage(page: Int) {
-        _currentPage.value = page
-        clearSelectedItems()
-    }
-
-    fun changeSelectedItem(studyInfoItem: StudyInfoItem, check: Boolean) {
-        if (check) _selectedItems.value.add(studyInfoItem)
-        else _selectedItems.value.remove(studyInfoItem)
-    }
-
-    fun getSelectedItemsSize(): Int {
-        return selectedItems.value.size
-    }
-
     fun changeButtonState(itemsSize: Int) {
         _isVisible.value = itemsSize > 0
     }
@@ -166,16 +138,14 @@ class StudyPageViewModel @Inject constructor(
         _isAllHintVisible.value = _isAllHintVisible.value.not()
     }
 
-    private fun clearSelectedItems() {
+    private fun initDataChangeButton() {
         _isVisible.value = false
-        _selectedItems.value.clear()
     }
 
     private fun addMyStudyInfo(studyInfo: List<StudyInfoItem>) {
         viewModelScope.launch {
             studyInfoUseCase.insertMyStudyInfo(studyInfo)
-            delay(1000L)
-            onNavigateRefreshClicked()
+            initDataChangeButton()
         }
     }
 
@@ -187,14 +157,5 @@ class StudyPageViewModel @Inject constructor(
             }
         }
         return pagerList
-    }
-
-    private fun onNavigateRefreshClicked() {
-        viewModelScope.launch {
-            koreanHistoryNavigator.navigateBack()
-            koreanHistoryNavigator.navigateTo(
-                Destination.StudyPage(dynastyState.value, studyState.value, "${currentPage.value}")
-            )
-        }
     }
 }

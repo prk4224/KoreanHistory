@@ -2,9 +2,11 @@ package com.jaehong.presenter.ui.studypage
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.StudyType
+import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.ui.studypage.description.DescriptionTextView
 import com.jaehong.presenter.ui.studypage.guide.blank.SelectRuleBlankDialog
 import com.jaehong.presenter.ui.studypage.guide.first.LongClickRuleFirstDialog
@@ -29,12 +31,10 @@ fun StudyPageScreen(
     val dynastyState = studyPageViewModel.dynastyState.collectAsState().value
     val studyState = studyPageViewModel.studyState.collectAsState().value
     val studyData = studyPageViewModel.studyInfoList.collectAsState().value
-    val selectedItems = studyPageViewModel.selectedItems.collectAsState().value
     val isVisible = studyPageViewModel.isVisible.collectAsState().value
     val allStudyData = studyPageViewModel.allStudyInfoList.collectAsState().value
     val dialogState = studyPageViewModel.showDialog.collectAsState().value
     val allHintState = studyPageViewModel.isAllHintVisible.collectAsState().value
-    val currentPage = studyPageViewModel.currentPage.collectAsState().value
     val pagerList = studyPageViewModel.pagerList.collectAsState().value
     val originGuideLabel = studyPageViewModel.originGuideLabel.collectAsState().value
     val firstGuideLabel = studyPageViewModel.firstGuideLabel.collectAsState().value
@@ -43,13 +43,12 @@ fun StudyPageScreen(
     val checkedUserRuleFirst = studyPageViewModel.checkedUserRuleFirst.collectAsState().value
     val checkedUserRuleBlank = studyPageViewModel.checkedUserRuleBlank.collectAsState().value
 
+    val selectedItems = remember { mutableStateListOf<StudyInfoItem>() }
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
     StudyPagePagerScreen(
         pagerList = pagerList,
-        currentPage = currentPage,
-        updatePage = { studyPageViewModel.updatePage(it) },
         studyState = studyState,
         allHintState = allHintState,
         studyData = studyData,
@@ -58,40 +57,40 @@ fun StudyPageScreen(
         dynastyState = dynastyState
     ) { studyInfo, index ->
         StudyAllViewItem(studyInfo) { descIndex, description ->
-            val (selected, setSelected) = remember { mutableStateOf(false) }
             val selectedItem = StudyInfoItem(
-                studyInfo.id + descIndex,
-                studyInfo.detail,
-                studyInfo.king_name,
-                arrayListOf(description)
-            )
+                    studyInfo.id + descIndex,
+                    studyInfo.detail,
+                    studyInfo.king_name,
+                    arrayListOf(description)
+                )
+
+            val selected = selectedItems.contains(selectedItem)
 
             DescriptionTextView(
-                description = description,
-                originDescription = allStudyData[index].description[descIndex],
                 studyState = studyState,
                 selectedItem = selectedItem,
-                selected = selected,
-                setSelected = setSelected,
-                changeSelectedItem = { item, select ->
-                    studyPageViewModel.changeSelectedItem(item, select)
+                backgroundColor = if (selected) Gray2 else Color.White,
+                alphaText = if (selected || studyState != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f,
+                hintText = if (selected) allStudyData[index].description[descIndex] else description,
+                changeSelectedItem = { item ->
+                    if(selected) selectedItems.remove(item)
+                    else selectedItems.add(item)
                 },
-                changeButtonState = {
-                    studyPageViewModel.changeButtonState(selectedItems.size)
-                },
-                changeAllHintState = {
-                    studyPageViewModel.changeAllHintState()
-                })
+                changeButtonState = { studyPageViewModel.changeButtonState(selectedItems.size) },
+                changeAllHintState = { studyPageViewModel.changeAllHintState() })
         }
     }
 
     DataChangeButton(
         iconType = true,
         isVisible = isVisible,
-        size = {studyPageViewModel.getSelectedItemsSize()},
+        size = selectedItems.size,
         snackBarState = snackBarState,
         coroutineScope = coroutineScope,
-        onIconClicked = { studyPageViewModel.addSelectedItems(selectedItems) },
+        onIconClicked = {
+            studyPageViewModel.addSelectedItems(selectedItems)
+            selectedItems.clear()
+        },
         onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() },
     )
 
@@ -100,6 +99,7 @@ fun StudyPageScreen(
             dialogType = true,
             onDialogConfirm = {
                 studyPageViewModel.onDialogConfirm()
+                selectedItems.clear()
             },
             onDialogDismiss = {
                 studyPageViewModel.onDialogDismiss()

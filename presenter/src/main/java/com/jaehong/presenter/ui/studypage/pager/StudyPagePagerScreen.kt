@@ -21,8 +21,6 @@ import com.jaehong.presenter.theme.Gray3
 @Composable
 fun StudyPagePagerScreen(
     pagerList: List<String>,
-    currentPage: Int,
-    updatePage: (Int) -> Unit,
     dynastyState: String,
     studyState: String,
     allHintState: Boolean,
@@ -37,12 +35,7 @@ fun StudyPagePagerScreen(
             .fillMaxSize()
             .background(Gray3),
         verticalAlignment = Alignment.Top,
-        state = rememberPagerState(initialPage = currentPage)
     ) { page ->
-        if (currentPage != this.currentPage) {
-            updatePage(this.currentPage)
-        }
-
         LazyColumn(
             modifier = Modifier
                 .padding(30.dp)

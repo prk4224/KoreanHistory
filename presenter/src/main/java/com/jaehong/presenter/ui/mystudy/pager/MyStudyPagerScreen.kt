@@ -19,8 +19,6 @@ import com.jaehong.presenter.theme.Gray3
 fun MyStudyPagerScreen(
     pagerList: List<String>,
     myStudyData: List<StudyInfoItem>,
-    currentPage: Int,
-    updatePage: (Int) -> Unit,
     myStudyHeader: @Composable (String) -> Unit,
     myStudyNotice: @Composable () -> Unit,
     myStudyView: @Composable (StudyInfoItem) -> Unit,
@@ -32,9 +30,7 @@ fun MyStudyPagerScreen(
             .background(Gray3),
         verticalAlignment = Alignment.Top,
     ) { page ->
-        if (currentPage != this.currentPage) {
-            updatePage(this.currentPage)
-        }
+
         LazyColumn(
             modifier = Modifier.padding(vertical = 50.dp, horizontal = 20.dp),
         ) {

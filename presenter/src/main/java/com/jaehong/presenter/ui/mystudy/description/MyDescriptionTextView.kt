@@ -20,10 +20,8 @@ import com.jaehong.presenter.util.FontFixed.nonScaledSp
 fun MyDescriptionTextView(
     description: String,
     selectedItem: StudyInfoItem,
-    selected: Boolean,
-    onSelectChange: (Boolean) -> Unit,
-    backgroundColor: Color = if(selected) Gray2 else Color.White,
-    onTextClicked: (StudyInfoItem,Boolean) -> Unit
+    backgroundColor: Color,
+    onTextClicked: (StudyInfoItem) -> Unit
 ) {
     Text(
         fontSize = 25.nonScaledSp,
@@ -36,8 +34,7 @@ fun MyDescriptionTextView(
             .padding(5.dp)
             .background(backgroundColor)
             .clickable {
-                onSelectChange(selected.not())
-                onTextClicked(selectedItem,selected.not())
+                onTextClicked(selectedItem)
             }
     )
 }

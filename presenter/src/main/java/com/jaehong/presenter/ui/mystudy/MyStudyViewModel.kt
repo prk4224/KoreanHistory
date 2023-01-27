@@ -27,14 +27,8 @@ class MyStudyViewModel @Inject constructor(
     private val _isVisible = MutableStateFlow(false)
     val isVisible = _isVisible.asStateFlow()
 
-    private val _selectedItems = MutableStateFlow(initList)
-    val selectedItems = _selectedItems.asStateFlow()
-
     private val _pagerList = MutableStateFlow(listOf(""))
     val pagerList = _pagerList.asStateFlow()
-
-    private val _currentPage = MutableStateFlow(0)
-    val currentPage = _currentPage.asStateFlow()
 
     private val _showDialog = MutableStateFlow(false)
     val showDialog = _showDialog.asStateFlow()
@@ -67,20 +61,6 @@ class MyStudyViewModel @Inject constructor(
         _showDialog.value = false
     }
 
-    fun updatePage(page: Int) {
-        _currentPage.value = page
-        clearSelectedItems()
-    }
-
-    fun changeSelectedItem(studyInfoItem: StudyInfoItem, check: Boolean) {
-        if (check) _selectedItems.value.add(studyInfoItem)
-        else _selectedItems.value.remove(studyInfoItem)
-    }
-
-    fun getSelectedItemsSize(): Int {
-        return selectedItems.value.size
-    }
-
     fun changeButtonState(itemSize: Int) {
         _isVisible.value = itemSize > 0
     }
@@ -88,9 +68,13 @@ class MyStudyViewModel @Inject constructor(
     fun deleteMyStudyInfo(selected: List<StudyInfoItem>) {
         viewModelScope.launch {
             myStudyInfoUseCase.deleteMyStudyInfo(selected)
+            initDataChangeButton()
             getMyStudyData()
-            clearSelectedItems()
         }
+    }
+
+    private fun initDataChangeButton() {
+        _isVisible.value = false
     }
 
     fun onBackButtonClicked() {
@@ -102,13 +86,9 @@ class MyStudyViewModel @Inject constructor(
     private fun deleteAllData(myStudyItems: List<StudyInfoItem>) {
         viewModelScope.launch {
             myStudyInfoUseCase.deleteMyStudyInfo(myStudyItems)
+            initDataChangeButton()
             getMyStudyData()
         }
-    }
-
-    private fun clearSelectedItems(){
-        _selectedItems.value.clear()
-        _isVisible.value = false
     }
 
     private fun getPagerList(myStudyList: List<StudyInfoItem>): List<String> {

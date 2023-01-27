@@ -3,8 +3,10 @@ package com.jaehong.presenter.ui.mystudy
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.ui.mystudy.blank.MyStudyBlankView
 import com.jaehong.presenter.ui.mystudy.description.MyDescriptionTextView
 import com.jaehong.presenter.ui.mystudy.item.MyStudyHeaderItem
@@ -22,11 +24,10 @@ fun MyStudyScreen(
 ) {
     val myStudyData = myStudyViewModel.myStudyInfoList.collectAsState().value
     val isVisible = myStudyViewModel.isVisible.collectAsState().value
-    val currentPage = myStudyViewModel.currentPage.collectAsState().value
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
-    val selectedItems = myStudyViewModel.selectedItems.collectAsState().value
     val dialogState = myStudyViewModel.showDialog.collectAsState().value
 
+    val selectedItems = remember { mutableStateListOf<StudyInfoItem>() }
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -35,10 +36,6 @@ fun MyStudyScreen(
             MyStudyPagerScreen(
                 pagerList = pagerList,
                 myStudyData = myStudyData,
-                currentPage = currentPage,
-                updatePage = {
-                    myStudyViewModel.updatePage(it)
-                },
                 myStudyHeader = {
                     MyStudyHeaderItem(it)
                 },
@@ -47,19 +44,23 @@ fun MyStudyScreen(
                 },
                 myStudyView = {
                     MyStudyViewItem(it) { studyInfo, description, descIndex ->
-                        val (selected,setSelected) = remember(description) { mutableStateOf(false) }
+                        val selectedItem = StudyInfoItem(
+                            studyInfo.id + descIndex,
+                            studyInfo.detail,
+                            studyInfo.king_name,
+                            arrayListOf(description)
+                        )
+
+                        val selected = selectedItems.contains(selectedItem)
+
                         MyDescriptionTextView(
                             description = description,
-                            selectedItem = StudyInfoItem(
-                                studyInfo.id + descIndex,
-                                studyInfo.detail,
-                                studyInfo.king_name,
-                                arrayListOf(description)
-                            ),
-                            selected = selected,
-                            onSelectChange = setSelected,
-                            onTextClicked = { selectedItem, select ->
-                                myStudyViewModel.changeSelectedItem(selectedItem, select)
+                            selectedItem = selectedItem,
+                            backgroundColor = if (selected) Gray2 else Color.White,
+                            onTextClicked = { item ->
+                                if(selected) selectedItems.remove(item)
+                                else selectedItems.add(item)
+
                                 myStudyViewModel.changeButtonState(selectedItems.size)
                             }
                         )
@@ -70,10 +71,13 @@ fun MyStudyScreen(
             DataChangeButton(
                 iconType = false,
                 isVisible = isVisible,
-                size = { myStudyViewModel.getSelectedItemsSize() },
+                size = selectedItems.size ,
                 snackBarState = snackBarState,
                 coroutineScope = coroutineScope,
-                onIconClicked = { myStudyViewModel.deleteMyStudyInfo(selectedItems) },
+                onIconClicked = {
+                    myStudyViewModel.deleteMyStudyInfo(selectedItems)
+                    selectedItems.clear()
+                },
                 onIconLongClicked = { myStudyViewModel.onOpenDialogClicked() }
             )
             if (dialogState) {
@@ -81,6 +85,7 @@ fun MyStudyScreen(
                     dialogType = false,
                     onDialogConfirm = {
                         myStudyViewModel.onDialogConfirm(myStudyData)
+                        selectedItems.clear()
                     },
                     onDialogDismiss = {
                         myStudyViewModel.onDialogDismiss()
