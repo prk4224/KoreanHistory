@@ -11,6 +11,7 @@ import com.jaehong.domain.local.model.enum_type.StudyType
 import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
 import com.jaehong.presenter.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -77,7 +78,7 @@ class StudyPageViewModel @Inject constructor(
                     .catch { Log.d("Get All Data", "result: ${it.message}") }
                     .collect {
                         _allStudyInfoList.value = it
-                        _pagerList.value = getPagerAndSelectedList(it)
+                        _pagerList.value = getPagerList(it)
                     }
 
                 if (studyType == StudyType.FIRST_REVIEW.value) {
@@ -149,7 +150,7 @@ class StudyPageViewModel @Inject constructor(
         }
     }
 
-    private fun getPagerAndSelectedList(studyInfo : StudyInfo): List<String> {
+    private fun getPagerList(studyInfo : StudyInfo): List<String> {
         val pagerList = mutableListOf<String>()
         studyInfo.forEach {
             if (pagerList.contains(it.detail).not()) {
