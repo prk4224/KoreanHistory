@@ -1,6 +1,5 @@
 package com.jaehong.presenter.ui.studypage.description
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,21 +8,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.StudyType
-import com.jaehong.presenter.theme.Gray2
-import com.jaehong.presenter.ui.studypage.StudyPageViewModel
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DescriptionTextView(
     studyState: String,

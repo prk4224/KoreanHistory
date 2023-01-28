@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.enum_type.DynastyType
+import com.jaehong.presenter.util.Constants.NOTHING
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
@@ -24,18 +26,21 @@ fun MyStudyViewItem(
             .height(IntrinsicSize.Min)
             .background(Color.White),
     ) {
-        Text(
-            text = studyInfo.king_name,
-            fontSize = 25.nonScaledSp,
-            lineHeight = 25.nonScaledSp,
-            color = Color.Black,
-            modifier = Modifier
-                .border(1.dp, Color.LightGray, RectangleShape)
-                .weight(0.5f)
-                .fillMaxHeight()
-                .wrapContentSize(Alignment.Center),
-            textAlign = TextAlign.Center,
-        )
+        if(studyInfo.king_name != NOTHING) {
+            Text(
+                text = studyInfo.king_name,
+                fontSize = 25.nonScaledSp,
+                lineHeight = 25.nonScaledSp,
+                color = Color.Black,
+                modifier = Modifier
+                    .border(1.dp, Color.LightGray, RectangleShape)
+                    .weight(0.5f)
+                    .fillMaxHeight()
+                    .wrapContentSize(Alignment.Center),
+                textAlign = TextAlign.Center,
+            )
+        }
+
         Column(
             modifier = Modifier
                 .weight(1f)

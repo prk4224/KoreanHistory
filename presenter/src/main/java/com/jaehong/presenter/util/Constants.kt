@@ -13,4 +13,5 @@ object Constants {
     const val MY_STUDY_TEXT = " 부족한 부분 한번 더 복습하기 ★"
     const val GUIDE_CHECKED_TEXT = "다시 보지 않기"
     const val GUIDE_OUT_TEXT = "공부하러 가기"
+    const val NOTHING = "Nothing"
 }

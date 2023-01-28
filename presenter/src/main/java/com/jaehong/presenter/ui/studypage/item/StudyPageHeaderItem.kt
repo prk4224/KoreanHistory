@@ -14,13 +14,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.theme.BaseColor1
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
-import com.jaehong.domain.local.model.enum_type.DynastyType
 
 @Composable
 fun StudyPageHeaderItem(
     dynastyState:String,
     pageTitle: String,
-    headerText: String = if(checkedType(dynastyState)) dynastyState else "$dynastyState, $pageTitle"
 ){
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -28,7 +26,7 @@ fun StudyPageHeaderItem(
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = headerText,
+            text = "$dynastyState, $pageTitle",
             textAlign = TextAlign.Center,
             fontSize = 30.nonScaledSp,
             color = Color.White,
@@ -37,10 +35,4 @@ fun StudyPageHeaderItem(
                 .padding(vertical = 7.dp)
         )
     }
-}
-
-private fun checkedType(type: String): Boolean {
-    return type.contains(DynastyType.MODERN.value)  ||
-            type.contains(DynastyType.JAPANESE.value) ||
-            type.contains(DynastyType.CONTEMPORARY.value)
 }
