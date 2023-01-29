@@ -12,6 +12,20 @@ val WooSuFont = FontFamily(
     Font(R.font.woo_su)
 )
 
+
+
+val GmarketBoldFont = FontFamily(
+    Font(R.font.gmarket_sans_bold)
+)
+
+val GmarketLightFont = FontFamily(
+    Font(R.font.gmarket_sans_light)
+)
+
+val GmarketMediumFont = FontFamily(
+    Font(R.font.gmarket_sans_medium)
+)
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
@@ -45,4 +59,28 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
     */
+)
+
+val GmarketBoldText = TextStyle(
+    fontFamily = GmarketBoldFont,
+    fontWeight = FontWeight.Normal,
+    fontSize = 22.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp
+)
+
+val GmarketLightText = TextStyle(
+    fontFamily = GmarketLightFont,
+    fontWeight = FontWeight.Normal,
+    fontSize = 22.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp
+)
+
+val GmarketMediumText = TextStyle(
+    fontFamily = GmarketMediumFont,
+    fontWeight = FontWeight.Normal,
+    fontSize = 22.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp
 )
