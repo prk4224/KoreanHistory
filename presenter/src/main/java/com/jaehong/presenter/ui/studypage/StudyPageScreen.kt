@@ -12,10 +12,7 @@ import com.jaehong.presenter.ui.studypage.guide.blank.SelectRuleBlankDialog
 import com.jaehong.presenter.ui.studypage.guide.first.LongClickRuleFirstDialog
 import com.jaehong.presenter.ui.studypage.guide.first.SelectRuleFirstDialog
 import com.jaehong.presenter.ui.studypage.guide.first.UserRuleFirstGuide
-import com.jaehong.presenter.ui.studypage.guide.origin.ScrollRuleOriginDialog
-import com.jaehong.presenter.ui.studypage.guide.origin.SelectRuleOriginDialog
-import com.jaehong.presenter.ui.studypage.guide.origin.SwipeRuleOriginDialog
-import com.jaehong.presenter.ui.studypage.guide.origin.UserRuleOriginGuide
+import com.jaehong.presenter.ui.studypage.guide.origin.*
 import com.jaehong.presenter.ui.studypage.item.StudyAllViewItem
 import com.jaehong.presenter.ui.studypage.item.StudyPageHeaderItem
 import com.jaehong.presenter.ui.studypage.pager.StudyPagePagerScreen
@@ -107,9 +104,8 @@ fun StudyPageScreen(
         )
     }
 
-
     when(studyState) {
-        StudyType.ORIGIN_STUDY.value -> if(originGuideLabel < 3 && checkedUserRuleOrigin) {
+        StudyType.ORIGIN_STUDY.value -> if(originGuideLabel < 4 && checkedUserRuleOrigin) {
             UserRuleOriginGuide(
                 label = originGuideLabel,
                 swipe = {
@@ -123,7 +119,12 @@ fun StudyPageScreen(
                     }
                 },
                 select = {
-                    SelectRuleOriginDialog { label, type, rule ->
+                    SelectRuleOriginDialog { label, type ->
+                        studyPageViewModel.updateLabel(label, type)
+                    }
+                },
+                allSave = {
+                    AllSaveRuleOriginDialog { label, type, rule ->
                         studyPageViewModel.updateLabel(label, type)
                         studyPageViewModel.setUserRule(rule)
                     }

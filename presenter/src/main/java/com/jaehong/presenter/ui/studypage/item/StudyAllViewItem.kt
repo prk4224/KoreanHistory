@@ -26,7 +26,7 @@ fun StudyAllViewItem(
             .height(IntrinsicSize.Min)
             .background(Color.White),
     ) {
-        if(studyInfo.king_name.contains(NOTHING).not()) {
+        if(studyInfo.king_name != NOTHING) {
             Text(
                 text = studyInfo.king_name,
                 fontSize = 25.nonScaledSp,

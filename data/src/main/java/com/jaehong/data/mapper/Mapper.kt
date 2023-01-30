@@ -13,7 +13,7 @@ object Mapper {
     fun StudyEntity.dataToDomain(): StudyInfo {
         val studyInfo = StudyInfo()
         this.forEach {
-            val index = studyInfo.checkDescription(it.king_name)
+            val index = studyInfo.checkDescription(it.detail,it.king_name)
             if (index != -1) {
                 studyInfo[index].description.add(it.description)
             } else {
@@ -27,9 +27,9 @@ object Mapper {
         return StudyInfoItem(this.id, this.detail, this.king_name, arrayListOf(this.description))
     }
 
-    private fun StudyInfo.checkDescription(kingName: String): Int {
+    private fun StudyInfo.checkDescription(detail: String,kingName: String): Int {
         this.forEachIndexed { index, studyInfoItem ->
-            if (studyInfoItem.king_name == kingName) {
+            if (studyInfoItem.detail == detail && studyInfoItem.king_name == kingName) {
                 return index
             }
         }
@@ -39,7 +39,7 @@ object Mapper {
     fun List<MyStudyEntity>.dataBaseToDomain(): StudyInfo {
         val studyInfo = StudyInfo()
         this.forEach {
-            val index = studyInfo.checkDescription(it.king_name)
+            val index = studyInfo.checkDescription(it.detail,it.king_name)
             if (index != -1) {
                 studyInfo[index].description.add(it.description)
             } else {

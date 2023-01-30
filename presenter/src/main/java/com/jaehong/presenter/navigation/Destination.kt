@@ -40,8 +40,6 @@ sealed class Destination(protected val route: String, vararg params: String) {
             STUDY_TYPE_KEY to studyType,
         )
     }
-
-
 }
 
 private fun String.appendParams(vararg params: Pair<String, Any?>): String {

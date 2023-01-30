@@ -48,7 +48,6 @@ fun StudyPagePagerScreen(
             item {
                 header(dynastyState, pagerList[page])
             }
-
             itemsIndexed(data) { index, studyInfo ->
                 if (studyInfo.detail == pagerList[page]) {
                     studyAllViewItem(studyInfo, index)

@@ -9,7 +9,9 @@ import com.jaehong.data.local.model.StudyEntity
 import com.jaehong.data.util.Constants.GUIDE_TOKEN
 import com.jaehong.data.util.enum_type.DynastyDetailType
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -37,9 +39,8 @@ class LocalDataSourceImpl @Inject constructor(
             DynastyDetailType.JAPANESE_THREE -> context.assets.open("japanese_all_3.json").reader().readText()
             DynastyDetailType.CONTEMPORARY_ONE -> context.assets.open("contemporary_all_1.json").reader().readText()
             DynastyDetailType.CONTEMPORARY_TWO -> context.assets.open("contemporary_all_2.json").reader().readText()
-            DynastyDetailType.CONTEMPORARY_THREE -> context.assets.open("contemporary_all_4.json").reader().readText()
+            DynastyDetailType.CONTEMPORARY_THREE -> context.assets.open("contemporary_all_3.json").reader().readText()
         }
-
         emit(Gson().fromJson(json, StudyEntity::class.java))
     }
 
