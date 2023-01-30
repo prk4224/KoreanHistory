@@ -24,14 +24,14 @@ import com.jaehong.domain.local.model.enum_type.StudyType
 fun SelectRuleOriginDialog(
     checkboxAllImage: Painter = painterResource(id = R.drawable.checkbox_image),
     guidePlusImage: Painter = painterResource(id = R.drawable.guide_plus_image),
-    onClickUpdate: (Int,String,String) -> Unit
+    onClickUpdate: (Int,String) -> Unit
 ) {
 
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable(
             onClick = {
-                onClickUpdate(3, StudyType.ORIGIN_STUDY.value, GuideKey.USER_RULE_ORIGIN.value)
+                onClickUpdate(3, StudyType.ORIGIN_STUDY.value)
             }
         )
     ) {

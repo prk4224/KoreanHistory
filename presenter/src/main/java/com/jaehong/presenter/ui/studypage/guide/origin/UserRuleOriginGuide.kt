@@ -13,6 +13,7 @@ fun UserRuleOriginGuide(
     swipe: @Composable () -> Unit,
     scroll: @Composable () -> Unit,
     select: @Composable () -> Unit,
+    allSave: @Composable () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -23,6 +24,7 @@ fun UserRuleOriginGuide(
             0 -> swipe()
             1 -> scroll()
             2 -> select()
+            3 -> allSave()
         }
     }
 }

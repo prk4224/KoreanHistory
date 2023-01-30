@@ -9,6 +9,7 @@ import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.presenter.theme.Gray2
 import com.jaehong.presenter.ui.mystudy.blank.MyStudyBlankView
 import com.jaehong.presenter.ui.mystudy.description.MyDescriptionTextView
+import com.jaehong.presenter.ui.mystudy.guide.AllRemoveRuleDialog
 import com.jaehong.presenter.ui.mystudy.item.MyStudyHeaderItem
 import com.jaehong.presenter.ui.mystudy.item.MyStudyNoticeItem
 import com.jaehong.presenter.ui.mystudy.item.MyStudyViewItem
@@ -26,6 +27,7 @@ fun MyStudyScreen(
     val isVisible = myStudyViewModel.isVisible.collectAsState().value
     val pagerList = myStudyViewModel.pagerList.collectAsState().value
     val dialogState = myStudyViewModel.showDialog.collectAsState().value
+    val checkedUserRule = myStudyViewModel.checkedUserRule.collectAsState().value
 
     val selectedItems = remember { mutableStateListOf<StudyInfoItem>() }
     val snackBarState = remember { SnackbarHostState() }
@@ -90,6 +92,11 @@ fun MyStudyScreen(
                         myStudyViewModel.onDialogDismiss()
                     }
                 )
+            }
+            if(checkedUserRule) {
+                AllRemoveRuleDialog {
+                    myStudyViewModel.setUserRule(it)
+                }
             }
         }
     } else MyStudyBlankView { myStudyViewModel.onBackButtonClicked() }

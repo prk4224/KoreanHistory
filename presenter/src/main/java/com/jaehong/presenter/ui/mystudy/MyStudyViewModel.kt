@@ -4,12 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.enum_type.GuideKey
 import com.jaehong.domain.local.usecase.GetMyStudyInfoUseCase
 import com.jaehong.presenter.navigation.KoreanHistoryNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,18 +35,33 @@ class MyStudyViewModel @Inject constructor(
     private val _showDialog = MutableStateFlow(false)
     val showDialog = _showDialog.asStateFlow()
 
+    private val _checkedUserRule = MutableStateFlow(false)
+    val checkedUserRule = _checkedUserRule.asStateFlow()
+
     init {
         getMyStudyData()
     }
 
     private fun getMyStudyData(){
         viewModelScope.launch {
-            myStudyInfoUseCase()
-                .catch { Log.d("My Study Data","result : $it") }
-                .collect {
-                    _myStudyInfoList.value = it
-                    _pagerList.value = getPagerList(it)
-                }
+            with(myStudyInfoUseCase) {
+                this()
+                    .catch { Log.d("My Study Data","result : $it") }
+                    .collect {
+                        _myStudyInfoList.value = it
+                        _pagerList.value = getPagerList(it)
+                    }
+                getGuideInfo(GuideKey.USER_RULE_MY_PAGE.value)
+                    .catch { Log.d("My Page Guide Rule", "result: ${it.message}") }
+                    .collect { _checkedUserRule.value = it }
+            }
+        }
+    }
+
+    fun setUserRule(key: String) {
+        viewModelScope.launch {
+            myStudyInfoUseCase.setGuideInfo(key)
+            _checkedUserRule.value = false
         }
     }
 
