@@ -23,6 +23,7 @@ fun TypeCheckButtonItem(
         Text(
             text = detailType,
             fontSize = 38.nonScaledSp,
+            lineHeight = 38.nonScaledSp,
             style = Typography.bodyMedium,
             color = Color.Black,
         )

@@ -15,10 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.jaehong.domain.local.model.enum_type.StudyType
 import com.jaehong.presenter.R
 import com.jaehong.presenter.theme.BaseColor1
-import com.jaehong.domain.local.model.enum_type.GuideKey
-import com.jaehong.domain.local.model.enum_type.StudyType
 
 @Composable
 fun SelectRuleOriginDialog(

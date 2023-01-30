@@ -13,12 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.theme.BaseColor1
+import com.jaehong.presenter.util.Extension.checkedType
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
 fun StudyPageHeaderItem(
     dynastyState:String,
     pageTitle: String,
+    header: String = if(dynastyState.checkedType()) pageTitle else "$dynastyState, $pageTitle"
 ){
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -26,7 +28,7 @@ fun StudyPageHeaderItem(
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = "$dynastyState, $pageTitle",
+            text = header,
             textAlign = TextAlign.Center,
             fontSize = 30.nonScaledSp,
             color = Color.White,

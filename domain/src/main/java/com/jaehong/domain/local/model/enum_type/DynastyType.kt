@@ -20,8 +20,8 @@ enum class DynastyType(
     }),
     JAPANESE("일제강점기", {
         when (it) {
-            1 -> "국권피탈 vs 민족대항"
-            2 -> "일제통치체제&국내독립운동"
+            1 -> "국권피탈vs민족대항"
+            2 -> "일제통치체제\n  &국내독립운동"
             3 -> "국외독립운동"
             else -> throw IllegalArgumentException("Dynasty Type Japanese Detail Error")
         }

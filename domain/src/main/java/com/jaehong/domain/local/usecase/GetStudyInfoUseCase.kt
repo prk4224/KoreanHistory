@@ -15,8 +15,7 @@ class GetStudyInfoUseCase @Inject constructor(
         dynastyType: String
     ): Flow<StudyInfo> = flow {
         localRepository.getAllStudyInfo(dynastyType).collect {
-            val temp = it
-            emit(temp)
+            emit(it)
         }
     }
 

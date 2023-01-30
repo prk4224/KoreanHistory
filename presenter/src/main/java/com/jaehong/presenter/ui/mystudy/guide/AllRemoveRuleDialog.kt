@@ -37,7 +37,7 @@ fun AllRemoveRuleDialog(
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = 30.dp, end = 30.dp)
+                .padding(bottom = 5.dp, end = 5.dp)
                 .size(200.dp)
         )
     }

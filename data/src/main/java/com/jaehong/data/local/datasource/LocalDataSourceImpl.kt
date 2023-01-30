@@ -9,9 +9,7 @@ import com.jaehong.data.local.model.StudyEntity
 import com.jaehong.data.util.Constants.GUIDE_TOKEN
 import com.jaehong.data.util.enum_type.DynastyDetailType
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 

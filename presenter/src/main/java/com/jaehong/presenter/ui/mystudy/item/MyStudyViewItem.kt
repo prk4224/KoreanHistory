@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.domain.local.model.StudyInfoItem
-import com.jaehong.domain.local.model.enum_type.DynastyType
 import com.jaehong.presenter.util.Constants.NOTHING
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 

@@ -1,7 +1,10 @@
 package com.jaehong.presenter.ui.studytype
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jaehong.presenter.theme.BaseColor1
+import com.jaehong.presenter.util.Extension.checkedType
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 
 @Composable
@@ -27,7 +31,7 @@ fun StudyTypeTitleItem(
 
     ) {
         Text(
-            text = dynastyType,
+            text = getHeaderText(dynastyType),
             textAlign = TextAlign.Center,
             fontSize = 35.nonScaledSp,
             color = Color.White,
@@ -35,4 +39,13 @@ fun StudyTypeTitleItem(
             modifier = Modifier.padding(vertical = 7.dp)
         )
     }
+}
+
+
+private fun getHeaderText(dynastyType: String): String {
+    val index = dynastyType.indexOf("\n")
+    return if(dynastyType.checkedType()) {
+        dynastyType.substring(index+1)
+    }
+    else dynastyType
 }
