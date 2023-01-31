@@ -1,8 +1,10 @@
 package com.jaehong.data.mapper
 
+import android.util.StateSet.NOTHING
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
 import com.jaehong.data.local.model.StudyEntity
 import com.jaehong.data.local.model.StudyEntityItem
+import com.jaehong.data.util.Constants.NOTHING_TEXT
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.data.util.enum_type.DynastyDetailType
@@ -29,7 +31,9 @@ object Mapper {
 
     private fun StudyInfo.checkDescription(detail: String,kingName: String): Int {
         this.forEachIndexed { index, studyInfoItem ->
-            if (studyInfoItem.detail == detail && studyInfoItem.king_name == kingName) {
+            if (studyInfoItem.detail == detail &&
+                studyInfoItem.king_name == kingName &&
+                studyInfoItem.king_name != NOTHING_TEXT) {
                 return index
             }
         }
