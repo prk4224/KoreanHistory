@@ -11,19 +11,30 @@
 
 <h4>🛏 간편하게 공부할 수 있는 한국사 학습지 App !<h4>
 
-<h4>🚌 대중교통을 이용할 때 간편하고 정확한게 한국사를 학습해 보세요 !<h4>
+
+<h4>스마트 스토어 누적 판매수 2만 5천권돌파,
+믿고 보는 한국사 정리노트 '우쑤판서'
+이제 스마트 폰으로도 볼 수 있어요!</h4>
+
+<h4>공부하고 머리 식힐때, 출퇴근길, 등하교길에
+간편하고 틈틈히 공부 하실 수 있도록 제작했답니다.</h4>
+
+<h4>한국사 정리 노트 우쑤판서 내용을 고스란히
+담은 우쑤판서APP
+어디서든 편리하고 재밌게 한국사 공부 해보세요:)</h4>
  
 <br/>
 
+<div align="center">   
+    <img src="https://user-images.githubusercontent.com/83493143/215729309-de87d6df-9342-4c97-9a2e-3f21ded42c31.jpeg" width="70%" 
+</div>
+
+
 ## 기능, 동작화면
 
-|<img src="https://user-images.githubusercontent.com/83493143/205109192-7b25e6c9-f4ce-4ee4-b463-742c1eb510d8.gif" width="180" />|<img src="https://user-images.githubusercontent.com/67995865/205450847-8c80b766-85d0-4eb6-82da-5267faf805a0.gif" width="180"/>|<img src="https://user-images.githubusercontent.com/67748153/207275039-32f88a16-6606-486f-a6ec-877d721e77f0.gif" width="180" />|<img src="https://user-images.githubusercontent.com/83493143/205107836-fa20fc9d-aa03-4b72-bd51-23f0cc0d6ef2.gif" width="180" />|
+|<img src="https://user-images.githubusercontent.com/83493143/215725507-744bdc4c-7483-41ea-acb4-e9a4ddd51349.gif" width="180" />|<img src="https://user-images.githubusercontent.com/83493143/215724647-f97beb85-15d8-4ee7-992e-dfaabe5f81df.gif" width="180"/>|<img src="https://user-images.githubusercontent.com/83493143/215724753-a7d142a8-4bc2-42be-aa05-aec9436b1dc9.gif" width="180" />|<img src="https://user-images.githubusercontent.com/83493143/215724874-703e446a-4782-409e-a93c-064303d1f455.gif" width="180" />|
 |:--:|:--:|:--:|:--:|
-|로그인|지도에서 채팅방 찾기|프로필 수정|채팅방 생성|
-
-|<img src="https://user-images.githubusercontent.com/67995865/205436537-33c1b5fc-50f6-47b0-9372-49827d1f5bbf.jpg" width="180" />|<img src="https://user-images.githubusercontent.com/67748153/207273926-01e7c274-399c-46d9-b127-85783bc1af05.png" width="180" />|<img src="https://user-images.githubusercontent.com/67995865/205436543-0f8eff78-812e-40b7-a7af-af83e73190e1.jpg" width="180" />|<img src="https://user-images.githubusercontent.com/67748153/207274029-69c8b499-0268-4e15-84aa-4d2967306e76.png" width="180" />|
-|:--:|:--:|:--:|:--:|
-|채팅방 생성 위치 선택|키워드 선택|채팅방|채팅방 목록|
+|일반 학습|초성 학습|백지 학습|My Page 이용|
 
 
 ## 기술스택
@@ -39,5 +50,14 @@
   <h4>MVVM</h4>
   <h4>CleanArchitecture</h4>
 </div>
+
+<div align="left">
+ <h3>issue</h3>
+ [compsoe recomposition](https://velog.io/@pwolong/Android-Compose-ReComposition)</br>
+ [compose navigation](https://velog.io/@pwolong/Android-Compose-Navigation)
+</div>
+
+
+
 
 
