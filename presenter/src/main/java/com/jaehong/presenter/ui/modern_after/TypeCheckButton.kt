@@ -38,7 +38,7 @@ fun TypeCheckButton(
                 .height(animationHeight.dp)
                 .background(Color.White, RoundedCornerShape(animationRadius)),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
             val list = when(dynastyType) {

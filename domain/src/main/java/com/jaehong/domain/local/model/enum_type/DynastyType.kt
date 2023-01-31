@@ -20,7 +20,7 @@ enum class DynastyType(
     }),
     JAPANESE("일제강점기", {
         when (it) {
-            1 -> "국권피탈vs민족대항"
+            1 -> "국권피탈\n  vs민족대항"
             2 -> "일제통치체제\n  &국내독립운동"
             3 -> "국외독립운동"
             else -> throw IllegalArgumentException("Dynasty Type Japanese Detail Error")
@@ -30,7 +30,7 @@ enum class DynastyType(
         when(it) {
             1 -> "광복 & 6.25 전쟁"
             2 -> "이승만~박정희"
-            3 -> "정두환~노무현"
+            3 -> "전두환~노무현"
             else -> throw IllegalArgumentException("Dynasty Type Contemporary Detail Error")
         }
     });

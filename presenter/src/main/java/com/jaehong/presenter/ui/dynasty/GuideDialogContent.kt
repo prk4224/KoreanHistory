@@ -45,7 +45,7 @@ fun GuideDialogContent(
                 painter =guideImage,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(top = 20.dp)
+                    .padding(top = 30.dp)
                     .align(Alignment.TopCenter)
             )
             Row(
