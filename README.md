@@ -38,8 +38,8 @@
 
 <div align="left">
  <h3>issue</h3>
- [compsoe recomposition](https://velog.io/@pwolong/Android-Compose-ReComposition)
- [박재홍](https://github.com/prk4224)
+ [compsoe recomposition](https://velog.io/@pwolong/Android-Compose-ReComposition)</br>
+ [compose navigation](https://velog.io/@pwolong/Android-Compose-Navigation)
 </div>
 
 
