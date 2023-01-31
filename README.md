@@ -17,13 +17,9 @@
 
 ## 기능, 동작화면
 
-|<img src="https://user-images.githubusercontent.com/83493143/205109192-7b25e6c9-f4ce-4ee4-b463-742c1eb510d8.gif" width="180" />|<img src="https://user-images.githubusercontent.com/67995865/205450847-8c80b766-85d0-4eb6-82da-5267faf805a0.gif" width="180"/>|<img src="https://user-images.githubusercontent.com/67748153/207275039-32f88a16-6606-486f-a6ec-877d721e77f0.gif" width="180" />|<img src="https://user-images.githubusercontent.com/83493143/205107836-fa20fc9d-aa03-4b72-bd51-23f0cc0d6ef2.gif" width="180" />|
+|<img src="https://user-images.githubusercontent.com/83493143/215725507-744bdc4c-7483-41ea-acb4-e9a4ddd51349.gif" width="180" />|<img src="https://user-images.githubusercontent.com/83493143/215724647-f97beb85-15d8-4ee7-992e-dfaabe5f81df.gif" width="180"/>|<img src="https://user-images.githubusercontent.com/83493143/215724753-a7d142a8-4bc2-42be-aa05-aec9436b1dc9.gif" width="180" />|<img src="https://user-images.githubusercontent.com/83493143/215724874-703e446a-4782-409e-a93c-064303d1f455.gif" width="180" />|
 |:--:|:--:|:--:|:--:|
-|로그인|지도에서 채팅방 찾기|프로필 수정|채팅방 생성|
-
-|<img src="https://user-images.githubusercontent.com/67995865/205436537-33c1b5fc-50f6-47b0-9372-49827d1f5bbf.jpg" width="180" />|<img src="https://user-images.githubusercontent.com/67748153/207273926-01e7c274-399c-46d9-b127-85783bc1af05.png" width="180" />|<img src="https://user-images.githubusercontent.com/67995865/205436543-0f8eff78-812e-40b7-a7af-af83e73190e1.jpg" width="180" />|<img src="https://user-images.githubusercontent.com/67748153/207274029-69c8b499-0268-4e15-84aa-4d2967306e76.png" width="180" />|
-|:--:|:--:|:--:|:--:|
-|채팅방 생성 위치 선택|키워드 선택|채팅방|채팅방 목록|
+|일반 학습|초성 학습|백지 학습|My Page 이용|
 
 
 ## 기술스택
@@ -39,5 +35,14 @@
   <h4>MVVM</h4>
   <h4>CleanArchitecture</h4>
 </div>
+
+<div align="left">
+ <h3>issue</h3>
+ [compsoe recomposition](https://velog.io/@pwolong/Android-Compose-ReComposition)
+ [박재홍](https://github.com/prk4224)
+</div>
+
+
+
 
 
