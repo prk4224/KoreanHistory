@@ -63,6 +63,7 @@ fun NavigationEffects(
             if (activity?.isFinishing == true) {
                 return@collect
             }
+
             when (intent) {
                 is NavigationIntent.NavigateBack -> {
                     if (intent.route != null) {

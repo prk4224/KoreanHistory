@@ -45,15 +45,19 @@ class MyStudyViewModel @Inject constructor(
     private fun getMyStudyData(){
         viewModelScope.launch {
             with(myStudyInfoUseCase) {
-                this()
-                    .catch { Log.d("My Study Data","result : $it") }
-                    .collect {
-                        _myStudyInfoList.value = it
-                        _pagerList.value = getPagerList(it)
-                    }
-                getGuideInfo(GuideKey.USER_RULE_MY_PAGE.value)
-                    .catch { Log.d("My Page Guide Rule", "result: ${it.message}") }
-                    .collect { _checkedUserRule.value = it }
+                launch {
+                    this@with()
+                        .catch { Log.d("My Study Data","result : $it") }
+                        .collect {
+                            _myStudyInfoList.value = it
+                            _pagerList.value = getPagerList(it)
+                        }
+                }
+                launch {
+                    getGuideInfo(GuideKey.USER_RULE_MY_PAGE.value)
+                        .catch { Log.d("My Page Guide Rule", "result: ${it.message}") }
+                        .collect { _checkedUserRule.value = it }
+                }
             }
         }
     }

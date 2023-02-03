@@ -72,29 +72,40 @@ class StudyPageViewModel @Inject constructor(
         _dynastyState.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
         _studyState.value = studyType ?: throw IllegalArgumentException("Study Type Error")
         viewModelScope.launch {
+
             with(studyInfoUseCase) {
-                this(dynastyType)
-                    .catch { Log.d("Get All Data", "result: ${it.message}") }
-                    .collect {
-                        _allStudyInfoList.value = it
-                        _pagerList.value = getPagerList(it)
-                    }
-
+                launch {
+                    this@with(dynastyType)
+                        .catch { Log.d("Get All Data", "result: ${it.message}") }
+                        .collect {
+                            _allStudyInfoList.value = it
+                            _pagerList.value = getPagerList(it)
+                        }
+                }
                 if (studyType == StudyType.FIRST_REVIEW.value) {
-                    getStudyIngo(dynastyType)
-                        .catch { Log.d("Study Type", "result: ${it.message}") }
-                        .collect { _studyInfoList.value = it }
+                    launch {
+                        getStudyIngo(dynastyType)
+                            .catch { Log.d("Study Type", "result: ${it.message}") }
+                            .collect { _studyInfoList.value = it }
+                        }
                     }
+                launch {
+                    getGuideInfo(GuideKey.USER_RULE_ORIGIN.value)
+                        .catch { Log.d("First Guide Rule", "result: ${it.message}") }
+                        .collect { _checkedUserRuleOrigin.value = it }
+                }
 
-                getGuideInfo(GuideKey.USER_RULE_ORIGIN.value)
-                    .catch { Log.d("First Guide Rule", "result: ${it.message}") }
-                    .collect { _checkedUserRuleOrigin.value = it }
-                getGuideInfo(GuideKey.USER_RULE_FIRST.value)
-                    .catch { Log.d("Second Guide Rule", "result: ${it.message}") }
-                    .collect { _checkedUserRuleFirst.value = it }
-                getGuideInfo(GuideKey.USER_RULE_BLANK.value)
-                    .catch { Log.d("Third Guide Rule", "result: ${it.message}") }
-                    .collect { _checkedUserRuleBlank.value = it }
+                launch {
+                    getGuideInfo(GuideKey.USER_RULE_FIRST.value)
+                        .catch { Log.d("Second Guide Rule", "result: ${it.message}") }
+                        .collect { _checkedUserRuleFirst.value = it }
+                }
+
+                launch {
+                    getGuideInfo(GuideKey.USER_RULE_BLANK.value)
+                        .catch { Log.d("Third Guide Rule", "result: ${it.message}") }
+                        .collect { _checkedUserRuleBlank.value = it }
+                }
             }
         }
     }
