@@ -16,4 +16,4 @@ rootProject.name = "KoreanHistory"
 include ':app'
 include ':domain'
 include ':data'
-include ':presenter'
+include ':presentation'

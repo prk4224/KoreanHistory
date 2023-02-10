@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.jaehong.presenter.R
+import com.jaehong.presentation.R
 
 val WooSuFont = FontFamily(
     Font(R.font.woo_su)

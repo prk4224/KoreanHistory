@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.jaehong.presenter.R
+import com.jaehong.presentation.R
 import com.jaehong.presenter.theme.Typography
 import com.jaehong.presenter.util.FontFixed.nonScaledSp
 import dagger.hilt.android.AndroidEntryPoint

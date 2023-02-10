@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.jaehong.presenter'
+    namespace 'com.jaehong.presentation'
     compileSdk 33
 
     defaultConfig {
