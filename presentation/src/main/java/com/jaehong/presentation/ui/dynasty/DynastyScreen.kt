@@ -1,9 +1,6 @@
 package com.jaehong.presentation.ui.dynasty
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presentation.util.composable.LogoImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,8 +10,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun DynastyScreen(
     dynastyViewModel: DynastyViewModel = hiltViewModel()
 ) {
-    val isVisible = dynastyViewModel.isVisible.collectAsState().value
-    val dialogState = dynastyViewModel.showDialog.collectAsState().value
+    val isVisible by dynastyViewModel.isVisible.collectAsState()
+    val dialogState by dynastyViewModel.showDialog.collectAsState()
     val (checked,setChecked) = remember { mutableStateOf(false) }
 
     DynastyButton(

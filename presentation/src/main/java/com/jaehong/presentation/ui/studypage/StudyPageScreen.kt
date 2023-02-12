@@ -25,20 +25,20 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun StudyPageScreen(
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
-    val dynastyState = studyPageViewModel.dynastyState.collectAsState().value
-    val studyState = studyPageViewModel.studyState.collectAsState().value
-    val studyData = studyPageViewModel.studyInfoList.collectAsState().value
-    val isVisible = studyPageViewModel.isVisible.collectAsState().value
-    val allStudyData = studyPageViewModel.allStudyInfoList.collectAsState().value
-    val dialogState = studyPageViewModel.showDialog.collectAsState().value
-    val allHintState = studyPageViewModel.isAllHintVisible.collectAsState().value
-    val pagerList = studyPageViewModel.pagerList.collectAsState().value
-    val originGuideLabel = studyPageViewModel.originGuideLabel.collectAsState().value
-    val firstGuideLabel = studyPageViewModel.firstGuideLabel.collectAsState().value
-    val blankGuideLabel = studyPageViewModel.blankGuideLabel.collectAsState().value
-    val checkedUserRuleOrigin = studyPageViewModel.checkedUserRuleOrigin.collectAsState().value
-    val checkedUserRuleFirst = studyPageViewModel.checkedUserRuleFirst.collectAsState().value
-    val checkedUserRuleBlank = studyPageViewModel.checkedUserRuleBlank.collectAsState().value
+    val dynastyState by studyPageViewModel.dynastyState.collectAsState()
+    val studyState by studyPageViewModel.studyState.collectAsState()
+    val studyData by studyPageViewModel.studyInfoList.collectAsState()
+    val isVisible by studyPageViewModel.isVisible.collectAsState()
+    val allStudyData by studyPageViewModel.allStudyInfoList.collectAsState()
+    val dialogState by studyPageViewModel.showDialog.collectAsState()
+    val allHintState by studyPageViewModel.isAllHintVisible.collectAsState()
+    val pagerList by studyPageViewModel.pagerList.collectAsState()
+    val originGuideLabel by studyPageViewModel.originGuideLabel.collectAsState()
+    val firstGuideLabel by studyPageViewModel.firstGuideLabel.collectAsState()
+    val blankGuideLabel by studyPageViewModel.blankGuideLabel.collectAsState()
+    val checkedUserRuleOrigin by studyPageViewModel.checkedUserRuleOrigin.collectAsState()
+    val checkedUserRuleFirst by studyPageViewModel.checkedUserRuleFirst.collectAsState()
+    val checkedUserRuleBlank by studyPageViewModel.checkedUserRuleBlank.collectAsState()
 
     val selectedItems = remember { mutableStateListOf<StudyInfoItem>() }
     val snackBarState = remember { SnackbarHostState() }

@@ -23,11 +23,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun MyStudyScreen(
     myStudyViewModel: MyStudyViewModel = hiltViewModel()
 ) {
-    val myStudyData = myStudyViewModel.myStudyInfoList.collectAsState().value
-    val isVisible = myStudyViewModel.isVisible.collectAsState().value
-    val pagerList = myStudyViewModel.pagerList.collectAsState().value
-    val dialogState = myStudyViewModel.showDialog.collectAsState().value
-    val checkedUserRule = myStudyViewModel.checkedUserRule.collectAsState().value
+    val myStudyData by myStudyViewModel.myStudyInfoList.collectAsState()
+    val isVisible by myStudyViewModel.isVisible.collectAsState()
+    val pagerList by myStudyViewModel.pagerList.collectAsState()
+    val dialogState by myStudyViewModel.showDialog.collectAsState()
+    val checkedUserRule by myStudyViewModel.checkedUserRule.collectAsState()
 
     val selectedItems = remember { mutableStateListOf<StudyInfoItem>() }
     val snackBarState = remember { SnackbarHostState() }
