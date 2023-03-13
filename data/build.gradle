@@ -50,4 +50,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    // FireBase
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.4'
 }
