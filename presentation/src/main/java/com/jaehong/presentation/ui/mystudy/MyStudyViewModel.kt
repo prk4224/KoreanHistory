@@ -20,9 +20,9 @@ class MyStudyViewModel @Inject constructor(
     private val myStudyInfoUseCase: GetMyStudyInfoUseCase
 ) : ViewModel() {
 
-    private val initList: MutableList<StudyInfoItem> = mutableListOf()
+    private val emptyList: MutableList<StudyInfoItem> = mutableListOf()
 
-    private val _myStudyInfoList = MutableStateFlow(initList.toList())
+    private val _myStudyInfoList = MutableStateFlow(emptyList.toList())
     val myStudyInfoList = _myStudyInfoList.asStateFlow()
 
     private val _isVisible = MutableStateFlow(false)
