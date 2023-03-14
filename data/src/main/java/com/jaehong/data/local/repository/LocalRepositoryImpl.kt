@@ -1,35 +1,17 @@
 package com.jaehong.data.local.repository
 
 import com.jaehong.data.local.datasource.LocalDataSource
-import com.jaehong.data.mapper.Mapper.checkedType
 import com.jaehong.data.mapper.Mapper.dataBaseToDomain
-import com.jaehong.data.mapper.Mapper.dataToDomain
 import com.jaehong.data.mapper.Mapper.domainToDataBase
-import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class LocalRepositoryImpl @Inject constructor(
     private val dataSource: LocalDataSource
-): com.jaehong.domain.local.repository.LocalRepository {
-
-    override suspend fun getAllStudyInfo(
-        dynastyType: String
-    ): Flow<StudyInfo> = flow {
-        dataSource.getAllStudyInfo(dynastyType.checkedType()).collect {
-            emit(it.dataToDomain())
-        }
-    }
-
-    override suspend fun getStudyInfo(
-        dynastyType: String,
-    ): Flow<StudyInfo> = flow {
-        dataSource.getStudyInfo(dynastyType.checkedType()).collect {
-            emit(it.dataToDomain())
-        }
-    }
+): LocalRepository {
 
     override suspend fun gatMyStudyInfo(): Flow<List<StudyInfoItem>> = flow {
         dataSource.gatMyStudyInfo().collect {

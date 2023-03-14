@@ -9,7 +9,6 @@ import javax.inject.Inject
 class GetGuideInfoUseCase @Inject constructor(
     private val localRepository: LocalRepository
 ) {
-
     suspend operator fun invoke(key: String) : Flow<Boolean> = flow {
         localRepository.getGuideInfo(key).collect {
             emit(it)

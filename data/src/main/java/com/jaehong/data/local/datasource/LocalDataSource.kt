@@ -6,10 +6,6 @@ import com.jaehong.data.util.enum_type.DynastyDetailType
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
-    suspend fun getAllStudyInfo(dynastyType: DynastyDetailType): Flow<StudyEntity>
-
-    suspend fun getStudyInfo(dynastyType: DynastyDetailType): Flow<StudyEntity>
-
     suspend fun gatMyStudyInfo(): Flow<List<MyStudyEntity>>
 
     suspend fun insertMyStudyInfo(studyList: List<MyStudyEntity>)

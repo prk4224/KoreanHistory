@@ -3,18 +3,20 @@ package com.jaehong.domain.local.usecase
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.repository.LocalRepository
+import com.jaehong.domain.local.repository.RemoteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetStudyInfoUseCase @Inject constructor(
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
+    private val remoteRepository: RemoteRepository
 ) {
     suspend operator fun invoke(
         dynastyType: String
     ): Flow<StudyInfo> = flow {
-        localRepository.getAllStudyInfo(dynastyType).collect {
+        remoteRepository.getAllStudyInfo(dynastyType).collect {
             emit(it)
         }
     }
@@ -22,7 +24,7 @@ class GetStudyInfoUseCase @Inject constructor(
     suspend fun getStudyIngo(
         dynastyType: String
     ): Flow<StudyInfo> = flow {
-        localRepository.getStudyInfo(dynastyType).collect {
+        remoteRepository.getStudyInfo(dynastyType).collect {
             emit(it)
         }
     }
