@@ -3,11 +3,7 @@ package com.jaehong.data.remote.datasource
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
-import com.jaehong.data.local.GuidePreference
-import com.jaehong.data.local.databasse.KoreanHistoryDataBase
-import com.jaehong.data.local.databasse.entity.MyStudyEntity
-import com.jaehong.data.local.model.StudyEntity
-import com.jaehong.data.util.Constants.GUIDE_TOKEN
+import com.jaehong.data.remote.model.StudyEntity
 import com.jaehong.data.util.Constants.STUDY_TYPE_ALL
 import com.jaehong.data.util.Constants.STUDY_TYPE_FIRST
 import com.jaehong.data.util.enum_type.DynastyDetailType
@@ -20,7 +16,7 @@ class RemoteDataSourceImpl @Inject constructor(
     private val fireStore: FirebaseFirestore
 ): RemoteDataSource {
 
-    private val TAG = "LocalDataSourceImpl"
+    private val TAG = "RemoteDataSourceImpl"
 
     override suspend fun getAllStudyInfo(
         dynastyType: DynastyDetailType

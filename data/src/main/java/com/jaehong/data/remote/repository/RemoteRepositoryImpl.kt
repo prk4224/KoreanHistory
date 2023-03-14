@@ -3,6 +3,7 @@ package com.jaehong.data.remote.repository
 import com.jaehong.data.local.datasource.LocalDataSource
 import com.jaehong.data.mapper.Mapper.checkedType
 import com.jaehong.data.mapper.Mapper.dataToDomain
+import com.jaehong.data.remote.datasource.RemoteDataSource
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.repository.RemoteRepository
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class RemoteRepositoryImpl @Inject constructor(
-    private val dataSource: LocalDataSource
+    private val dataSource: RemoteDataSource
 ): RemoteRepository {
 
     override suspend fun getAllStudyInfo(

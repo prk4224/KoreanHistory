@@ -1,8 +1,8 @@
 package com.jaehong.data.mapper
 
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
-import com.jaehong.data.local.model.StudyEntity
-import com.jaehong.data.local.model.StudyEntityItem
+import com.jaehong.data.remote.model.StudyEntity
+import com.jaehong.data.remote.model.StudyEntityItem
 import com.jaehong.data.util.Constants.NOTHING_TEXT
 import com.jaehong.data.util.enum_type.DynastyDetailType
 import com.jaehong.domain.local.model.StudyInfo
