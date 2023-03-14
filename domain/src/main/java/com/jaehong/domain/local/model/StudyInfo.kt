@@ -1,3 +1,5 @@
 package com.jaehong.domain.local.model
 
-class StudyInfo : ArrayList<StudyInfoItem>()
+data class StudyInfo(
+    val item: ArrayList<StudyInfoItem>
+)

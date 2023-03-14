@@ -12,24 +12,18 @@ import com.jaehong.domain.local.model.enum_type.DynastyType
 object Mapper {
 
     fun StudyEntity.dataToDomain(): StudyInfo {
-        val studyInfo = StudyInfo()
-        this.forEach {
-            val index = studyInfo.checkDescription(it.detail,it.king_name)
-            if (index != -1) {
-                studyInfo[index].description.add(it.description)
-            } else {
-                studyInfo.add(it.dataToDomain())
-            }
-        }
-        return studyInfo
+        val temp = StudyInfo(arrayListOf())
+        temp.item.addAll(this.item.map { it.dataToDomain() })
+
+        return temp
     }
 
     fun StudyEntityItem.dataToDomain(): StudyInfoItem {
-        return StudyInfoItem(this.id, this.detail, this.king_name, arrayListOf(this.description))
+        return StudyInfoItem(this.id, this.detail, this.king_name, this.description)
     }
 
     private fun StudyInfo.checkDescription(detail: String,kingName: String): Int {
-        this.forEachIndexed { index, studyInfoItem ->
+        this.item.forEachIndexed { index, studyInfoItem ->
             if (studyInfoItem.detail == detail &&
                 studyInfoItem.king_name == kingName &&
                 studyInfoItem.king_name != NOTHING_TEXT) {
@@ -40,13 +34,13 @@ object Mapper {
     }
 
     fun List<MyStudyEntity>.dataBaseToDomain(): StudyInfo {
-        val studyInfo = StudyInfo()
+        val studyInfo = StudyInfo(arrayListOf())
         this.forEach {
             val index = studyInfo.checkDescription(it.detail,it.king_name)
             if (index != -1) {
-                studyInfo[index].description.add(it.description)
+                studyInfo.item[index].description.add(it.description)
             } else {
-                studyInfo.add(it.dataBaseToDomain())
+                studyInfo.item.add(it.dataBaseToDomain())
             }
         }
         return studyInfo
