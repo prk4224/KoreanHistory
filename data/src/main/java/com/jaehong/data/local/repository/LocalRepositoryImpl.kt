@@ -27,13 +27,13 @@ class LocalRepositoryImpl @Inject constructor(
         dynastyType: String,
     ): Flow<StudyInfo> = flow {
         dataSource.getStudyInfo(dynastyType.checkedType()).collect {
-            emit(it. dataToDomain())
+            emit(it.dataToDomain())
         }
     }
 
     override suspend fun gatMyStudyInfo(): Flow<List<StudyInfoItem>> = flow {
         dataSource.gatMyStudyInfo().collect {
-            emit(it.dataBaseToDomain())
+            emit(it.dataBaseToDomain().item)
         }
     }
 

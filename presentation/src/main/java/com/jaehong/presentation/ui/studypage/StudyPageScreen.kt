@@ -4,6 +4,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.StudyType
 import com.jaehong.presentation.theme.Gray2
@@ -48,8 +49,8 @@ fun StudyPageScreen(
         pagerList = pagerList,
         studyState = studyState,
         allHintState = allHintState,
-        studyData = studyData,
-        allStudyData = allStudyData,
+        studyData = studyData.item,
+        allStudyData = allStudyData.item,
         header = { type, title -> StudyPageHeaderItem(type, title) },
         dynastyState = dynastyState
     ) { studyInfo, index ->
@@ -68,7 +69,7 @@ fun StudyPageScreen(
                 selectedItem = selectedItem,
                 backgroundColor = if (selected) Gray2 else Color.White,
                 alphaText = if (selected || studyState != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f,
-                hintText = if (selected) allStudyData[index].description[descIndex] else description,
+                hintText = if (selected) allStudyData.item[index].description[descIndex] else description,
                 changeSelectedItem = { item ->
                     if(selected) selectedItems.remove(item)
                     else selectedItems.add(item)
@@ -85,7 +86,9 @@ fun StudyPageScreen(
         snackBarState = snackBarState,
         coroutineScope = coroutineScope,
         onIconClicked = {
-            studyPageViewModel.addSelectedItems(selectedItems)
+            val temp = StudyInfo(arrayListOf())
+            temp.item.addAll(selectedItems)
+            studyPageViewModel.addSelectedItems(temp)
             selectedItems.clear()
         },
         onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() },

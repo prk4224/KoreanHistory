@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfo
-import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.GuideKey
 import com.jaehong.domain.local.model.enum_type.StudyType
 import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
@@ -29,10 +28,10 @@ class StudyPageViewModel @Inject constructor(
     private val _studyState = MutableStateFlow("")
     val studyState = _studyState.asStateFlow()
 
-    private val _allStudyInfoList = MutableStateFlow(StudyInfo())
+    private val _allStudyInfoList = MutableStateFlow(StudyInfo(arrayListOf()))
     val allStudyInfoList = _allStudyInfoList.asStateFlow()
 
-    private val _studyInfoList = MutableStateFlow(StudyInfo())
+    private val _studyInfoList = MutableStateFlow(StudyInfo(arrayListOf()))
     val studyInfoList = _studyInfoList.asStateFlow()
 
     private val _isVisible = MutableStateFlow(false)
@@ -137,7 +136,7 @@ class StudyPageViewModel @Inject constructor(
         _showDialog.value = false
     }
 
-    fun addSelectedItems(selectedItems: List<StudyInfoItem>) {
+    fun addSelectedItems(selectedItems: StudyInfo) {
         addMyStudyInfo(selectedItems)
     }
 
@@ -153,16 +152,16 @@ class StudyPageViewModel @Inject constructor(
         _isVisible.value = false
     }
 
-    private fun addMyStudyInfo(studyInfo: List<StudyInfoItem>) {
+    private fun addMyStudyInfo(studyInfo: StudyInfo) {
         viewModelScope.launch {
-            studyInfoUseCase.insertMyStudyInfo(studyInfo)
+            studyInfoUseCase.insertMyStudyInfo(studyInfo.item)
             initDataChangeButton()
         }
     }
 
     private fun getPagerList(studyInfo : StudyInfo): List<String> {
         val pagerList = mutableListOf<String>()
-        studyInfo.forEach {
+        studyInfo.item.forEach {
             if (pagerList.contains(it.detail).not()) {
                 pagerList.add(it.detail)
             }
