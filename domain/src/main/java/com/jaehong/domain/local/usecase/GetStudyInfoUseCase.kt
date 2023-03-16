@@ -13,18 +13,16 @@ class GetStudyInfoUseCase @Inject constructor(
     private val localRepository: LocalRepository,
     private val remoteRepository: RemoteRepository
 ) {
-    suspend operator fun invoke(
-        dynastyType: String
+
+    suspend fun getRemoteStudyInfo(
+        dynastyType: String,
+        studyType: String,
     ): Flow<StudyInfo> = flow {
-        remoteRepository.getAllStudyInfo(dynastyType).collect {
+        remoteRepository.getRemoteStudyInfo(dynastyType,studyType).collect {
             emit(it)
         }
     }
 
-    suspend fun getStudyIngo(
-        dynastyType: String
-    ): Flow<StudyInfo> = flow {
-        remoteRepository.getStudyInfo(dynastyType).collect {
             emit(it)
         }
     }
