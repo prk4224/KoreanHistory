@@ -23,8 +23,21 @@ class GetStudyInfoUseCase @Inject constructor(
         }
     }
 
+    suspend fun getLocalStudyInfo(
+        dynastyType: String,
+        studyType: String,
+    ): Flow<List<StudyInfoItem>> = flow {
+        localRepository.getLocalStudyInfo(dynastyType,studyType).collect {
             emit(it)
         }
+    }
+
+    suspend fun insertLocalStudyInfo(
+        studyInfo: List<StudyInfoItem>,
+        dynastyType: String,
+        studyType: String,
+    ) {
+        localRepository.insertLocalStudyIndo(studyInfo,dynastyType,studyType)
     }
 
     suspend fun insertMyStudyInfo(studyInfo: List<StudyInfoItem>) {
