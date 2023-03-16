@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.jaehong.data.local.databasse.KoreanHistoryDataBase
 import com.jaehong.data.local.databasse.KoreanHistoryDataBase.Companion.KOREAN_HISTORY_NAME
 import com.jaehong.data.local.databasse.dao.MyStudyDao
+import com.jaehong.data.local.databasse.dao.StudyInfoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,10 +23,9 @@ class DataBaseModule {
         @ApplicationContext context: Context
     ): KoreanHistoryDataBase {
         return Room.databaseBuilder(
-            context,
-            KoreanHistoryDataBase::class.java,
-            KOREAN_HISTORY_NAME
-        ).build()
+            context, KoreanHistoryDataBase::class.java, KOREAN_HISTORY_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Singleton
@@ -33,5 +33,11 @@ class DataBaseModule {
     fun provideMyStudy(
         dataBase: KoreanHistoryDataBase
     ): MyStudyDao = dataBase.myStudyDao()
+
+    @Singleton
+    @Provides
+    fun provideStudyInfo(
+        dataBase: KoreanHistoryDataBase
+    ): StudyInfoDao = dataBase.studyInfoDao()
 
 }
