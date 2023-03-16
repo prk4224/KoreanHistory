@@ -5,7 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteRepository {
 
-    suspend fun getAllStudyInfo(dynastyType: String): Flow<StudyInfo>
-
-    suspend fun getStudyInfo(dynastyType: String): Flow<StudyInfo>
+    suspend fun getRemoteStudyInfo(dynastyType: String, studyType: String): Flow<StudyInfo>
 }

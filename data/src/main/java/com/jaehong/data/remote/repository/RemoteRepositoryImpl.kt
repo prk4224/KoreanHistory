@@ -1,6 +1,5 @@
 package com.jaehong.data.remote.repository
 
-import com.jaehong.data.local.datasource.LocalDataSource
 import com.jaehong.data.mapper.Mapper.checkedType
 import com.jaehong.data.mapper.Mapper.dataToDomain
 import com.jaehong.data.remote.datasource.RemoteDataSource
@@ -12,20 +11,13 @@ import javax.inject.Inject
 
 class RemoteRepositoryImpl @Inject constructor(
     private val dataSource: RemoteDataSource
-): RemoteRepository {
+) : RemoteRepository {
 
-    override suspend fun getAllStudyInfo(
-        dynastyType: String
-    ): Flow<StudyInfo> = flow {
-        dataSource.getAllStudyInfo(dynastyType.checkedType()).collect {
-            emit(it.dataToDomain())
-        }
-    }
-
-    override suspend fun getStudyInfo(
+    override suspend fun getRemoteStudyInfo(
         dynastyType: String,
+        studyType: String,
     ): Flow<StudyInfo> = flow {
-        dataSource.getStudyInfo(dynastyType.checkedType()).collect {
+        dataSource.getRemoteStudyInfo(dynastyType.checkedType(), studyType).collect {
             emit(it.dataToDomain())
         }
     }
