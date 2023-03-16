@@ -5,7 +5,11 @@ import com.jaehong.domain.local.model.StudyInfoItem
 import kotlinx.coroutines.flow.Flow
 
 interface LocalRepository {
-    suspend fun gatMyStudyInfo(): Flow<List<StudyInfoItem>>
+    suspend fun getLocalStudyInfo(dynastyType: String, studyType: String): Flow<List<StudyInfoItem>>
+
+    suspend fun insertLocalStudyIndo(studyList: List<StudyInfoItem>,dynastyType: String, studyType: String)
+
+    suspend fun getMyStudyInfo(): Flow<List<StudyInfoItem>>
 
     suspend fun insertMyStudyInfo(studyList: List<StudyInfoItem>)
 
