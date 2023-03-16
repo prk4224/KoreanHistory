@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull
 @Entity(tableName = "MY_STUDY_TABLE")
 data class MyStudyEntity (
     @PrimaryKey
-    val id: Int,
+    val id: String,
     val detail: String,
     val king_name: String,
     val description: String,
