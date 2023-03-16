@@ -11,7 +11,7 @@ class GetMyStudyInfoUseCase @Inject constructor(
     private val localRepository: LocalRepository
 ) {
     suspend operator fun invoke(): Flow<List<StudyInfoItem>> = flow {
-        localRepository.gatMyStudyInfo().collect {
+        localRepository.getMyStudyInfo().collect {
             emit(it)
         }
     }

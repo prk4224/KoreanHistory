@@ -4,7 +4,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.StudyType
 import com.jaehong.presentation.theme.Gray2
@@ -49,18 +48,18 @@ fun StudyPageScreen(
         pagerList = pagerList,
         studyState = studyState,
         allHintState = allHintState,
-        studyData = studyData.item,
-        allStudyData = allStudyData.item,
+        studyData = studyData,
+        allStudyData = allStudyData,
         header = { type, title -> StudyPageHeaderItem(type, title) },
         dynastyState = dynastyState
     ) { studyInfo, index ->
         StudyAllViewItem(studyInfo) { descIndex, description ->
             val selectedItem = StudyInfoItem(
-                    studyInfo.id + descIndex,
-                    studyInfo.detail,
-                    studyInfo.king_name,
-                    arrayListOf(description)
-                )
+                studyInfo.id+descIndex,
+                studyInfo.detail,
+                studyInfo.king_name,
+                arrayListOf(studyInfo.description[descIndex])
+            )
 
             val selected = selectedItems.contains(selectedItem)
 
@@ -69,9 +68,9 @@ fun StudyPageScreen(
                 selectedItem = selectedItem,
                 backgroundColor = if (selected) Gray2 else Color.White,
                 alphaText = if (selected || studyState != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f,
-                hintText = if (selected) allStudyData.item[index].description[descIndex] else description,
+                hintText = if (selected) allStudyData[index].description[descIndex] else description,
                 changeSelectedItem = { item ->
-                    if(selected) selectedItems.remove(item)
+                    if (selected) selectedItems.remove(item)
                     else selectedItems.add(item)
                 },
                 changeButtonState = { studyPageViewModel.changeButtonState(selectedItems.size) },
@@ -86,9 +85,7 @@ fun StudyPageScreen(
         snackBarState = snackBarState,
         coroutineScope = coroutineScope,
         onIconClicked = {
-            val temp = StudyInfo(arrayListOf())
-            temp.item.addAll(selectedItems)
-            studyPageViewModel.addSelectedItems(temp)
+            studyPageViewModel.addSelectedItems(selectedItems)
             selectedItems.clear()
         },
         onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() },

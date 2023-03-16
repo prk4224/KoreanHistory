@@ -47,7 +47,7 @@ fun MyStudyScreen(
                 myStudyView = {
                     MyStudyViewItem(it) { studyInfo, description, descIndex ->
                         val selectedItem = StudyInfoItem(
-                            studyInfo.id + descIndex,
+                            studyInfo.id,
                             studyInfo.detail,
                             studyInfo.king_name,
                             arrayListOf(description)
