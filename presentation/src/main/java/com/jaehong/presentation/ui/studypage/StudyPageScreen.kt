@@ -55,7 +55,7 @@ fun StudyPageScreen(
     ) { studyInfo, index ->
         StudyAllViewItem(studyInfo) { descIndex, description ->
             val selectedItem = StudyInfoItem(
-                studyInfo.id+descIndex,
+                studyInfo.id,
                 studyInfo.detail,
                 studyInfo.king_name,
                 arrayListOf(studyInfo.description[descIndex])

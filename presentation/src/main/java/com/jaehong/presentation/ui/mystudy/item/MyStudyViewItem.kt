@@ -18,7 +18,7 @@ import com.jaehong.presentation.util.FontFixed.nonScaledSp
 @Composable
 fun MyStudyViewItem(
     studyInfo: StudyInfoItem,
-    myDescription: @Composable (StudyInfoItem,String,Int) -> Unit
+    myDescription: @Composable (StudyInfoItem,String) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -45,8 +45,8 @@ fun MyStudyViewItem(
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
-            studyInfo.description.forEachIndexed { descIndex, description ->
-                myDescription(studyInfo,description,descIndex)
+            studyInfo.description.forEach { description ->
+                myDescription(studyInfo,description)
             }
         }
     }
