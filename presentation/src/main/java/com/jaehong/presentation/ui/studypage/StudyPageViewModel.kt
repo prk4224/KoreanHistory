@@ -24,8 +24,8 @@ class StudyPageViewModel @Inject constructor(
     private val studyInfoUseCase: GetStudyInfoUseCase
 ) : ViewModel() {
 
-    private val _checkRemoteItemsUpdateState = MutableStateFlow(false)
-    val checkRemoteItemsUpdateState = _checkRemoteItemsUpdateState.asStateFlow()
+    private val _remoteState = MutableStateFlow(false)
+    val remoteState = _remoteState.asStateFlow()
 
     private val _dynastyState = MutableStateFlow("")
     val dynastyState = _dynastyState.asStateFlow()
@@ -76,22 +76,10 @@ class StudyPageViewModel @Inject constructor(
         _dynastyState.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
         _studyState.value = studyType ?: throw IllegalArgumentException("Study Type Error")
         viewModelScope.launch {
-            launch {
-                if (checkRemoteItemsUpdateState.value.not()) {
-                    getRemoteStudyInfo(dynastyType, STUDY_TYPE_ALL)
-                } else {
-                    getLocalStudyInfo(dynastyType, STUDY_TYPE_ALL)
-                }
+            getRemoteState(dynastyType, STUDY_TYPE_ALL)
 
-            }
             if (studyType == StudyType.FIRST_REVIEW.value) {
-                launch {
-                    if (checkRemoteItemsUpdateState.value.not()) {
-                        getRemoteStudyInfo(dynastyType, STUDY_TYPE_FIRST)
-                    } else {
-                        getLocalStudyInfo(dynastyType, STUDY_TYPE_FIRST)
-                    }
-                }
+                getRemoteState(dynastyType, STUDY_TYPE_FIRST)
             }
 
             with(studyInfoUseCase) {
@@ -116,8 +104,10 @@ class StudyPageViewModel @Inject constructor(
         }
     }
 
-    fun updateRemoteState(state: Boolean) {
-        _checkRemoteItemsUpdateState.value = state
+    private fun updateRemoteState(dynastyType: String, studyType: String, state: Boolean) {
+        viewModelScope.launch {
+            studyInfoUseCase.setRemoteState(dynastyType, studyType, state)
+        }
     }
 
     fun setUserRule(key: String) {
@@ -180,19 +170,44 @@ class StudyPageViewModel @Inject constructor(
         return pagerList
     }
 
-    private fun getRemoteStudyInfo(dynastyType: String, studyType: String) {
-        viewModelScope.launch {
+    private suspend fun getRemoteState(dynastyType: String, studyType: String) {
+       val scope = viewModelScope.launch {
+           studyInfoUseCase.getRemoteState(dynastyType, studyType)
+               .catch { Log.d("Get Remote State", "result: ${it.message}") }
+               .collect {
+                   _remoteState.value = it
+               }
+       }
+        scope.join()
+        checkedGetType(dynastyType,studyType)
+        scope.cancel()
+    }
+
+    private suspend fun checkedGetType(dynastyType: String, studyType: String) {
+        if (remoteState.value) {
+            getLocalStudyInfo(dynastyType, studyType)
+        } else {
+            getRemoteStudyInfo(dynastyType, studyType)
+        }
+    }
+
+    private suspend fun getRemoteStudyInfo(dynastyType: String, studyType: String) {
+        val scope = viewModelScope.launch {
             with(studyInfoUseCase) {
                 getRemoteStudyInfo(dynastyType, studyType)
                     .catch { Log.d("Get All Data", "result: ${it.message}") }
                     .collect {
-                        _allStudyInfoList.value = it.items
+                        if(studyType == STUDY_TYPE_FIRST) _studyInfoList.value = it.items
+                        else _allStudyInfoList.value = it.items
                         _pagerList.value = getPagerList(it.items)
-                        insertStudyInfo(it.items, dynastyType, studyType)
-                        updateRemoteState(true)
                     }
             }
         }
+        scope.join()
+        val insertItems = if(studyType == STUDY_TYPE_FIRST) studyInfoList.value else allStudyInfoList.value
+        insertStudyInfo(insertItems, dynastyType, studyType)
+        updateRemoteState(dynastyType, studyType, true)
+        scope.cancel()
     }
 
     private fun getLocalStudyInfo(dynastyType: String, studyType: String) {
@@ -201,10 +216,10 @@ class StudyPageViewModel @Inject constructor(
                 .getLocalStudyInfo(dynastyType, studyType)
                 .catch { Log.d("Get All Data", "result: ${it.message}") }
                 .collect {
-                    _allStudyInfoList.value = it
+                    if(studyType == STUDY_TYPE_FIRST) _studyInfoList.value = it
+                    else _allStudyInfoList.value = it
                     _pagerList.value = getPagerList(it)
                 }
-
         }
     }
 
@@ -214,7 +229,7 @@ class StudyPageViewModel @Inject constructor(
         studyType: String,
     ) {
         viewModelScope.launch {
-            studyInfoUseCase.insertLocalStudyInfo(studyInfo,dynastyType,studyType)
+            studyInfoUseCase.insertLocalStudyInfo(studyInfo, dynastyType, studyType)
         }
     }
 
