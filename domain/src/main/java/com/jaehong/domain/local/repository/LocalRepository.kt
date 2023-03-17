@@ -2,6 +2,7 @@ package com.jaehong.domain.local.repository
 
 import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.enum_type.DynastyDetailType
 import kotlinx.coroutines.flow.Flow
 
 interface LocalRepository {
@@ -14,6 +15,10 @@ interface LocalRepository {
     suspend fun insertMyStudyInfo(studyList: List<StudyInfoItem>)
 
     suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>)
+
+    suspend fun getRemoteState(dynastyType: String, studyType: String): Flow<Boolean>
+
+    suspend fun setRemoteState(dynastyType: String, studyType: String, state: Boolean)
 
     suspend fun getGuideInfo(key: String): Flow<Boolean>
 

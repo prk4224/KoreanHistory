@@ -7,8 +7,10 @@ import com.jaehong.data.mapper.Mapper.dataToDomain
 import com.jaehong.data.mapper.Mapper.domainToData
 import com.jaehong.data.mapper.Mapper.domainToDataBase
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.enum_type.DynastyDetailType
 import com.jaehong.domain.local.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -52,6 +54,23 @@ class LocalRepositoryImpl @Inject constructor(
 
     override suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>) {
         dataSource.deleteMyStudyInfo(studyList.domainToDataBase())
+    }
+
+    override suspend fun getRemoteState(
+        dynastyType: String,
+        studyType: String
+    ): Flow<Boolean> = flow {
+        dataSource.getRemoteState(dynastyType.checkedType(),studyType).collect {
+            emit(it)
+        }
+    }
+
+    override suspend fun setRemoteState(
+        dynastyType: String,
+        studyType: String,
+        state: Boolean
+    ) {
+        dataSource.setRemoteState(dynastyType.checkedType(),studyType,state)
     }
 
     override suspend fun getGuideInfo(key: String): Flow<Boolean> = flow {
