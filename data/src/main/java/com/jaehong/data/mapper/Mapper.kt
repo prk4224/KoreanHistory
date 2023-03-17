@@ -51,6 +51,17 @@ object Mapper {
         )
     }
 
+    private fun StudyInfo.checkDescription(detail: String, kingName: String): Int {
+        this.items.forEachIndexed { index, studyInfoItem ->
+            if (studyInfoItem.detail == detail &&
+                studyInfoItem.king_name == kingName &&
+                studyInfoItem.king_name != NOTHING_TEXT
+            ) {
+                return index
+            }
+        }
+        return -1
+    }
 
     fun List<MyStudyEntity>.dataBaseToDomain(): StudyInfo {
         val studyInfo = StudyInfo(arrayListOf())
@@ -65,32 +76,26 @@ object Mapper {
         return studyInfo
     }
 
-    private fun StudyInfo.checkDescription(detail: String, kingName: String): Int {
-        this.items.forEachIndexed { index, studyInfoItem ->
-            if (studyInfoItem.detail == detail &&
-                studyInfoItem.king_name == kingName &&
-                studyInfoItem.king_name != NOTHING_TEXT
-            ) {
-                return index
-            }
-        }
-        return -1
+    fun MyStudyEntity.dataBaseToDomain(): StudyInfoItem {
+        return StudyInfoItem(this.id.split("/").first(), this.detail, this.king_name, arrayListOf(this.description))
     }
 
     fun List<StudyInfoItem>.domainToDataBase(): List<MyStudyEntity> {
         val myStudyInfo = mutableListOf<MyStudyEntity>()
         this.forEach {
-            myStudyInfo.add(it.domainToDataBase())
+            myStudyInfo.addAll(it.domainToDataBase())
         }
         return myStudyInfo
     }
 
-    fun MyStudyEntity.dataBaseToDomain(): StudyInfoItem {
-        return StudyInfoItem(this.id, this.detail, this.king_name, arrayListOf(this.description))
-    }
+    fun StudyInfoItem.domainToDataBase(): List<MyStudyEntity> {
+        val myStudyItems = mutableListOf<MyStudyEntity>()
+        this.description.forEach { desc ->
+            val temp = MyStudyEntity(this.id+"/$desc", this.detail, this.king_name, desc)
+            myStudyItems.add(temp)
+        }
 
-    fun StudyInfoItem.domainToDataBase(): MyStudyEntity {
-        return MyStudyEntity(this.id, this.detail, this.king_name, this.description[0])
+        return myStudyItems
     }
 
     fun String.checkedType(): DynastyDetailType {
