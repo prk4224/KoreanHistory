@@ -16,6 +16,10 @@ interface LocalDataSource {
 
     suspend fun deleteMyStudyInfo(studyList: List<MyStudyEntity>)
 
+    suspend fun getRemoteState(dynastyType: DynastyDetailType, studyType: String): Flow<Boolean>
+
+    suspend fun setRemoteState(dynastyType: DynastyDetailType, studyType: String, state: Boolean)
+
     suspend fun getGuideInfo(key: String): Flow<Boolean>
 
     suspend fun setGuideInfo(key: String)
