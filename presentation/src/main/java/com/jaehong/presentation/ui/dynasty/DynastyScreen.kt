@@ -10,12 +10,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun DynastyScreen(
     dynastyViewModel: DynastyViewModel = hiltViewModel()
 ) {
-    val isVisible by dynastyViewModel.isVisible.collectAsState()
-    val dialogState by dynastyViewModel.showDialog.collectAsState()
+    val animationState by dynastyViewModel.animationState.collectAsState()
+    val isVisibleDialog by dynastyViewModel.isVisibleDialog.collectAsState()
     val (checked,setChecked) = remember { mutableStateOf(false) }
 
     DynastyButton(
-        isVisible = isVisible,
+        animationState = animationState,
         dynastyButtonItem = { title, visible ->
             DynastyButtonItem(
                 title = title,
@@ -38,7 +38,7 @@ fun DynastyScreen(
 
     dynastyViewModel.startAnimation()
 
-    if(dialogState){
+    if(isVisibleDialog){
         GuideDialogContent(
             onGuideClicked = { dynastyViewModel.onDialogDismiss(it) },
             checked = checked,

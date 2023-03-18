@@ -25,33 +25,31 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun StudyPageScreen(
     studyPageViewModel: StudyPageViewModel = hiltViewModel()
 ) {
-    val dynastyState by studyPageViewModel.dynastyState.collectAsState()
-    val studyState by studyPageViewModel.studyState.collectAsState()
-    val studyData by studyPageViewModel.studyInfoList.collectAsState()
-    val isVisible by studyPageViewModel.isVisible.collectAsState()
-    val allStudyData by studyPageViewModel.allStudyInfoList.collectAsState()
-    val dialogState by studyPageViewModel.showDialog.collectAsState()
-    val allHintState by studyPageViewModel.isAllHintVisible.collectAsState()
-    val pagerList by studyPageViewModel.pagerList.collectAsState()
+    val dynastyType by studyPageViewModel.dynastyType.collectAsState()
+    val studyType by studyPageViewModel.studyType.collectAsState()
+    val firstStudyItems by studyPageViewModel.firstStudyItems.collectAsState()
+    val isVisiblePlusBtn by studyPageViewModel.isVisiblePlusBtn.collectAsState()
+    val originStudyItems by studyPageViewModel.originStudyItems.collectAsState()
+    val isVisibleDialog by studyPageViewModel.isVisibleDialog.collectAsState()
+    val isVisibleAllHint by studyPageViewModel.isVisibleAllHint.collectAsState()
+    val pageList by studyPageViewModel.pageList.collectAsState()
     val originGuideLabel by studyPageViewModel.originGuideLabel.collectAsState()
     val firstGuideLabel by studyPageViewModel.firstGuideLabel.collectAsState()
     val blankGuideLabel by studyPageViewModel.blankGuideLabel.collectAsState()
-    val checkedUserRuleOrigin by studyPageViewModel.checkedUserRuleOrigin.collectAsState()
-    val checkedUserRuleFirst by studyPageViewModel.checkedUserRuleFirst.collectAsState()
-    val checkedUserRuleBlank by studyPageViewModel.checkedUserRuleBlank.collectAsState()
+    val userRuleState by studyPageViewModel.userRuleState.collectAsState()
 
     val selectedItems = remember { mutableStateListOf<StudyInfoItem>() }
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
     StudyPagePagerScreen(
-        pagerList = pagerList,
-        studyState = studyState,
-        allHintState = allHintState,
-        studyData = studyData,
-        allStudyData = allStudyData,
+        pageList = pageList,
+        studyType = studyType,
+        isVisibleAllHint = isVisibleAllHint,
+        firstStudyItems = firstStudyItems,
+        originStudyItems = originStudyItems,
         header = { type, title -> StudyPageHeaderItem(type, title) },
-        dynastyState = dynastyState
+        dynastyType = dynastyType
     ) { studyInfo, index ->
         StudyAllViewItem(studyInfo) { descIndex, description ->
             val selectedItem = StudyInfoItem(
@@ -64,34 +62,34 @@ fun StudyPageScreen(
             val selected = selectedItems.contains(selectedItem)
 
             DescriptionTextView(
-                studyState = studyState,
+                studyType = studyType,
                 selectedItem = selectedItem,
                 backgroundColor = if (selected) Gray2 else Color.White,
-                alphaText = if (selected || studyState != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f,
-                hintText = if (selected) allStudyData[index].description[descIndex] else description,
+                alphaText = if (selected || studyType != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f,
+                hintText = if (selected) originStudyItems[index].description[descIndex] else description,
                 changeSelectedItem = { item ->
                     if (selected) selectedItems.remove(item)
                     else selectedItems.add(item)
                 },
-                changeButtonState = { studyPageViewModel.changeButtonState(selectedItems.size) },
+                checkedButtonState = { studyPageViewModel.checkedButtonState(selectedItems.size) },
                 changeAllHintState = { studyPageViewModel.changeAllHintState() })
         }
     }
 
     DataChangeButton(
         iconType = true,
-        isVisible = isVisible,
+        isVisible = isVisiblePlusBtn,
         size = selectedItems.size,
         snackBarState = snackBarState,
         coroutineScope = coroutineScope,
         onIconClicked = {
-            studyPageViewModel.addSelectedItems(selectedItems)
+            studyPageViewModel.insertMyStudyItems(selectedItems)
             selectedItems.clear()
         },
         onIconLongClicked = { studyPageViewModel.onOpenDialogClicked() },
     )
 
-    if (dialogState) {
+    if (isVisibleDialog) {
         SaveCheckAlertDialog(
             dialogType = true,
             onDialogConfirm = {
@@ -104,8 +102,8 @@ fun StudyPageScreen(
         )
     }
 
-    when(studyState) {
-        StudyType.ORIGIN_STUDY.value -> if(originGuideLabel < 4 && checkedUserRuleOrigin) {
+    when(studyType) {
+        StudyType.ORIGIN_STUDY.value -> if(originGuideLabel < 4 && userRuleState) {
             UserRuleOriginGuide(
                 label = originGuideLabel,
                 swipe = {
@@ -126,12 +124,12 @@ fun StudyPageScreen(
                 allSave = {
                     AllSaveRuleOriginDialog { label, type, rule ->
                         studyPageViewModel.updateLabel(label, type)
-                        studyPageViewModel.setUserRule(rule)
+                        studyPageViewModel.updateUserRule(rule)
                     }
                 }
             )
         }
-        StudyType.FIRST_REVIEW.value -> if(firstGuideLabel < 2 && checkedUserRuleFirst) {
+        StudyType.FIRST_REVIEW.value -> if(firstGuideLabel < 2 && userRuleState) {
             UserRuleFirstGuide(
                 firstGuideLabel,
                 select = {
@@ -142,15 +140,15 @@ fun StudyPageScreen(
                 longClick = {
                     LongClickRuleFirstDialog { label, type, rule ->
                         studyPageViewModel.updateLabel(label, type)
-                        studyPageViewModel.setUserRule(rule)
+                        studyPageViewModel.updateUserRule(rule)
                     }
                 }
             )
         }
-        StudyType.ALL_BLANK_REVIEW.value -> if(blankGuideLabel && checkedUserRuleBlank) {
+        StudyType.ALL_BLANK_REVIEW.value -> if(blankGuideLabel && userRuleState) {
             SelectRuleBlankDialog { label, type, rule ->
                 studyPageViewModel.updateLabel(label, type)
-                studyPageViewModel.setUserRule(rule)
+                studyPageViewModel.updateUserRule(rule)
             }
         }
     }

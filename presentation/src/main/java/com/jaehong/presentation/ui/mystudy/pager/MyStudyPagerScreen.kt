@@ -17,14 +17,14 @@ import com.jaehong.presentation.theme.Gray3
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MyStudyPagerScreen(
-    pagerList: List<String>,
-    myStudyData: List<StudyInfoItem>,
+    pageList: List<String>,
+    myStudyItems: List<StudyInfoItem>,
     myStudyHeader: @Composable (String) -> Unit,
     myStudyNotice: @Composable () -> Unit,
     myStudyView: @Composable (StudyInfoItem) -> Unit,
 ) {
     HorizontalPager(
-        count = pagerList.size,
+        count = pageList.size,
         modifier = Modifier
             .fillMaxSize()
             .background(Gray3),
@@ -35,13 +35,13 @@ fun MyStudyPagerScreen(
             modifier = Modifier.padding(vertical = 50.dp, horizontal = 20.dp),
         ) {
             item {
-                myStudyHeader(pagerList[page])
+                myStudyHeader(pageList[page])
             }
             item {
                 myStudyNotice()
             }
-            items(myStudyData) { studyInfo ->
-                if (pagerList[page] == studyInfo.detail) {
+            items(myStudyItems) { studyInfo ->
+                if (pageList[page] == studyInfo.detail) {
                     myStudyView(studyInfo)
                 }
             }

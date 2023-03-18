@@ -20,104 +20,106 @@ class MyStudyViewModel @Inject constructor(
     private val myStudyInfoUseCase: GetMyStudyInfoUseCase
 ) : ViewModel() {
 
-    private val emptyList: MutableList<StudyInfoItem> = mutableListOf()
+    private val _myStudyItems = MutableStateFlow(listOf<StudyInfoItem>())
+    val myStudyItems = _myStudyItems.asStateFlow()
 
-    private val _myStudyInfoList = MutableStateFlow(emptyList.toList())
-    val myStudyInfoList = _myStudyInfoList.asStateFlow()
+    private val _isVisibleMinusBtn = MutableStateFlow(false)
+    val isVisibleMinusBtn = _isVisibleMinusBtn.asStateFlow()
 
-    private val _isVisible = MutableStateFlow(false)
-    val isVisible = _isVisible.asStateFlow()
+    private val _pageList = MutableStateFlow(listOf(""))
+    val pageList = _pageList.asStateFlow()
 
-    private val _pagerList = MutableStateFlow(listOf(""))
-    val pagerList = _pagerList.asStateFlow()
+    private val _isVisibleDialog = MutableStateFlow(false)
+    val isVisibleDialog = _isVisibleDialog.asStateFlow()
 
-    private val _showDialog = MutableStateFlow(false)
-    val showDialog = _showDialog.asStateFlow()
-
-    private val _checkedUserRule = MutableStateFlow(false)
-    val checkedUserRule = _checkedUserRule.asStateFlow()
+    private val _userRuleState = MutableStateFlow(false)
+    val userRuleState = _userRuleState.asStateFlow()
 
     init {
-        getMyStudyData()
+        getMyStudyItems()
+        getUserRule()
     }
 
-    private fun getMyStudyData(){
+    private fun getMyStudyItems() {
         viewModelScope.launch {
-            with(myStudyInfoUseCase) {
-                launch {
-                    this@with()
-                        .catch { Log.d("My Study Data","result : $it") }
-                        .collect {
-                            _myStudyInfoList.value = it
-                            _pagerList.value = getPagerList(it)
-                        }
+            myStudyInfoUseCase()
+                .catch { Log.d("My Study Data", "result : $it") }
+                .collect {
+                    _myStudyItems.value = it
+                    _pageList.value = getPageList(it)
                 }
-                launch {
-                    getGuideInfo(GuideKey.USER_RULE_MY_PAGE.value)
-                        .catch { Log.d("My Page Guide Rule", "result: ${it.message}") }
-                        .collect { _checkedUserRule.value = it }
-                }
-            }
+        }
+    }
+
+    fun deleteMyStudyItems(selected: List<StudyInfoItem>) {
+        viewModelScope.launch {
+            myStudyInfoUseCase.deleteMyStudyInfo(selected)
+            initMinusButton()
+            getMyStudyItems()
+        }
+    }
+
+    private fun deleteAllItems(myStudyItems: List<StudyInfoItem>) {
+        viewModelScope.launch {
+            myStudyInfoUseCase.deleteMyStudyInfo(myStudyItems)
+            initMinusButton()
+            getMyStudyItems()
+        }
+    }
+
+    //Dialog
+    fun onOpenDialogClicked() {
+        _isVisibleDialog.value = true
+    }
+
+    fun onDialogConfirm(myStudyItems: List<StudyInfoItem>) {
+        deleteAllItems(myStudyItems)
+        _isVisibleDialog.value = false
+    }
+
+    fun onDialogDismiss() {
+        _isVisibleDialog.value = false
+    }
+
+    //Guide
+    private fun getUserRule() {
+        viewModelScope.launch {
+            myStudyInfoUseCase.getGuideState(GuideKey.USER_RULE_MY_PAGE.value)
+                .catch { Log.d("My Page Guide Rule", "result: ${it.message}") }
+                .collect { _userRuleState.value = it }
         }
     }
 
     fun setUserRule(key: String) {
         viewModelScope.launch {
-            myStudyInfoUseCase.setGuideInfo(key)
-            _checkedUserRule.value = false
+            myStudyInfoUseCase.setGuideState(key)
+            _userRuleState.value = false
         }
     }
 
-    fun onOpenDialogClicked() {
-        _showDialog.value = true
-    }
-
-    fun onDialogConfirm(myStudyItems: List<StudyInfoItem>) {
-        deleteAllData(myStudyItems)
-        _showDialog.value = false
-    }
-
-    fun onDialogDismiss() {
-        _showDialog.value = false
-    }
-
-    fun changeButtonState(itemSize: Int) {
-        _isVisible.value = itemSize > 0
-    }
-
-    fun deleteMyStudyInfo(selected: List<StudyInfoItem>) {
-        viewModelScope.launch {
-            myStudyInfoUseCase.deleteMyStudyInfo(selected)
-            initDataChangeButton()
-            getMyStudyData()
+    //Pager
+    private fun getPageList(myStudyList: List<StudyInfoItem>): List<String> {
+        val pageList = mutableListOf<String>()
+        myStudyList.forEach {
+            if (pageList.contains(it.detail).not()) {
+                pageList.add(it.detail)
+            }
         }
+        return pageList
     }
 
-    private fun initDataChangeButton() {
-        _isVisible.value = false
+    //Button
+    fun checkedButtonState(itemSize: Int) {
+        _isVisibleMinusBtn.value = itemSize > 0
+    }
+
+    private fun initMinusButton() {
+        _isVisibleMinusBtn.value = false
     }
 
     fun onBackButtonClicked() {
         viewModelScope.launch {
             koreanHistoryNavigator.navigateBack()
         }
-    }
-
-    private fun deleteAllData(myStudyItems: List<StudyInfoItem>) {
-        viewModelScope.launch {
-            myStudyInfoUseCase.deleteMyStudyInfo(myStudyItems)
-            initDataChangeButton()
-            getMyStudyData()
-        }
-    }
-
-    private fun getPagerList(myStudyList: List<StudyInfoItem>): List<String> {
-        val pagerList = mutableListOf<String>()
-        myStudyList.forEach {
-            if (pagerList.contains(it.detail).not()) {
-                pagerList.add(it.detail)
-            }
-        }
-        return pagerList
     }
 }

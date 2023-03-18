@@ -20,7 +20,7 @@ import com.jaehong.presentation.util.composable.verticalScrollbar
 
 @Composable
 fun DynastyButton(
-    isVisible: Boolean,
+    animationState: Boolean,
     markImage: Painter = painterResource(id = R.drawable.woo_su_mark),
     listState: LazyListState = rememberLazyListState(),
     logoImage: @Composable (Painter) -> Unit,
@@ -44,7 +44,7 @@ fun DynastyButton(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             items(MainActivity.dynastyList) {
-                dynastyButtonItem(it, isVisible)
+                dynastyButtonItem(it, animationState)
             }
         }
     }

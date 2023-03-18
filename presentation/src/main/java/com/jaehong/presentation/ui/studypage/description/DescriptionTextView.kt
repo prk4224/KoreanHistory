@@ -21,13 +21,13 @@ import com.jaehong.presentation.util.FontFixed.nonScaledSp
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DescriptionTextView(
-    studyState: String,
+    studyType: String,
     selectedItem: StudyInfoItem,
     backgroundColor: Color,
     alphaText: Float,
     hintText: String,
     changeSelectedItem: (StudyInfoItem) -> Unit,
-    changeButtonState: () -> Unit,
+    checkedButtonState: () -> Unit,
     changeAllHintState: () -> Unit,
 
 ) {
@@ -45,12 +45,12 @@ fun DescriptionTextView(
             .combinedClickable(
                 onClick = {
                     changeSelectedItem(selectedItem)
-                    if (studyState == StudyType.ORIGIN_STUDY.value) {
-                        changeButtonState()
+                    if (studyType == StudyType.ORIGIN_STUDY.value) {
+                        checkedButtonState()
                     }
                 },
                 onLongClick = {
-                    if (studyState == StudyType.FIRST_REVIEW.value) {
+                    if (studyType == StudyType.FIRST_REVIEW.value) {
                         changeAllHintState()
                     }
                 }

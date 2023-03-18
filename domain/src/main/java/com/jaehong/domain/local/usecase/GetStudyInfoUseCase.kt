@@ -44,30 +44,30 @@ class GetStudyInfoUseCase @Inject constructor(
         localRepository.insertMyStudyInfo(studyInfo)
     }
 
-    suspend fun getRemoteState(
+    suspend fun getRemoteUpdateState(
         dynastyType: String,
         studyType: String,
     ): Flow<Boolean> = flow {
-        localRepository.getRemoteState(dynastyType,studyType).collect {
+        localRepository.getRemoteUpdateState(dynastyType,studyType).collect {
             emit(it)
         }
     }
 
-    suspend fun setRemoteState(
+    suspend fun setRemoteUpdateState(
         dynastyType: String,
         studyType: String,
         state: Boolean,
     ) {
-        localRepository.setRemoteState(dynastyType,studyType,state)
+        localRepository.setRemoteUpdateState(dynastyType,studyType,state)
     }
 
-    suspend fun getGuideInfo(key: String): Flow<Boolean> = flow {
-        localRepository.getGuideInfo(key).collect {
+    suspend fun getGuideState(key: String): Flow<Boolean> = flow {
+        localRepository.getGuideState(key).collect {
             emit(it)
         }
     }
 
-    suspend fun setGuideInfo(key: String) {
-        localRepository.setGuideInfo(key)
+    suspend fun setGuideState(key: String) {
+        localRepository.setGuideState(key)
     }
 }

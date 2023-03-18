@@ -21,18 +21,18 @@ class DynastyViewModel @Inject constructor(
     private val getGuideInfoUseCase: GetGuideInfoUseCase
 ): ViewModel() {
 
-    private val _isVisible = MutableStateFlow(false)
-    val isVisible = _isVisible.asStateFlow()
+    private val _animationState = MutableStateFlow(false)
+    val animationState = _animationState.asStateFlow()
 
-    private val _showDialog = MutableStateFlow(false)
-    val showDialog = _showDialog.asStateFlow()
+    private val _isVisibleDialog = MutableStateFlow(false)
+    val isVisibleDialog = _isVisibleDialog.asStateFlow()
 
     init {
         viewModelScope.launch {
             getGuideInfoUseCase(GuideKey.GUIDE_KEY.value)
                 .catch { Log.d("Guide Date", "result : ${it.message}") }
                 .collect {
-                    _showDialog.value = it
+                    _isVisibleDialog.value = it
                 }
         }
     }
@@ -40,14 +40,14 @@ class DynastyViewModel @Inject constructor(
     fun startAnimation(){
         viewModelScope.launch {
             delay(300)
-            _isVisible.value = true
+            _animationState.value = true
         }
     }
 
     fun onDialogDismiss(check: Boolean) {
-        _showDialog.value = false
+        _isVisibleDialog.value = false
         viewModelScope.launch {
-            if(check) getGuideInfoUseCase.setGuideInfo(GuideKey.GUIDE_KEY.value)
+            if(check) getGuideInfoUseCase.setGuideState(GuideKey.GUIDE_KEY.value)
         }
     }
 

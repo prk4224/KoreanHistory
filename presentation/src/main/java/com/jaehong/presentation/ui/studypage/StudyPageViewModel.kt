@@ -23,96 +23,184 @@ class StudyPageViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val studyInfoUseCase: GetStudyInfoUseCase
 ) : ViewModel() {
+    private val emptyList: List<StudyInfoItem> = listOf()
+
+    private val _dynastyType = MutableStateFlow("")
+    val dynastyType = _dynastyType.asStateFlow()
+
+    private val _studyType = MutableStateFlow("")
+    val studyType = _studyType.asStateFlow()
 
     private val _remoteState = MutableStateFlow(false)
-    val remoteState = _remoteState.asStateFlow()
+    private val remoteState = _remoteState.asStateFlow()
 
-    private val _dynastyState = MutableStateFlow("")
-    val dynastyState = _dynastyState.asStateFlow()
+    private val _originStudyItems = MutableStateFlow(emptyList)
+    val originStudyItems = _originStudyItems.asStateFlow()
 
-    private val _studyState = MutableStateFlow("")
-    val studyState = _studyState.asStateFlow()
+    private val _firstStudyItems = MutableStateFlow(emptyList)
+    val firstStudyItems = _firstStudyItems.asStateFlow()
 
-    private val _allStudyInfoList = MutableStateFlow(listOf<StudyInfoItem>())
-    val allStudyInfoList = _allStudyInfoList.asStateFlow()
+    private val _isVisiblePlusBtn = MutableStateFlow(false)
+    val isVisiblePlusBtn = _isVisiblePlusBtn.asStateFlow()
 
-    private val _studyInfoList = MutableStateFlow(listOf<StudyInfoItem>())
-    val studyInfoList = _studyInfoList.asStateFlow()
+    private val _isVisibleAllHint = MutableStateFlow(false)
+    val isVisibleAllHint = _isVisibleAllHint.asStateFlow()
 
-    private val _isVisible = MutableStateFlow(false)
-    val isVisible = _isVisible.asStateFlow()
+    private val _isVisibleDialog = MutableStateFlow(false)
+    val isVisibleDialog = _isVisibleDialog.asStateFlow()
 
-    private val _isAllHintVisible = MutableStateFlow(false)
-    val isAllHintVisible = _isAllHintVisible.asStateFlow()
+    private val _pageList = MutableStateFlow(listOf(""))
+    val pageList = _pageList.asStateFlow()
 
-    private val _showDialog = MutableStateFlow(false)
-    val showDialog = _showDialog.asStateFlow()
-
-    private val _pagerList = MutableStateFlow(listOf(""))
-    val pagerList = _pagerList.asStateFlow()
+    private val _userRuleState = MutableStateFlow(false)
+    val userRuleState = _userRuleState.asStateFlow()
 
     private val _originGuideLabel = MutableStateFlow(0)
     val originGuideLabel = _originGuideLabel.asStateFlow()
 
-    private val _checkedUserRuleOrigin = MutableStateFlow(false)
-    val checkedUserRuleOrigin = _checkedUserRuleOrigin.asStateFlow()
-
     private val _firstGuideLabel = MutableStateFlow(0)
     val firstGuideLabel = _firstGuideLabel.asStateFlow()
 
-    private val _checkedUserRuleFirst = MutableStateFlow(false)
-    val checkedUserRuleFirst = _checkedUserRuleFirst.asStateFlow()
-
     private val _blankGuideLabel = MutableStateFlow(true)
     val blankGuideLabel = _blankGuideLabel.asStateFlow()
-
-    private val _checkedUserRuleBlank = MutableStateFlow(false)
-    val checkedUserRuleBlank = _checkedUserRuleBlank.asStateFlow()
 
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.StudyPage.DYNASTY_TYPE_KEY)
         val studyType = savedStateHandle.get<String>(Destination.StudyPage.STUDY_TYPE_KEY)
 
-        _dynastyState.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
-        _studyState.value = studyType ?: throw IllegalArgumentException("Study Type Error")
+        _dynastyType.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
+        _studyType.value = studyType ?: throw IllegalArgumentException("Study Type Error")
         viewModelScope.launch {
-            getRemoteState(dynastyType, STUDY_TYPE_ALL)
-
+            checkedRemoteState(dynastyType, STUDY_TYPE_ALL)
             if (studyType == StudyType.FIRST_REVIEW.value) {
-                getRemoteState(dynastyType, STUDY_TYPE_FIRST)
+                checkedRemoteState(dynastyType, STUDY_TYPE_FIRST)
             }
+            getUserRule(studyType)
+        }
+    }
 
+    private suspend fun checkedRemoteState(dynastyType: String, studyType: String) {
+       val scope = viewModelScope.launch {
+           studyInfoUseCase.getRemoteUpdateState(dynastyType, studyType)
+               .catch { Log.d("Get Remote State", "result: ${it.message}") }
+               .collect {
+                   _remoteState.value = it
+               }
+       }
+        scope.join()
+        checkedGetType(dynastyType,studyType,studyType == STUDY_TYPE_FIRST)
+        scope.cancel()
+    }
+
+    private suspend fun checkedGetType(
+        dynastyType: String,
+        studyType: String,
+        checkedStudyType: Boolean,
+    ) {
+        if (remoteState.value) {
+            getLocalStudyItems(dynastyType, studyType,checkedStudyType)
+        } else {
+            getRemoteStudyItems(dynastyType, studyType,checkedStudyType)
+        }
+    }
+
+    private suspend fun getRemoteStudyItems(
+        dynastyType: String,
+        studyType: String,
+        checkedStudyType: Boolean,
+    ) {
+        val scope = viewModelScope.launch {
             with(studyInfoUseCase) {
-                launch {
-                    getGuideInfo(GuideKey.USER_RULE_ORIGIN.value)
-                        .catch { Log.d("First Guide Rule", "result: ${it.message}") }
-                        .collect { _checkedUserRuleOrigin.value = it }
-                }
-
-                launch {
-                    getGuideInfo(GuideKey.USER_RULE_FIRST.value)
-                        .catch { Log.d("Second Guide Rule", "result: ${it.message}") }
-                        .collect { _checkedUserRuleFirst.value = it }
-                }
-
-                launch {
-                    getGuideInfo(GuideKey.USER_RULE_BLANK.value)
-                        .catch { Log.d("Third Guide Rule", "result: ${it.message}") }
-                        .collect { _checkedUserRuleBlank.value = it }
-                }
+                getRemoteStudyInfo(dynastyType, studyType)
+                    .catch { Log.d("Get All Data", "result: ${it.message}") }
+                    .collect {
+                        if(checkedStudyType) _firstStudyItems.value = it.items
+                        else _originStudyItems.value = it.items
+                        _pageList.value = getPageList(it.items)
+                    }
             }
+        }
+        scope.join()
+        val insertItems = if(checkedStudyType) firstStudyItems.value else originStudyItems.value
+        insertStudyItems(insertItems, dynastyType, studyType)
+        updateRemoteState(dynastyType, studyType, true)
+        scope.cancel()
+    }
+
+    private fun getLocalStudyItems(
+        dynastyType: String,
+        studyType: String,
+        checkedStudyType: Boolean,
+    ) {
+        viewModelScope.launch {
+            studyInfoUseCase
+                .getLocalStudyInfo(dynastyType, studyType)
+                .catch { Log.d("Get All Data", "result: ${it.message}") }
+                .collect {
+                    if(checkedStudyType) _firstStudyItems.value = it
+                    else _originStudyItems.value = it
+                    _pageList.value = getPageList(it)
+                }
+        }
+    }
+
+    private fun insertStudyItems(
+        studyInfo: List<StudyInfoItem>,
+        dynastyType: String,
+        studyType: String,
+    ) {
+        viewModelScope.launch {
+            studyInfoUseCase.insertLocalStudyInfo(studyInfo, dynastyType, studyType)
         }
     }
 
     private fun updateRemoteState(dynastyType: String, studyType: String, state: Boolean) {
         viewModelScope.launch {
-            studyInfoUseCase.setRemoteState(dynastyType, studyType, state)
+            studyInfoUseCase.setRemoteUpdateState(dynastyType, studyType, state)
         }
     }
 
-    fun setUserRule(key: String) {
+    //MyStudy
+    fun insertMyStudyItems(studyInfo: List<StudyInfoItem>) {
         viewModelScope.launch {
-            studyInfoUseCase.setGuideInfo(key)
+            studyInfoUseCase.insertMyStudyInfo(studyInfo)
+            initPlusButton()
+        }
+    }
+
+    //Dialog
+    fun onOpenDialogClicked() {
+        _isVisibleDialog.value = true
+    }
+
+    fun onDialogConfirm() {
+        insertMyStudyItems(originStudyItems.value)
+        _isVisibleDialog.value = false
+    }
+
+    fun onDialogDismiss() {
+        _isVisibleDialog.value = false
+    }
+
+    //Guide
+    private fun getUserRule(studyType: String) {
+        val guideKey = when(studyType) {
+            StudyType.ORIGIN_STUDY.value -> GuideKey.USER_RULE_ORIGIN.value
+            StudyType.FIRST_REVIEW.value -> GuideKey.USER_RULE_FIRST.value
+            StudyType.ALL_BLANK_REVIEW.value -> GuideKey.USER_RULE_BLANK.value
+            else -> throw IllegalArgumentException("Guide Key Error")
+        }
+
+        viewModelScope.launch {
+            studyInfoUseCase.getGuideState(guideKey)
+                .catch { Log.d("Get Gudie Key Error", "result: ${it.message}") }
+                .collect { _userRuleState.value = it }
+        }
+    }
+
+    fun updateUserRule(key: String) {
+        viewModelScope.launch {
+            studyInfoUseCase.setGuideState(key)
         }
     }
 
@@ -124,43 +212,8 @@ class StudyPageViewModel @Inject constructor(
         }
     }
 
-    fun onOpenDialogClicked() {
-        _showDialog.value = true
-    }
-
-    fun onDialogConfirm() {
-        addMyStudyInfo(allStudyInfoList.value)
-        _showDialog.value = false
-    }
-
-    fun onDialogDismiss() {
-        _showDialog.value = false
-    }
-
-    fun addSelectedItems(selectedItems: List<StudyInfoItem>) {
-        addMyStudyInfo(selectedItems)
-    }
-
-    fun changeButtonState(itemsSize: Int) {
-        _isVisible.value = itemsSize > 0
-    }
-
-    fun changeAllHintState() {
-        _isAllHintVisible.value = _isAllHintVisible.value.not()
-    }
-
-    private fun initDataChangeButton() {
-        _isVisible.value = false
-    }
-
-    private fun addMyStudyInfo(studyInfo: List<StudyInfoItem>) {
-        viewModelScope.launch {
-            studyInfoUseCase.insertMyStudyInfo(studyInfo)
-            initDataChangeButton()
-        }
-    }
-
-    private fun getPagerList(studyInfo: List<StudyInfoItem>): List<String> {
+    //Pager
+    private fun getPageList(studyInfo: List<StudyInfoItem>): List<String> {
         val pagerList = mutableListOf<String>()
         studyInfo.forEach {
             if (pagerList.contains(it.detail).not()) {
@@ -170,67 +223,18 @@ class StudyPageViewModel @Inject constructor(
         return pagerList
     }
 
-    private suspend fun getRemoteState(dynastyType: String, studyType: String) {
-       val scope = viewModelScope.launch {
-           studyInfoUseCase.getRemoteState(dynastyType, studyType)
-               .catch { Log.d("Get Remote State", "result: ${it.message}") }
-               .collect {
-                   _remoteState.value = it
-               }
-       }
-        scope.join()
-        checkedGetType(dynastyType,studyType)
-        scope.cancel()
+    //Button
+    private fun initPlusButton() {
+        _isVisiblePlusBtn.value = false
     }
 
-    private suspend fun checkedGetType(dynastyType: String, studyType: String) {
-        if (remoteState.value) {
-            getLocalStudyInfo(dynastyType, studyType)
-        } else {
-            getRemoteStudyInfo(dynastyType, studyType)
-        }
+    fun checkedButtonState(itemsSize: Int) {
+        _isVisiblePlusBtn.value = itemsSize > 0
     }
 
-    private suspend fun getRemoteStudyInfo(dynastyType: String, studyType: String) {
-        val scope = viewModelScope.launch {
-            with(studyInfoUseCase) {
-                getRemoteStudyInfo(dynastyType, studyType)
-                    .catch { Log.d("Get All Data", "result: ${it.message}") }
-                    .collect {
-                        if(studyType == STUDY_TYPE_FIRST) _studyInfoList.value = it.items
-                        else _allStudyInfoList.value = it.items
-                        _pagerList.value = getPagerList(it.items)
-                    }
-            }
-        }
-        scope.join()
-        val insertItems = if(studyType == STUDY_TYPE_FIRST) studyInfoList.value else allStudyInfoList.value
-        insertStudyInfo(insertItems, dynastyType, studyType)
-        updateRemoteState(dynastyType, studyType, true)
-        scope.cancel()
-    }
-
-    private fun getLocalStudyInfo(dynastyType: String, studyType: String) {
-        viewModelScope.launch {
-            studyInfoUseCase
-                .getLocalStudyInfo(dynastyType, studyType)
-                .catch { Log.d("Get All Data", "result: ${it.message}") }
-                .collect {
-                    if(studyType == STUDY_TYPE_FIRST) _studyInfoList.value = it
-                    else _allStudyInfoList.value = it
-                    _pagerList.value = getPagerList(it)
-                }
-        }
-    }
-
-    private fun insertStudyInfo(
-        studyInfo: List<StudyInfoItem>,
-        dynastyType: String,
-        studyType: String,
-    ) {
-        viewModelScope.launch {
-            studyInfoUseCase.insertLocalStudyInfo(studyInfo, dynastyType, studyType)
-        }
+    //Hint
+    fun changeAllHintState() {
+        _isVisibleAllHint.value = isVisibleAllHint.value.not()
     }
 
 }

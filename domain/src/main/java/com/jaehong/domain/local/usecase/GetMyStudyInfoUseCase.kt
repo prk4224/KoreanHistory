@@ -20,13 +20,13 @@ class GetMyStudyInfoUseCase @Inject constructor(
         localRepository.deleteMyStudyInfo(studyList)
     }
 
-    suspend fun getGuideInfo(key: String): Flow<Boolean> = flow {
-        localRepository.getGuideInfo(key).collect {
+    suspend fun getGuideState(key: String): Flow<Boolean> = flow {
+        localRepository.getGuideState(key).collect {
             emit(it)
         }
     }
 
-    suspend fun setGuideInfo(key: String) {
-        localRepository.setGuideInfo(key)
+    suspend fun setGuideState(key: String) {
+        localRepository.setGuideState(key)
     }
 }

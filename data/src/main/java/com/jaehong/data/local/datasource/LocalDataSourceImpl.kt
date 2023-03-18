@@ -36,27 +36,27 @@ class LocalDataSourceImpl @Inject constructor(
         koreanHistoryDataBase.myStudyDao().deleteMyStudyWithListTransaction(studyList)
     }
 
-    override suspend fun getRemoteState(
+    override suspend fun getRemoteUpdateState(
         dynastyType: DynastyDetailType,
         studyType: String,
     ): Flow<Boolean> = flow {
-        emit(preference.getState(dynastyType.value(studyType)))
+        emit(preference.getRemoteUpdateState(dynastyType.value(studyType)))
     }
 
-    override suspend fun setRemoteState(
+    override suspend fun setRemoteUpdateState(
         dynastyType: DynastyDetailType,
         studyType: String,
         state: Boolean
     ) {
-        preference.setState(dynastyType.value(studyType),state)
+        preference.setRemoteUpdateState(dynastyType.value(studyType),state)
     }
 
-    override suspend fun getGuideInfo(key: String)
+    override suspend fun getGuideState(key: String)
     : Flow<Boolean> = flow {
-        emit(preference.getString(key))
+        emit(preference.getGuideState(key))
     }
 
-    override suspend fun setGuideInfo(key: String) {
-        preference.setString(key, GUIDE_TOKEN)
+    override suspend fun setGuideState(key: String) {
+        preference.setGuideState(key, false)
     }
 }

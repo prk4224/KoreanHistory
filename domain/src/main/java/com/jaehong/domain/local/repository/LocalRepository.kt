@@ -16,11 +16,11 @@ interface LocalRepository {
 
     suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>)
 
-    suspend fun getRemoteState(dynastyType: String, studyType: String): Flow<Boolean>
+    suspend fun getRemoteUpdateState(dynastyType: String, studyType: String): Flow<Boolean>
 
-    suspend fun setRemoteState(dynastyType: String, studyType: String, state: Boolean)
+    suspend fun setRemoteUpdateState(dynastyType: String, studyType: String, state: Boolean)
 
-    suspend fun getGuideInfo(key: String): Flow<Boolean>
+    suspend fun getGuideState(key: String): Flow<Boolean>
 
-    suspend fun setGuideInfo(key: String)
+    suspend fun setGuideState(key: String)
 }

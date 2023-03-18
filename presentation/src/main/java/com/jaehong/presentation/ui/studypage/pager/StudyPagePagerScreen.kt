@@ -18,17 +18,17 @@ import com.jaehong.presentation.theme.Gray3
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun StudyPagePagerScreen(
-    pagerList: List<String>,
-    dynastyState: String,
-    studyState: String,
-    allHintState: Boolean,
-    studyData: List<StudyInfoItem>,
-    allStudyData: List<StudyInfoItem>,
+    pageList: List<String>,
+    dynastyType: String,
+    studyType: String,
+    isVisibleAllHint: Boolean,
+    firstStudyItems: List<StudyInfoItem>,
+    originStudyItems: List<StudyInfoItem>,
     header: @Composable (String, String) -> Unit,
     studyAllViewItem: @Composable (StudyInfoItem, Int) -> Unit,
 ) {
     HorizontalPager(
-        count = pagerList.size,
+        count = pageList.size,
         modifier = Modifier
             .fillMaxSize()
             .background(Gray3),
@@ -38,16 +38,16 @@ fun StudyPagePagerScreen(
             modifier = Modifier
                 .padding(30.dp)
         ) {
-            val data = if (studyState == StudyType.FIRST_REVIEW.value && allHintState.not()) {
-                studyData
+            val data = if (studyType == StudyType.FIRST_REVIEW.value && isVisibleAllHint.not()) {
+                firstStudyItems
             } else {
-                allStudyData
+                originStudyItems
             }
             item {
-                header(dynastyState, pagerList[page])
+                header(dynastyType, pageList[page])
             }
             itemsIndexed(data) { index, studyInfo ->
-                if (studyInfo.detail == pagerList[page]) {
+                if (studyInfo.detail == pageList[page]) {
                     studyAllViewItem(studyInfo, index)
                 }
             }

@@ -23,21 +23,21 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun MyStudyScreen(
     myStudyViewModel: MyStudyViewModel = hiltViewModel()
 ) {
-    val myStudyData by myStudyViewModel.myStudyInfoList.collectAsState()
-    val isVisible by myStudyViewModel.isVisible.collectAsState()
-    val pagerList by myStudyViewModel.pagerList.collectAsState()
-    val dialogState by myStudyViewModel.showDialog.collectAsState()
-    val checkedUserRule by myStudyViewModel.checkedUserRule.collectAsState()
+    val myStudyItems by myStudyViewModel.myStudyItems.collectAsState()
+    val isVisibleMinusBtn by myStudyViewModel.isVisibleMinusBtn.collectAsState()
+    val pageList by myStudyViewModel.pageList.collectAsState()
+    val isVisibleDialog by myStudyViewModel.isVisibleDialog.collectAsState()
+    val userRuleState by myStudyViewModel.userRuleState.collectAsState()
 
     val selectedItems = remember { mutableStateListOf<StudyInfoItem>() }
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
-    if(pagerList.isNotEmpty()){
+    if(pageList.isNotEmpty()){
         Surface {
             MyStudyPagerScreen(
-                pagerList = pagerList,
-                myStudyData = myStudyData,
+                pageList = pageList,
+                myStudyItems = myStudyItems,
                 myStudyHeader = {
                     MyStudyHeaderItem(it)
                 },
@@ -62,7 +62,7 @@ fun MyStudyScreen(
                             onTextClicked = { item ->
                                 if(selected) selectedItems.remove(item)
                                 else selectedItems.add(item)
-                                myStudyViewModel.changeButtonState(selectedItems.size)
+                                myStudyViewModel.checkedButtonState(selectedItems.size)
                             }
                         )
                     }
@@ -71,21 +71,21 @@ fun MyStudyScreen(
 
             DataChangeButton(
                 iconType = false,
-                isVisible = isVisible,
+                isVisible = isVisibleMinusBtn,
                 size = selectedItems.size ,
                 snackBarState = snackBarState,
                 coroutineScope = coroutineScope,
                 onIconClicked = {
-                    myStudyViewModel.deleteMyStudyInfo(selectedItems)
+                    myStudyViewModel.deleteMyStudyItems(selectedItems)
                     selectedItems.clear()
                 },
                 onIconLongClicked = { myStudyViewModel.onOpenDialogClicked() }
             )
-            if (dialogState) {
+            if (isVisibleDialog) {
                 SaveCheckAlertDialog(
                     dialogType = false,
                     onDialogConfirm = {
-                        myStudyViewModel.onDialogConfirm(myStudyData)
+                        myStudyViewModel.onDialogConfirm(myStudyItems)
                         selectedItems.clear()
                     },
                     onDialogDismiss = {
@@ -93,7 +93,7 @@ fun MyStudyScreen(
                     }
                 )
             }
-            if(checkedUserRule) {
+            if(userRuleState) {
                 AllRemoveRuleDialog {
                     myStudyViewModel.setUserRule(it)
                 }

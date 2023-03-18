@@ -10,12 +10,12 @@ class GetGuideInfoUseCase @Inject constructor(
     private val localRepository: LocalRepository
 ) {
     suspend operator fun invoke(key: String) : Flow<Boolean> = flow {
-        localRepository.getGuideInfo(key).collect {
+        localRepository.getGuideState(key).collect {
             emit(it)
         }
     }
 
-    suspend fun setGuideInfo(key: String){
-        localRepository.setGuideInfo(key)
+    suspend fun setGuideState(key: String){
+        localRepository.setGuideState(key)
     }
 }

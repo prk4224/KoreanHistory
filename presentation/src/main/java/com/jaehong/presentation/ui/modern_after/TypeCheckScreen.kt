@@ -15,17 +15,17 @@ fun TypeCheckScreen(
     typeCheckViewModel: TypeCheckViewModel = hiltViewModel()
 ) {
 
-    val dynastyType by typeCheckViewModel.dynastyState.collectAsState()
-    val isVisible by typeCheckViewModel.isVisible.collectAsState()
+    val dynastyType by typeCheckViewModel.dynastyType.collectAsState()
+    val animationState by typeCheckViewModel.animationState.collectAsState()
 
     val animationHeight by animateIntAsState(
-        targetValue = if(isVisible) 400 else 50,
+        targetValue = if(animationState) 400 else 50,
         animationSpec = tween(
             delayMillis = 100
         )
     )
     val animationRadius by animateIntAsState(
-        targetValue = if(isVisible) 10 else 50,
+        targetValue = if(animationState) 10 else 50,
         animationSpec = tween(
             delayMillis = 100
         )

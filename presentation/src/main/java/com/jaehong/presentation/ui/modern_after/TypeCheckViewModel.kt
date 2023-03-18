@@ -18,22 +18,21 @@ class TypeCheckViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
+    private val _dynastyType = MutableStateFlow("")
+    val dynastyType = _dynastyType.asStateFlow()
 
-    private val _dynastyState = MutableStateFlow("")
-    val dynastyState = _dynastyState.asStateFlow()
-
-    private val _isVisible = MutableStateFlow(false)
-    val isVisible = _isVisible.asStateFlow()
+    private val _animationState = MutableStateFlow(false)
+    val animationState = _animationState.asStateFlow()
 
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.TypeCheck.DYNASTY_TYPE_KEY)
-        _dynastyState.value = dynastyType?: throw IllegalArgumentException("Dynasty Type Error")
+        _dynastyType.value = dynastyType?: throw IllegalArgumentException("Dynasty Type Error")
     }
 
     fun startAnimation(){
         viewModelScope.launch {
             delay(300)
-            _isVisible.value = true
+            _animationState.value = true
         }
     }
 

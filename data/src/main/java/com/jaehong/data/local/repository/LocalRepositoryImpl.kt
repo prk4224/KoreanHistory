@@ -7,10 +7,8 @@ import com.jaehong.data.mapper.Mapper.dataToDomain
 import com.jaehong.data.mapper.Mapper.domainToData
 import com.jaehong.data.mapper.Mapper.domainToDataBase
 import com.jaehong.domain.local.model.StudyInfoItem
-import com.jaehong.domain.local.model.enum_type.DynastyDetailType
 import com.jaehong.domain.local.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -56,30 +54,30 @@ class LocalRepositoryImpl @Inject constructor(
         dataSource.deleteMyStudyInfo(studyList.domainToDataBase())
     }
 
-    override suspend fun getRemoteState(
+    override suspend fun getRemoteUpdateState(
         dynastyType: String,
         studyType: String
     ): Flow<Boolean> = flow {
-        dataSource.getRemoteState(dynastyType.checkedType(),studyType).collect {
+        dataSource.getRemoteUpdateState(dynastyType.checkedType(),studyType).collect {
             emit(it)
         }
     }
 
-    override suspend fun setRemoteState(
+    override suspend fun setRemoteUpdateState(
         dynastyType: String,
         studyType: String,
         state: Boolean
     ) {
-        dataSource.setRemoteState(dynastyType.checkedType(),studyType,state)
+        dataSource.setRemoteUpdateState(dynastyType.checkedType(),studyType,state)
     }
 
-    override suspend fun getGuideInfo(key: String): Flow<Boolean> = flow {
-        dataSource.getGuideInfo(key).collect {
+    override suspend fun getGuideState(key: String): Flow<Boolean> = flow {
+        dataSource.getGuideState(key).collect {
             emit(it)
         }
     }
 
-    override suspend fun setGuideInfo(key: String) {
-        dataSource.setGuideInfo(key)
+    override suspend fun setGuideState(key: String) {
+        dataSource.setGuideState(key)
     }
 }
