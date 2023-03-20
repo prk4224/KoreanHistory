@@ -1,5 +1,6 @@
 package com.jaehong.presentation.ui.studypage
 
+import android.accounts.NetworkErrorException
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.GuideKey
 import com.jaehong.domain.local.model.enum_type.StudyType
+import com.jaehong.domain.local.model.result.NetworkResult
 import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
 import com.jaehong.presentation.navigation.Destination
 import com.jaehong.presentation.util.Constants.STUDY_TYPE_ALL
@@ -80,15 +82,15 @@ class StudyPageViewModel @Inject constructor(
     }
 
     private suspend fun checkedRemoteState(dynastyType: String, studyType: String) {
-       val scope = viewModelScope.launch {
-           studyInfoUseCase.getRemoteUpdateState(dynastyType, studyType)
-               .catch { Log.d("Get Remote State", "result: ${it.message}") }
-               .collect {
-                   _remoteState.value = it
-               }
-       }
+        val scope = viewModelScope.launch {
+            studyInfoUseCase.getRemoteUpdateState(dynastyType, studyType)
+                .catch { Log.d("Get Remote State", "result: ${it.message}") }
+                .collect {
+                    _remoteState.value = it
+                }
+        }
         scope.join()
-        checkedGetType(dynastyType,studyType,studyType == STUDY_TYPE_FIRST)
+        checkedGetType(dynastyType, studyType, studyType == STUDY_TYPE_FIRST)
         scope.cancel()
     }
 
@@ -98,9 +100,9 @@ class StudyPageViewModel @Inject constructor(
         checkedStudyType: Boolean,
     ) {
         if (remoteState.value) {
-            getLocalStudyItems(dynastyType, studyType,checkedStudyType)
+            getLocalStudyItems(dynastyType, studyType, checkedStudyType)
         } else {
-            getRemoteStudyItems(dynastyType, studyType,checkedStudyType)
+            getRemoteStudyItems(dynastyType, studyType, checkedStudyType)
         }
     }
 
@@ -110,18 +112,26 @@ class StudyPageViewModel @Inject constructor(
         checkedStudyType: Boolean,
     ) {
         val scope = viewModelScope.launch {
-            with(studyInfoUseCase) {
-                getRemoteStudyInfo(dynastyType, studyType)
-                    .catch { Log.d("Get All Data", "result: ${it.message}") }
-                    .collect {
-                        if(checkedStudyType) _firstStudyItems.value = it.items
-                        else _originStudyItems.value = it.items
-                        _pageList.value = getPageList(it.items)
+            studyInfoUseCase.getRemoteStudyInfo(dynastyType, studyType)
+                .catch { Log.d("Get All Data", "result: ${it.message}") }
+                .collect {
+                    when (it) {
+                        is NetworkResult.Success -> {
+                            if (checkedStudyType) _firstStudyItems.value = it.data
+                            else _originStudyItems.value = it.data
+                            _pageList.value = getPageList(it.data)
+                        }
+                        is NetworkResult.Error -> {
+                            throw NetworkErrorException("Network Error")
+                        }
+                        else -> {
+                            throw IllegalArgumentException("Type Error")
+                        }
                     }
-            }
+                }
         }
         scope.join()
-        val insertItems = if(checkedStudyType) firstStudyItems.value else originStudyItems.value
+        val insertItems = if (checkedStudyType) firstStudyItems.value else originStudyItems.value
         insertStudyItems(insertItems, dynastyType, studyType)
         updateRemoteState(dynastyType, studyType, true)
         scope.cancel()
@@ -137,7 +147,7 @@ class StudyPageViewModel @Inject constructor(
                 .getLocalStudyInfo(dynastyType, studyType)
                 .catch { Log.d("Get All Data", "result: ${it.message}") }
                 .collect {
-                    if(checkedStudyType) _firstStudyItems.value = it
+                    if (checkedStudyType) _firstStudyItems.value = it
                     else _originStudyItems.value = it
                     _pageList.value = getPageList(it)
                 }
@@ -184,7 +194,7 @@ class StudyPageViewModel @Inject constructor(
 
     //Guide
     private fun getUserRule(studyType: String) {
-        val guideKey = when(studyType) {
+        val guideKey = when (studyType) {
             StudyType.ORIGIN_STUDY.value -> GuideKey.USER_RULE_ORIGIN.value
             StudyType.FIRST_REVIEW.value -> GuideKey.USER_RULE_FIRST.value
             StudyType.ALL_BLANK_REVIEW.value -> GuideKey.USER_RULE_BLANK.value
