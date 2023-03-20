@@ -2,28 +2,20 @@ package com.jaehong.data.mapper
 
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
 import com.jaehong.data.local.databasse.entity.StudyInfoEntity
-import com.jaehong.data.remote.model.StudyEntity
-import com.jaehong.data.remote.model.StudyEntityItem
-import com.jaehong.data.util.Constants.NOTHING_TEXT
-import com.jaehong.domain.local.model.StudyInfo
+import com.jaehong.data.remote.model.RootField
+import com.jaehong.data.util.Constants
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.DynastyDetailType
 import com.jaehong.domain.local.model.enum_type.DynastyType
+import com.jaehong.domain.local.model.result.NetworkResult
 
 object Mapper {
 
-    fun List<StudyInfoEntity>.dataToDomain(): List<StudyInfoItem> {
-        return this.map {
-            StudyInfoItem(
-                it.id,
-                it.detail,
-                it.king_name,
-                it.description.changeTypeListToArrayList()
-            )
-        }
+    fun List<StudyInfoEntity>.dataFromDomain(): List<StudyInfoItem> {
+        return this.map { it.mappingDataFromDomain() }
     }
 
-    fun List<StudyInfoItem>.domainToData(studyType: String): List<StudyInfoEntity> {
+    fun List<StudyInfoItem>.domainFromData(studyType: String): List<StudyInfoEntity> {
         return this.map {
             StudyInfoEntity(
                 it.id,
@@ -35,27 +27,24 @@ object Mapper {
         }
     }
 
-    fun StudyEntity.dataToDomain(): StudyInfo {
-        val temp = StudyInfo(arrayListOf())
-        temp.items.addAll(this.items.map { it.dataToDomain() })
-
-        return temp
+    fun List<MyStudyEntity>.mappingListDataFromDomain(): List<StudyInfoItem> {
+        val studyInfo = arrayListOf<StudyInfoItem>()
+        this.forEach {
+            val index = studyInfo.checkDescription(it.detail, it.king_name)
+            if (index != -1) {
+                studyInfo[index].description.add(it.description)
+            } else {
+                studyInfo.add(it.mappingDataFromDomain())
+            }
+        }
+        return studyInfo
     }
 
-    fun StudyEntityItem.dataToDomain(): StudyInfoItem {
-        return StudyInfoItem(
-            this.id,
-            this.detail,
-            this.king_name,
-            this.description.changeTypeListToArrayList()
-        )
-    }
-
-    private fun StudyInfo.checkDescription(detail: String, kingName: String): Int {
-        this.items.forEachIndexed { index, studyInfoItem ->
+    private fun List<StudyInfoItem>.checkDescription(detail: String, kingName: String): Int {
+        this.forEachIndexed { index, studyInfoItem ->
             if (studyInfoItem.detail == detail &&
                 studyInfoItem.king_name == kingName &&
-                studyInfoItem.king_name != NOTHING_TEXT
+                studyInfoItem.king_name != Constants.NOTHING_TEXT
             ) {
                 return index
             }
@@ -63,32 +52,29 @@ object Mapper {
         return -1
     }
 
-    fun List<MyStudyEntity>.dataBaseToDomain(): StudyInfo {
-        val studyInfo = StudyInfo(arrayListOf())
-        this.forEach {
-            val index = studyInfo.checkDescription(it.detail, it.king_name)
-            if (index != -1) {
-                studyInfo.items[index].description.add(it.description)
-            } else {
-                studyInfo.items.add(it.dataBaseToDomain())
+    fun NetworkResult<RootField>.dataFromDomain(): NetworkResult<List<StudyInfoItem>> {
+        return when(this) {
+            is NetworkResult.Success -> {
+                NetworkResult.Success(
+                    this.data.mappingDataFromDomain()
+                )
             }
+            is NetworkResult.Error -> {
+                this
+            }
+            else -> throw Exception("")
         }
-        return studyInfo
     }
 
-    fun MyStudyEntity.dataBaseToDomain(): StudyInfoItem {
-        return StudyInfoItem(this.id.split("/").first(), this.detail, this.king_name, arrayListOf(this.description))
-    }
-
-    fun List<StudyInfoItem>.domainToDataBase(): List<MyStudyEntity> {
+    fun List<StudyInfoItem>.domainFromDataBase(): List<MyStudyEntity> {
         val myStudyInfo = mutableListOf<MyStudyEntity>()
         this.forEach {
-            myStudyInfo.addAll(it.domainToDataBase())
+            myStudyInfo.addAll(it.domainFromDataBase())
         }
         return myStudyInfo
     }
 
-    fun StudyInfoItem.domainToDataBase(): List<MyStudyEntity> {
+    fun StudyInfoItem.domainFromDataBase(): List<MyStudyEntity> {
         val myStudyItems = mutableListOf<MyStudyEntity>()
         this.description.forEach { desc ->
             val temp = MyStudyEntity(this.id+"/$desc", this.detail, this.king_name, desc)
@@ -118,11 +104,7 @@ object Mapper {
         }
     }
 
-    private fun <T> List<T>.changeTypeListToArrayList(): ArrayList<T> {
-        val arrayList = arrayListOf<T>()
-        this.forEach {
-            arrayList.add(it)
-        }
-        return arrayList
+    fun<T> List<T>.listFromArrayList(): ArrayList<T> {
+        return ArrayList(this)
     }
 }
