@@ -1,7 +1,7 @@
 package com.jaehong.domain.local.usecase
 
-import com.jaehong.domain.local.model.StudyInfo
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.result.NetworkResult
 import com.jaehong.domain.local.repository.LocalRepository
 import com.jaehong.domain.local.repository.RemoteRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +17,7 @@ class GetStudyInfoUseCase @Inject constructor(
     suspend fun getRemoteStudyInfo(
         dynastyType: String,
         studyType: String,
-    ): Flow<StudyInfo> = flow {
+    ): Flow<NetworkResult<List<StudyInfoItem>>> = flow {
         remoteRepository.getRemoteStudyInfo(dynastyType,studyType).collect {
             emit(it)
         }
