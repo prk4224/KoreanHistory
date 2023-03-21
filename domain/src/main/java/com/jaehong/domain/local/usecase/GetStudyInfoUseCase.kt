@@ -1,7 +1,8 @@
 package com.jaehong.domain.local.usecase
 
 import com.jaehong.domain.local.model.StudyInfoItem
-import com.jaehong.domain.local.model.result.NetworkResult
+import com.jaehong.domain.local.model.result.DbResult
+import com.jaehong.domain.local.model.result.ApiResult
 import com.jaehong.domain.local.repository.LocalRepository
 import com.jaehong.domain.local.repository.RemoteRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,7 @@ class GetStudyInfoUseCase @Inject constructor(
     suspend fun getRemoteStudyInfo(
         dynastyType: String,
         studyType: String,
-    ): Flow<NetworkResult<List<StudyInfoItem>>> = flow {
+    ): Flow<ApiResult<List<StudyInfoItem>>> = flow {
         remoteRepository.getRemoteStudyInfo(dynastyType,studyType).collect {
             emit(it)
         }
@@ -26,7 +27,7 @@ class GetStudyInfoUseCase @Inject constructor(
     suspend fun getLocalStudyInfo(
         dynastyType: String,
         studyType: String,
-    ): Flow<List<StudyInfoItem>> = flow {
+    ): Flow<DbResult<List<StudyInfoItem>>> = flow {
         localRepository.getLocalStudyInfo(dynastyType,studyType).collect {
             emit(it)
         }
@@ -36,12 +37,18 @@ class GetStudyInfoUseCase @Inject constructor(
         studyInfo: List<StudyInfoItem>,
         dynastyType: String,
         studyType: String,
-    ) {
-        localRepository.insertLocalStudyIndo(studyInfo,dynastyType,studyType)
+    ): Flow<DbResult<Boolean>> = flow {
+        localRepository.insertLocalStudyIndo(studyInfo,dynastyType,studyType).collect {
+            emit(it)
+        }
     }
 
-    suspend fun insertMyStudyInfo(studyInfo: List<StudyInfoItem>) {
-        localRepository.insertMyStudyInfo(studyInfo)
+    suspend fun insertMyStudyInfo(
+        studyInfo: List<StudyInfoItem>
+    ): Flow<DbResult<Boolean>> = flow {
+        localRepository.insertMyStudyInfo(studyInfo).collect {
+            emit(it)
+        }
     }
 
     suspend fun getRemoteUpdateState(
