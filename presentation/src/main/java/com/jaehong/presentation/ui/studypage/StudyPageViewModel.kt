@@ -66,18 +66,26 @@ class StudyPageViewModel @Inject constructor(
     private val _blankGuideLabel = MutableStateFlow(true)
     val blankGuideLabel = _blankGuideLabel.asStateFlow()
 
+    private val _connectionState = MutableStateFlow(false)
+    val connectionState = _connectionState.asStateFlow()
+
     init {
         val dynastyType = savedStateHandle.get<String>(Destination.StudyPage.DYNASTY_TYPE_KEY)
         val studyType = savedStateHandle.get<String>(Destination.StudyPage.STUDY_TYPE_KEY)
 
         _dynastyType.value = dynastyType ?: throw IllegalArgumentException("Dynasty Type Error")
         _studyType.value = studyType ?: throw IllegalArgumentException("Study Type Error")
+
+        observeNetworkState()
+    }
+
+    fun initStudyData() {
         viewModelScope.launch {
-            checkedRemoteState(dynastyType, STUDY_TYPE_ALL)
-            if (studyType == StudyType.FIRST_REVIEW.value) {
-                checkedRemoteState(dynastyType, STUDY_TYPE_FIRST)
+            checkedRemoteState(dynastyType.value, STUDY_TYPE_ALL)
+            if (studyType.value == StudyType.FIRST_REVIEW.value) {
+                checkedRemoteState(dynastyType.value, STUDY_TYPE_FIRST)
             }
-            getUserRule(studyType)
+            getUserRule(studyType.value)
         }
     }
 
