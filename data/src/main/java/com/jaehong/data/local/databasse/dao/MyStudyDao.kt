@@ -1,36 +1,36 @@
 package com.jaehong.data.local.databasse.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.jaehong.data.local.databasse.entity.MyStudyEntity
 
 @Dao
 interface MyStudyDao {
 
     @Query("SELECT * FROM MY_STUDY_TABLE ")
-    suspend fun getMyStudyList(): List<MyStudyEntity>
+    suspend fun getMyStudyList(): List<MyStudyEntity>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMyStudy(info: MyStudyEntity)
+    suspend fun insertMyStudy(info: MyStudyEntity): Long
 
     @Transaction
-    suspend fun insertMyStudyWithListTransaction(myStudyList: List<MyStudyEntity>) {
+    suspend fun insertMyStudyWithListTransaction(myStudyList: List<MyStudyEntity>): Boolean {
+        var result = 0
         myStudyList.forEach {
-            insertMyStudy(it)
+            if(insertMyStudy(it) > 0) result++
         }
+        return result == myStudyList.size
     }
 
     @Delete
-    suspend fun deleteMyStudy(info: MyStudyEntity)
+    suspend fun deleteMyStudy(info: MyStudyEntity): Int
 
     @Transaction
-    suspend fun deleteMyStudyWithListTransaction(myStudyList: List<MyStudyEntity>) {
+    suspend fun deleteMyStudyWithListTransaction(myStudyList: List<MyStudyEntity>): Boolean {
+        var result = 0
         myStudyList.forEach {
-            deleteMyStudy(it)
+            if(deleteMyStudy(it) > 0) result++
         }
+
+        return result == myStudyList.size
     }
 }

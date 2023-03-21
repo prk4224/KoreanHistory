@@ -11,15 +11,17 @@ import com.jaehong.data.local.databasse.entity.StudyInfoEntity
 interface StudyInfoDao {
 
     @Query("SELECT * FROM STUDY_INFO_TABLE WHERE pageType = :studyType")
-    suspend fun getLocalStudyInfo(studyType: String): List<StudyInfoEntity>
+    suspend fun getLocalStudyInfo(studyType: String): List<StudyInfoEntity>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLocalStudyInfo(info: StudyInfoEntity)
+    suspend fun insertLocalStudyInfo(info: StudyInfoEntity): Long
 
     @Transaction
-    suspend fun insertStudyInfoWithListTransaction(studyInfoList: List<StudyInfoEntity>) {
+    suspend fun insertStudyInfoWithListTransaction(studyInfoList: List<StudyInfoEntity>): Boolean {
+        var result = 0
         studyInfoList.forEach {
-            insertLocalStudyInfo(it)
+            if(insertLocalStudyInfo(it) > 0) result++
         }
+        return result == studyInfoList.size
     }
 }
