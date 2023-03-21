@@ -70,4 +70,10 @@ class GetStudyInfoUseCase @Inject constructor(
     suspend fun setGuideState(key: String) {
         localRepository.setGuideState(key)
     }
+
+    suspend fun observeConnectivityAsFlow(): Flow<Boolean> = flow {
+        localRepository.observeConnectivityAsFlow().collect {
+            emit(it)
+        }
+    }
 }
