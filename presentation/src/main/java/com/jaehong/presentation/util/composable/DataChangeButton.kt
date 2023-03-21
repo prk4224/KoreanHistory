@@ -64,7 +64,11 @@ fun DataChangeButton(
                     .combinedClickable(
                         onClick = {
                             onIconClicked()
-                            showSnackBarOneSecond(snackBarState,coroutineScope,size,snackBarMessage)
+                            showSnackBarOneSecond(
+                                snackBarState,
+                                coroutineScope,
+                                "$size 개 $snackBarMessage"
+                            )
                         },
                         onLongClick = { onIconLongClicked() }
                     )
@@ -77,13 +81,12 @@ fun DataChangeButton(
 private fun showSnackBarOneSecond(
     snackBarState: SnackbarHostState,
     coroutineScope: CoroutineScope,
-    size: Int,
     message: String
 ) {
     coroutineScope.launch {
         val scope = coroutineScope.launch {
             snackBarState.showSnackbar(
-                message = "$size 개 $message",
+                message = message,
                 duration = SnackbarDuration.Indefinite
             )
         }
