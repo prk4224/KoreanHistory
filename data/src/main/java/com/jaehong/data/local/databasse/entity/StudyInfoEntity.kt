@@ -1,6 +1,5 @@
 package com.jaehong.data.local.databasse.entity
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.jaehong.data.mapper.Mapper.listFromArrayList

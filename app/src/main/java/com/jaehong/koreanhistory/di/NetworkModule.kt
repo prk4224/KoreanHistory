@@ -31,7 +31,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideNaverApiInterceptor(): ApiInterceptor = ApiInterceptor()
+    fun provideApiInterceptor(): ApiInterceptor = ApiInterceptor()
 
     @Provides
     @Singleton

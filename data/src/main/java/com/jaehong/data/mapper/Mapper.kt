@@ -7,7 +7,8 @@ import com.jaehong.data.util.Constants
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.DynastyDetailType
 import com.jaehong.domain.local.model.enum_type.DynastyType
-import com.jaehong.domain.local.model.result.NetworkResult
+import com.jaehong.domain.local.model.result.DbResult
+import com.jaehong.domain.local.model.result.ApiResult
 
 object Mapper {
 
@@ -52,19 +53,45 @@ object Mapper {
         return -1
     }
 
-    fun NetworkResult<RootField>.dataFromDomain(): NetworkResult<List<StudyInfoItem>> {
+    fun ApiResult<RootField>.dataFromDomain(): ApiResult<List<StudyInfoItem>> {
         return when(this) {
-            is NetworkResult.Success -> {
-                NetworkResult.Success(
+            is ApiResult.Success -> {
+                ApiResult.Success(
                     this.data.mappingDataFromDomain()
                 )
             }
-            is NetworkResult.Error -> {
+            is ApiResult.Error -> {
                 this
             }
             else -> throw Exception("")
         }
     }
+
+    fun DbResult<List<StudyInfoEntity>>.dataFromDomain(): DbResult<List<StudyInfoItem>> {
+        return when(this) {
+            is DbResult.Success -> {
+                DbResult.Success(this.data.dataFromDomain())
+            }
+            is DbResult.Error -> {
+                this
+            }
+            else -> throw Exception("")
+        }
+    }
+
+    fun DbResult<List<MyStudyEntity>>.mappingListDataFromDomain(): DbResult<List<StudyInfoItem>> {
+        return when(this) {
+            is DbResult.Success -> {
+                DbResult.Success(this.data.mappingListDataFromDomain())
+            }
+            is DbResult.Error -> {
+                this
+            }
+            else -> throw Exception("")
+        }
+    }
+
+
 
     fun List<StudyInfoItem>.domainFromDataBase(): List<MyStudyEntity> {
         val myStudyInfo = mutableListOf<MyStudyEntity>()

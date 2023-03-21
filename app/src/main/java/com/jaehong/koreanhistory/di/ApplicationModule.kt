@@ -2,6 +2,7 @@ package com.jaehong.koreanhistory.di
 
 import android.content.Context
 import com.jaehong.data.local.preference.KoreanHistoryPreference
+import com.jaehong.data.local.preference.KoreanHistoryPreferenceImpl
 import com.jaehong.koreanhistory.Constants.GUIDE_KEY
 import dagger.Module
 import dagger.Provides
@@ -17,5 +18,5 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun providePreference(@ApplicationContext context: Context): KoreanHistoryPreference =
-        KoreanHistoryPreference(context.getSharedPreferences(GUIDE_KEY, Context.MODE_PRIVATE))
+        KoreanHistoryPreferenceImpl(context.getSharedPreferences(GUIDE_KEY, Context.MODE_PRIVATE))
 }
