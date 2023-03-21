@@ -3,20 +3,12 @@ package com.jaehong.data.local.preference
 import android.content.SharedPreferences
 import com.jaehong.data.util.Constants.STRING_EMPTY
 
-class KoreanHistoryPreference constructor(private val prefs: SharedPreferences) {
-    fun getGuideState(key: String): Boolean {
-        return prefs.getBoolean(key,true)
-    }
+interface KoreanHistoryPreference {
+    fun getGuideState(key: String): Boolean
 
-    fun setGuideState(key: String, value: Boolean) {
-        prefs.edit().putBoolean(key, value).apply()
-    }
+    fun setGuideState(key: String, value: Boolean)
 
-    fun getRemoteUpdateState(key: String): Boolean {
-        return prefs.getBoolean(key,false)
-    }
+    fun getRemoteUpdateState(key: String): Boolean
 
-    fun setRemoteUpdateState(key: String, state: Boolean) {
-        prefs.edit().putBoolean(key,state).apply()
-    }
+    fun setRemoteUpdateState(key: String, state: Boolean)
 }
