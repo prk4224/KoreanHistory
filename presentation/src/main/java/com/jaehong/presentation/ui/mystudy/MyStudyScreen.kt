@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.result.UiStateResult
 import com.jaehong.presentation.theme.Gray2
 import com.jaehong.presentation.ui.mystudy.blank.MyStudyBlankView
 import com.jaehong.presentation.ui.mystudy.description.MyDescriptionTextView
@@ -14,6 +15,7 @@ import com.jaehong.presentation.ui.mystudy.item.MyStudyHeaderItem
 import com.jaehong.presentation.ui.mystudy.item.MyStudyNoticeItem
 import com.jaehong.presentation.ui.mystudy.item.MyStudyViewItem
 import com.jaehong.presentation.ui.mystudy.pager.MyStudyPagerScreen
+import com.jaehong.presentation.util.composable.CircularProgressBar
 import com.jaehong.presentation.util.composable.DataChangeButton
 import com.jaehong.presentation.util.dialog.SaveCheckAlertDialog
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +25,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun MyStudyScreen(
     myStudyViewModel: MyStudyViewModel = hiltViewModel()
 ) {
+    val uiState by myStudyViewModel.uiState.collectAsState()
     val myStudyItems by myStudyViewModel.myStudyItems.collectAsState()
     val isVisibleMinusBtn by myStudyViewModel.isVisibleMinusBtn.collectAsState()
     val pageList by myStudyViewModel.pageList.collectAsState()
@@ -85,7 +88,7 @@ fun MyStudyScreen(
                 SaveCheckAlertDialog(
                     dialogType = false,
                     onDialogConfirm = {
-                        myStudyViewModel.onDialogConfirm(myStudyItems)
+                        myStudyViewModel.onDialogConfirm()
                         selectedItems.clear()
                     },
                     onDialogDismiss = {
@@ -100,4 +103,8 @@ fun MyStudyScreen(
             }
         }
     } else MyStudyBlankView { myStudyViewModel.onBackButtonClicked() }
+
+    if(uiState == UiStateResult.LOADING) {
+        CircularProgressBar()
+    }
 }
