@@ -80,29 +80,28 @@ class StudyPageViewModel @Inject constructor(
         _studyType.value = studyType ?: throw IllegalArgumentException("Study Type Error")
 
         observeNetworkState()
+        checkedRemoteState(dynastyType,studyType)
     }
 
     fun initStudyData() {
         viewModelScope.launch {
-            checkedRemoteState(dynastyType.value, STUDY_TYPE_ALL)
+            checkedGetType(dynastyType.value, STUDY_TYPE_ALL, false)
             if (studyType.value == StudyType.FIRST_REVIEW.value) {
-                checkedRemoteState(dynastyType.value, STUDY_TYPE_FIRST)
+                checkedGetType(dynastyType.value, STUDY_TYPE_FIRST,true)
             }
             getUserRule(studyType.value)
         }
     }
 
-    private suspend fun checkedRemoteState(dynastyType: String, studyType: String) {
-        val scope = viewModelScope.launch {
-            studyInfoUseCase.getRemoteUpdateState(dynastyType, studyType)
+    private fun checkedRemoteState(dynastyType: String, studyType: String) {
+        viewModelScope.launch {
+            val type = if(studyType == StudyType.FIRST_REVIEW.value) STUDY_TYPE_FIRST else STUDY_TYPE_ALL
+            studyInfoUseCase.getRemoteUpdateState(dynastyType, type)
                 .catch { Log.d("Get Remote State", "result: ${it.message}") }
                 .collect {
                     _remoteState.value = it
                 }
         }
-        scope.join()
-        checkedGetType(dynastyType, studyType, studyType == STUDY_TYPE_FIRST)
-        scope.cancel()
     }
 
     private suspend fun checkedGetType(
@@ -279,11 +278,11 @@ class StudyPageViewModel @Inject constructor(
         _isVisibleAllHint.value = isVisibleAllHint.value.not()
     }
 
-
+    // Network Check
     private fun observeNetworkState() {
         viewModelScope.launch {
             studyInfoUseCase.observeConnectivityAsFlow()
-                .catch { }
+                .catch { Log.d("Get Gudie Key Error", "result: ${it.message}") }
                 .collect {
                     _connectionState.value = it
                 }
