@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.GuideKey
+import com.jaehong.domain.local.model.result.UiStateResult
 import com.jaehong.domain.local.usecase.GetMyStudyInfoUseCase
 import com.jaehong.presentation.navigation.KoreanHistoryNavigator
+import com.jaehong.presentation.util.checkedResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +21,8 @@ class MyStudyViewModel @Inject constructor(
     private val koreanHistoryNavigator: KoreanHistoryNavigator,
     private val myStudyInfoUseCase: GetMyStudyInfoUseCase
 ) : ViewModel() {
+    private val _uiState = MutableStateFlow(UiStateResult.LOADING)
+    val uiState = _uiState.asStateFlow()
 
     private val _myStudyItems = MutableStateFlow(listOf<StudyInfoItem>())
     val myStudyItems = _myStudyItems.asStateFlow()
@@ -45,25 +49,34 @@ class MyStudyViewModel @Inject constructor(
             myStudyInfoUseCase()
                 .catch { Log.d("My Study Data", "result : $it") }
                 .collect {
-                    _myStudyItems.value = it
-                    _pageList.value = getPageList(it)
+                    checkedResult(
+                        dbResult = it,
+                        success = { items ->
+                            _uiState.value = UiStateResult.SUCCESS
+                            _myStudyItems.value = items
+                            _pageList.value = getPageList(items)
+                        }
+                    )
                 }
         }
     }
 
     fun deleteMyStudyItems(selected: List<StudyInfoItem>) {
         viewModelScope.launch {
+            _uiState.value = UiStateResult.LOADING
             myStudyInfoUseCase.deleteMyStudyInfo(selected)
-            initMinusButton()
-            getMyStudyItems()
-        }
-    }
-
-    private fun deleteAllItems(myStudyItems: List<StudyInfoItem>) {
-        viewModelScope.launch {
-            myStudyInfoUseCase.deleteMyStudyInfo(myStudyItems)
-            initMinusButton()
-            getMyStudyItems()
+                .catch {  Log.d("Insert Data", "result: ${it.message}") }
+                .collect {
+                    checkedResult(
+                        dbResult = it,
+                        success = {
+                            _uiState.value = UiStateResult.SUCCESS
+                            Log.d("Room Result", "MyStudyEntity Delete Ok")
+                            initMinusButton()
+                            getMyStudyItems()
+                        }
+                    )
+                }
         }
     }
 
@@ -72,8 +85,8 @@ class MyStudyViewModel @Inject constructor(
         _isVisibleDialog.value = true
     }
 
-    fun onDialogConfirm(myStudyItems: List<StudyInfoItem>) {
-        deleteAllItems(myStudyItems)
+    fun onDialogConfirm() {
+        deleteMyStudyItems(myStudyItems.value)
         _isVisibleDialog.value = false
     }
 

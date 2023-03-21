@@ -1,6 +1,5 @@
 package com.jaehong.presentation.ui.studypage
 
-import android.accounts.NetworkErrorException
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -8,11 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.GuideKey
 import com.jaehong.domain.local.model.enum_type.StudyType
-import com.jaehong.domain.local.model.result.NetworkResult
+import com.jaehong.domain.local.model.result.UiStateResult
 import com.jaehong.domain.local.usecase.GetStudyInfoUseCase
 import com.jaehong.presentation.navigation.Destination
 import com.jaehong.presentation.util.Constants.STUDY_TYPE_ALL
 import com.jaehong.presentation.util.Constants.STUDY_TYPE_FIRST
+import com.jaehong.presentation.util.checkedResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,9 +23,12 @@ import javax.inject.Inject
 @HiltViewModel
 class StudyPageViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val studyInfoUseCase: GetStudyInfoUseCase
+    private val studyInfoUseCase: GetStudyInfoUseCase,
 ) : ViewModel() {
     private val emptyList: List<StudyInfoItem> = listOf()
+
+    private val _uiState = MutableStateFlow(UiStateResult.LOADING)
+    val uiState = _uiState.asStateFlow()
 
     private val _dynastyType = MutableStateFlow("")
     val dynastyType = _dynastyType.asStateFlow()
@@ -34,7 +37,7 @@ class StudyPageViewModel @Inject constructor(
     val studyType = _studyType.asStateFlow()
 
     private val _remoteState = MutableStateFlow(false)
-    private val remoteState = _remoteState.asStateFlow()
+    val remoteState = _remoteState.asStateFlow()
 
     private val _originStudyItems = MutableStateFlow(emptyList)
     val originStudyItems = _originStudyItems.asStateFlow()
@@ -123,19 +126,16 @@ class StudyPageViewModel @Inject constructor(
             studyInfoUseCase.getRemoteStudyInfo(dynastyType, studyType)
                 .catch { Log.d("Get All Data", "result: ${it.message}") }
                 .collect {
-                    when (it) {
-                        is NetworkResult.Success -> {
-                            if (checkedStudyType) _firstStudyItems.value = it.data
-                            else _originStudyItems.value = it.data
-                            _pageList.value = getPageList(it.data)
+                    checkedResult(
+                        apiResult = it,
+                        success = { items ->
+                            _uiState.value = UiStateResult.SUCCESS
+                            if (checkedStudyType) _firstStudyItems.value = items
+                            else _originStudyItems.value = items
+                            _pageList.value = getPageList(items)
                         }
-                        is NetworkResult.Error -> {
-                            throw NetworkErrorException("Network Error")
-                        }
-                        else -> {
-                            throw IllegalArgumentException("Type Error")
-                        }
-                    }
+                    )
+
                 }
         }
         scope.join()
@@ -155,9 +155,15 @@ class StudyPageViewModel @Inject constructor(
                 .getLocalStudyInfo(dynastyType, studyType)
                 .catch { Log.d("Get All Data", "result: ${it.message}") }
                 .collect {
-                    if (checkedStudyType) _firstStudyItems.value = it
-                    else _originStudyItems.value = it
-                    _pageList.value = getPageList(it)
+                    checkedResult(
+                        dbResult = it,
+                        success = { items ->
+                            _uiState.value = UiStateResult.SUCCESS
+                            if (checkedStudyType) _firstStudyItems.value = items
+                            else _originStudyItems.value = items
+                            _pageList.value = getPageList(items)
+                        }
+                    )
                 }
         }
     }
@@ -169,6 +175,13 @@ class StudyPageViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             studyInfoUseCase.insertLocalStudyInfo(studyInfo, dynastyType, studyType)
+                .catch { Log.d("Insert Data", "result: ${it.message}") }
+                .collect {
+                    checkedResult(
+                        dbResult = it,
+                        success = { Log.d("Room Result", "StudyInfoEntity Insert Ok") }
+                    )
+                }
         }
     }
 
@@ -182,7 +195,16 @@ class StudyPageViewModel @Inject constructor(
     fun insertMyStudyItems(studyInfo: List<StudyInfoItem>) {
         viewModelScope.launch {
             studyInfoUseCase.insertMyStudyInfo(studyInfo)
-            initPlusButton()
+                .catch { Log.d("Insert Data", "result: ${it.message}") }
+                .collect {
+                    checkedResult(
+                        dbResult = it,
+                        success = {
+                            Log.d("Room Result", "MyStudyEntity Insert Ok")
+                            initPlusButton()
+                        }
+                    )
+                }
         }
     }
 
@@ -192,7 +214,9 @@ class StudyPageViewModel @Inject constructor(
     }
 
     fun onDialogConfirm() {
-        insertMyStudyItems(originStudyItems.value)
+        viewModelScope.launch {
+            insertMyStudyItems(originStudyItems.value)
+        }
         _isVisibleDialog.value = false
     }
 
@@ -255,4 +279,14 @@ class StudyPageViewModel @Inject constructor(
         _isVisibleAllHint.value = isVisibleAllHint.value.not()
     }
 
+
+    private fun observeNetworkState() {
+        viewModelScope.launch {
+            studyInfoUseCase.observeConnectivityAsFlow()
+                .catch { }
+                .collect {
+                    _connectionState.value = it
+                }
+        }
+    }
 }
