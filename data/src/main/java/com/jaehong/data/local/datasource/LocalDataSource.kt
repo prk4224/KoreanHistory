@@ -24,4 +24,5 @@ interface LocalDataSource {
 
     suspend fun setGuideState(key: String)
 
+    suspend fun observeConnectivityAsFlow(): Flow<Boolean>
 }

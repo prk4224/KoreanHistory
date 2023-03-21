@@ -59,4 +59,16 @@ class LocalDataSourceImpl @Inject constructor(
     override suspend fun setGuideState(key: String) {
         preference.setGuideState(key, false)
     }
+
+    override suspend fun observeConnectivityAsFlow():Flow<Boolean> = callbackFlow {
+        val connectivityManager = networkManager.getConnectivityManager()
+        val callback = networkCallback { result -> trySend(result) }
+        val networkRequest = networkManager.getNetworkRequest()
+
+        connectivityManager.registerNetworkCallback(networkRequest,callback)
+
+        awaitClose {
+            connectivityManager.unregisterNetworkCallback(callback)
+        }
+    }
 }
