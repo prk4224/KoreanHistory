@@ -80,4 +80,10 @@ class LocalRepositoryImpl @Inject constructor(
     override suspend fun setGuideState(key: String) {
         dataSource.setGuideState(key)
     }
+
+    override suspend fun observeConnectivityAsFlow(): Flow<Boolean> = flow {
+        dataSource.observeConnectivityAsFlow().collect {
+            emit(it)
+        }
+    }
 }

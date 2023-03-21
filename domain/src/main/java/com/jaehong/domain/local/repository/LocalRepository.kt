@@ -23,4 +23,6 @@ interface LocalRepository {
     suspend fun getGuideState(key: String): Flow<Boolean>
 
     suspend fun setGuideState(key: String)
+
+    suspend fun observeConnectivityAsFlow(): Flow<Boolean>
 }
