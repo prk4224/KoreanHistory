@@ -2,13 +2,15 @@ package com.jaehong.data.local.repository
 
 import com.jaehong.data.local.datasource.LocalDataSource
 import com.jaehong.data.mapper.Mapper.checkedType
-import com.jaehong.data.mapper.Mapper.dataBaseToDomain
-import com.jaehong.data.mapper.Mapper.dataToDomain
-import com.jaehong.data.mapper.Mapper.domainToData
-import com.jaehong.data.mapper.Mapper.domainToDataBase
+import com.jaehong.data.mapper.Mapper.dataFromDomain
+import com.jaehong.data.mapper.Mapper.domainFromData
+import com.jaehong.data.mapper.Mapper.domainFromDataBase
+import com.jaehong.data.mapper.Mapper.mappingListDataFromDomain
 import com.jaehong.domain.local.model.StudyInfoItem
+import com.jaehong.domain.local.model.result.DbResult
 import com.jaehong.domain.local.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -18,12 +20,11 @@ class LocalRepositoryImpl @Inject constructor(
     override suspend fun getLocalStudyInfo(
         dynastyType: String,
         studyType: String
-    ): Flow<List<StudyInfoItem>> = flow {
+    ): Flow<DbResult<List<StudyInfoItem>>> = flow {
 
-        dataSource.getLocalStudyInfo(
-            dynastyType.checkedType().value(studyType)
-        ).collect {
-            emit(it.dataToDomain())
+        dataSource.getLocalStudyInfo(dynastyType.checkedType().value(studyType))
+            .collect {
+            emit(it.dataFromDomain())
         }
     }
 
@@ -31,34 +32,49 @@ class LocalRepositoryImpl @Inject constructor(
         studyList: List<StudyInfoItem>,
         dynastyType: String,
         studyType: String
-    ) {
-        dataSource
-            .insertLocalStudyIndo(
-                studyList.domainToData(
-                    dynastyType.checkedType().value(studyType)
-                )
+    ): Flow<DbResult<Boolean>> = flow {
+        dataSource.insertLocalStudyIndo(
+            studyList.domainFromData(
+                dynastyType.checkedType().value(studyType)
             )
+        ).collect {
+            emit(it)
+        }
+
     }
 
-    override suspend fun getMyStudyInfo(): Flow<List<StudyInfoItem>> = flow {
+    override suspend fun getMyStudyInfo()
+    : Flow<DbResult<List<StudyInfoItem>>> = flow {
         dataSource.getMyStudyInfo().collect {
-            emit(it.dataBaseToDomain().items)
+            emit(it.mappingListDataFromDomain())
         }
     }
 
-    override suspend fun insertMyStudyInfo(studyList: List<StudyInfoItem>) {
-        dataSource.insertMyStudyInfo(studyList.domainToDataBase())
+    override suspend fun insertMyStudyInfo(
+        studyList: List<StudyInfoItem>
+    ): Flow<DbResult<Boolean>> = flow {
+        dataSource
+            .insertMyStudyInfo(studyList.domainFromDataBase())
+            .collect {
+                emit(it)
+            }
     }
 
-    override suspend fun deleteMyStudyInfo(studyList: List<StudyInfoItem>) {
-        dataSource.deleteMyStudyInfo(studyList.domainToDataBase())
+    override suspend fun deleteMyStudyInfo(
+        studyList: List<StudyInfoItem>
+    ): Flow<DbResult<Boolean>> = flow {
+        dataSource
+            .deleteMyStudyInfo(studyList.domainFromDataBase())
+            .collect {
+                emit(it)
+            }
     }
 
     override suspend fun getRemoteUpdateState(
         dynastyType: String,
         studyType: String
     ): Flow<Boolean> = flow {
-        dataSource.getRemoteUpdateState(dynastyType.checkedType(),studyType).collect {
+        dataSource.getRemoteUpdateState(dynastyType.checkedType(), studyType).collect {
             emit(it)
         }
     }
@@ -68,7 +84,7 @@ class LocalRepositoryImpl @Inject constructor(
         studyType: String,
         state: Boolean
     ) {
-        dataSource.setRemoteUpdateState(dynastyType.checkedType(),studyType,state)
+        dataSource.setRemoteUpdateState(dynastyType.checkedType(), studyType, state)
     }
 
     override suspend fun getGuideState(key: String): Flow<Boolean> = flow {
