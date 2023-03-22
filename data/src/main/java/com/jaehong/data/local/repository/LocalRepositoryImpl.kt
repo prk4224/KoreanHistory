@@ -10,7 +10,6 @@ import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.result.DbResult
 import com.jaehong.domain.local.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
