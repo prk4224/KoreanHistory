@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +26,7 @@ class StudyPageViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val studyInfoUseCase: GetStudyInfoUseCase,
 ) : ViewModel() {
-    private val emptyList: List<StudyInfoItem> = listOf()
+    private val emptyList = listOf<StudyInfoItem>()
 
     private val _uiState = MutableStateFlow(UiStateResult.LOADING)
     val uiState = _uiState.asStateFlow()
@@ -80,27 +81,28 @@ class StudyPageViewModel @Inject constructor(
         _studyType.value = studyType ?: throw IllegalArgumentException("Study Type Error")
 
         observeNetworkState()
-        checkedRemoteState(dynastyType,studyType)
-    }
-
-    fun initStudyData() {
-        viewModelScope.launch {
-            checkedGetType(dynastyType.value, STUDY_TYPE_ALL, false)
-            if (studyType.value == StudyType.FIRST_REVIEW.value) {
-                checkedGetType(dynastyType.value, STUDY_TYPE_FIRST,true)
-            }
-            getUserRule(studyType.value)
-        }
+        checkedRemoteState(dynastyType, studyType)
     }
 
     private fun checkedRemoteState(dynastyType: String, studyType: String) {
         viewModelScope.launch {
-            val type = if(studyType == StudyType.FIRST_REVIEW.value) STUDY_TYPE_FIRST else STUDY_TYPE_ALL
+            val type =
+                if (studyType == StudyType.FIRST_REVIEW.value) STUDY_TYPE_FIRST else STUDY_TYPE_ALL
             studyInfoUseCase.getRemoteUpdateState(dynastyType, type)
                 .catch { Log.d("Get Remote State", "result: ${it.message}") }
                 .collect {
                     _remoteState.value = it
                 }
+        }
+    }
+
+    fun getStudyData() {
+        viewModelScope.launch {
+            checkedGetType(dynastyType.value, STUDY_TYPE_ALL, false)
+            if (studyType.value == StudyType.FIRST_REVIEW.value) {
+                checkedGetType(dynastyType.value, STUDY_TYPE_FIRST, true)
+            }
+            getUserRule(studyType.value)
         }
     }
 

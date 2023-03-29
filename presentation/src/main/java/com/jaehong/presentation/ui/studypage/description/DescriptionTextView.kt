@@ -7,15 +7,18 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.GenericShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.jaehong.domain.local.model.StudyInfoItem
 import com.jaehong.domain.local.model.enum_type.StudyType
+import com.jaehong.presentation.theme.WooSuFont
 import com.jaehong.presentation.util.FontFixed.nonScaledSp
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -26,16 +29,25 @@ fun DescriptionTextView(
     backgroundColor: Color,
     alphaText: Float,
     hintText: String,
+//    updateState: Boolean,
+//    description: String,
+//    setDescription: (String) -> Unit,
     changeSelectedItem: (StudyInfoItem) -> Unit,
     checkedButtonState: () -> Unit,
     changeAllHintState: () -> Unit,
 
 ) {
     Text(
-        fontSize = 25.nonScaledSp,
-        lineHeight = 25.nonScaledSp,
+        //value = if(updateState) description else hintText,
+        //onValueChange = { setDescription(it) },
+        //readOnly = updateState.not(),
+        //textStyle = TextStyle(
         text = hintText,
-        color = Color.Black,
+            fontSize = 25.nonScaledSp,
+            lineHeight = 25.nonScaledSp,
+            color = Color.Black,
+            fontFamily = WooSuFont,
+        //),
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, Color.LightGray, getTopLineShape())
@@ -54,8 +66,8 @@ fun DescriptionTextView(
                         changeAllHintState()
                     }
                 }
-            ),
-        )
+            )
+    )
 }
 
 private fun getTopLineShape() : Shape {

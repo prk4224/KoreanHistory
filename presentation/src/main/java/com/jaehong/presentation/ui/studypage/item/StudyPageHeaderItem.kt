@@ -1,6 +1,9 @@
 package com.jaehong.presentation.ui.studypage.item
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,16 +19,25 @@ import com.jaehong.presentation.theme.BaseColor1
 import com.jaehong.presentation.util.Extension.checkedType
 import com.jaehong.presentation.util.FontFixed.nonScaledSp
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StudyPageHeaderItem(
     dynastyState:String,
     pageTitle: String,
-    header: String = if(dynastyState.checkedType()) pageTitle else "$dynastyState, $pageTitle"
+    //updateState: Boolean,
+    header: String = if(dynastyState.checkedType()) pageTitle else "$dynastyState, $pageTitle",
+    //onLongClick: () -> Unit,
+    //addItem: () -> Unit
 ){
     Box(modifier = Modifier
         .fillMaxWidth()
-        .background(BaseColor1, RoundedCornerShape(50, 50, 0, 0)),
-        contentAlignment = Alignment.Center
+        .background(BaseColor1, RoundedCornerShape(50, 50, 0, 0))
+        .combinedClickable(
+            onClick = { },
+            onLongClick = {
+                //onLongClick()
+            }
+        ),
     ){
         Text(
             text = header,
@@ -35,6 +47,19 @@ fun StudyPageHeaderItem(
             lineHeight = 30.nonScaledSp,
             modifier = Modifier
                 .padding(vertical = 7.dp)
+                .align(Alignment.Center)
         )
+//        if(updateState) {
+//            Text(
+//                text = "추가",
+//                textAlign = TextAlign.Center,
+//                fontSize = 18.nonScaledSp,
+//                color = Color.White,
+//                modifier = Modifier
+//                    .padding(7.dp)
+//                    .align(Alignment.CenterEnd)
+//                    .clickable { addItem() }
+//            )
+//        }
     }
 }

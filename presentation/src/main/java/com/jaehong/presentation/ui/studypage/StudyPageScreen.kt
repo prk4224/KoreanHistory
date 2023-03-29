@@ -22,6 +22,7 @@ import com.jaehong.presentation.util.composable.DataChangeButton
 import com.jaehong.presentation.util.dialog.NetworkConnectErrorDialog
 import com.jaehong.presentation.util.dialog.SaveCheckAlertDialog
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.util.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -44,31 +45,68 @@ fun StudyPageScreen(
     val remoteState by studyPageViewModel.remoteState.collectAsState()
     val connectionState by studyPageViewModel.connectionState.collectAsState()
 
+    //val updatedState = remember { mutableStateOf(false) }
     val selectedItems = remember { mutableStateListOf<StudyInfoItem>() }
+    //val updatedItems = remember { mutableStateListOf<StudyInfoItem>() }
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
     if (remoteState || connectionState) {
-        studyPageViewModel.initStudyData()
+        studyPageViewModel.getStudyData()
 
         StudyPagePagerScreen(
             pageList = pageList,
             studyType = studyType,
             isVisibleAllHint = isVisibleAllHint,
             firstStudyItems = firstStudyItems,
-            originStudyItems = originStudyItems,
-            header = { type, title -> StudyPageHeaderItem(type, title) },
-            dynastyType = dynastyType
+            //originStudyItems = if (updatedState.value.not()) originStudyItems else updatedItems,
+            originStudyItems =  originStudyItems,
+            header = { type, title ->
+                StudyPageHeaderItem(
+                    dynastyState = type,
+                    pageTitle = title,
+                    //updateState = updatedState.value,
+//                    addItem = {
+//                        updatedItems.add(StudyInfoItem(makeUUID(), title, "", arrayListOf()))
+//                    },
+//                    onLongClick = {
+//                        if (updatedState.value.not()) updatedItems.addAll(originStudyItems)
+//                        updatedState.value = true
+//                    }
+                )
+            },
+            dynastyType = dynastyType,
         ) { studyInfo, index ->
-            StudyAllViewItem(studyInfo) { descIndex, description ->
+//            val map = remember { mutableStateListOf<String>() }
+//            studyInfo.description.forEach {
+//                if (map.contains(it).not()) map.add(it)
+//            }
+//            val kingName = remember { mutableStateOf(studyInfo.king_name) }
+
+            StudyAllViewItem(
+                studyInfo = studyInfo,
+                //list = map,
+//                updateState = updatedState.value,
+//                kingName = kingName.value,
+//                setKingName = { setValue ->
+//                    kingName.value = setValue
+//                    studyInfo.king_name = setValue
+//                },
+//                addDescription = {
+//                    studyInfo.description.add("")
+//                    map.add("")
+//                }
+            ) { descIndex, description ->
+
                 val selectedItem = StudyInfoItem(
                     studyInfo.id,
                     studyInfo.detail,
                     studyInfo.king_name,
-                    arrayListOf(studyInfo.description[descIndex])
+                    arrayListOf(description)
                 )
 
                 val selected = selectedItems.contains(selectedItem)
+                //val descValue = remember { mutableStateOf(description) }
 
                 DescriptionTextView(
                     studyType = studyType,
@@ -76,12 +114,23 @@ fun StudyPageScreen(
                     backgroundColor = if (selected) Gray2 else Color.White,
                     alphaText = if (selected || studyType != StudyType.ALL_BLANK_REVIEW.value) 1f else 0f,
                     hintText = if (selected) originStudyItems[index].description[descIndex] else description,
+//                    updateState = updatedState.value,
+//                    setDescription = { value ->
+//                        studyInfo.description[descIndex] = value
+//                        descValue.value = value
+//                    },
+//                    description = descValue.value,
                     changeSelectedItem = { item ->
                         if (selected) selectedItems.remove(item)
                         else selectedItems.add(item)
                     },
-                    checkedButtonState = { studyPageViewModel.checkedButtonState(selectedItems.size) },
-                    changeAllHintState = { studyPageViewModel.changeAllHintState() })
+                    checkedButtonState = {
+                         studyPageViewModel.checkedButtonState(selectedItems.size)
+                    },
+                    changeAllHintState = {
+                         studyPageViewModel.changeAllHintState()
+                    }
+                )
             }
         }
 
@@ -168,4 +217,8 @@ fun StudyPageScreen(
     } else {
         NetworkConnectErrorDialog()
     }
+}
+
+private fun makeUUID(): String {
+    return UUID.randomUUID().toString()
 }
