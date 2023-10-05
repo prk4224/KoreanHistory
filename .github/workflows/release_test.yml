@@ -37,7 +37,7 @@ jobs:
           RECEIVE_EXTRACTED_NAME=$(echo $RECEIVE_BRANCH_NAME | awk -F/ '{print $2}')
           if [[ -n "$SEND_EXTRACTED_NAME" && -n "$RECEIVE_EXTRACTED_NAME" ]]; then
             echo "보내는 PR 추출된 이름: $SEND_EXTRACTED_NAME 받는 PR 추출된 이름: $RECEIVE_EXTRACTED_NAME"
-            echo "::set-output name=issue_name::release/$RECEIVE_BRANCH_NAME <- deploy/$SEND_EXTRACTED_NAME"
+            echo "::set-output name=issue_name::release/$RECEIVE_EXTRACTED_NAME <- deploy/$SEND_EXTRACTED_NAME"
           else
             echo "추출할 이름이 없습니다."
             exit 0
