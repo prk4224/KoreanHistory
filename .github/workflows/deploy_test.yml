@@ -54,7 +54,6 @@ jobs:
             exit 0
           fi
       - name: Update PR Title
-        if: ${{ steps.receive_branch_name.outputs.receive_branch_name != '' && steps.pr_title.outputs.pr_title != '' && steps.merged_branch_name.outputs.merged_branch_name != '' }}
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
           NEW_TITLE="deploy/${{ steps.issue_name.outputs.receive_branch_name }} <- ${{ steps.issue_name.outputs.merged_branch_name }} ${{ steps.pr_title.outputs.pr_title }}"
