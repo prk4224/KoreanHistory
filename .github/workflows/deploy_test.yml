@@ -43,7 +43,7 @@ jobs:
       - name: Update PR Title
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
-          NEW_TITLE="${{ steps.issue_name.outputs.merged_branch_name }} ${{ steps.pr_title.outputs.pr_title }}"
+          NEW_TITLE="${{ steps.merged_branch_name.outputs.merged_branch_name }} ${{ steps.pr_title.outputs.pr_title }}"
           # GitHub API를 사용하여 PR 제목 업데이트
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
