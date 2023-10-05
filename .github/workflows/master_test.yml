@@ -1,9 +1,9 @@
-name: release pr title update
+name: master pr title update
 
 on:
   pull_request:
     branches:
-      - 'release/*/base'
+      - 'master'
 
 permissions: write-all
 
@@ -16,28 +16,25 @@ jobs:
         id: pr_title
         run: |
           PR_TITLE=$(curl -sH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .title)
-          # PR 제목에 "release/, deploy/"가 포함되면 종료
-          if [[ "$PR_TITLE" == *"release/"* && "$PR_TITLE" == *"deploy/"* ]]; then
-            echo "# PR 제목에 'release/, deploy/'가 포함되므로 종료합니다."
+          # PR 제목에 "master <- release/"로 시작되면 종료
+          if [[ "$PR_TITLE" == *"master <- release/"* ]]; then
+            echo "# PR 제목에 'master <- release/'로 시작하므로 종료합니다."
             exit 0
           else
-            echo "PR 제목이 'release/, deploy/'가 포함되지 않으므로 다음 스텝으로 진행합니다."
+            echo "PR 제목이 'master <- release/'가 로 시작하지 않으므로 다음 스텝으로 진행합니다."
             echo "::set-output name=pr_title::$PR_TITLE"
           fi
       - name: Get Issue Name
         id: issue_name
         run: |
           # PR의 브랜치 이름 가져오기
-          SEND_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          RECEIVE_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
-          echo "보내는 PR의 브랜치 이름: $SEND_BRANCH_NAME"
-          echo "받는 PR의 브랜치 이름: $RECEIVE_BRANCH_NAME"
-          # 브랜치 이름에서 "first/second/third" 중 second 부분 추출
-          SEND_EXTRACTED_NAME=$(echo $SEND_BRANCH_NAME | awk -F/ '{print $2}')
-          RECEIVE_EXTRACTED_NAME=$(echo $RECEIVE_BRANCH_NAME | awk -F/ '{print $2}')
-          if [[ -n "$SEND_EXTRACTED_NAME" && -n "$RECEIVE_EXTRACTED_NAME" ]]; then
-            echo "보내는 PR 추출된 이름: $SEND_EXTRACTED_NAME 받는 PR 추출된 이름: $RECEIVE_EXTRACTED_NAME"
-            echo "::set-output name=issue_name::release/$RECEIVE_EXTRACTED_NAME <- deploy/$SEND_EXTRACTED_NAME"
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          echo "PR의 브랜치 이름: $BRANCH_NAME"
+          # 브랜치 이름에서 "release/{버전이름}/base" 중 {버전이름} 부분 추출
+          EXTRACTED_NAME=$(echo $BRANCH_NAME | awk -F/ '{print $2}')
+          if [[ -n "$EXTRACTED_NAME" ]]; then
+            echo "PR 추출된 이름: $EXTRACTED_NAME"
+            echo "::set-output name=issue_name::master <- release/$EXTRACTED_NAME"
           else
             echo "추출할 이름이 없습니다."
             exit 0
