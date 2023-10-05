@@ -28,27 +28,14 @@ jobs:
         id: merged_branch_name
         run: |
           MERGED_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
-          echo "Merged Branch Name: $MERGED_BRANCH_NAME"
-           # 브랜치 이름에서 "배포 이름" 부분 추출
-          EXTRACTED_NAME=$(echo "$MERGED_BRANCH_NAME"| awk -F'/' '{print $2}')
-          if [[ -n "$EXTRACTED_NAME" ]]; then
-            echo "추출된 이름: $EXTRACTED_NAME"
-            echo "::set-output name=merged_branch_name::$EXTRACTED_NAME"
-          else
-            echo "추출할 이름이 없습니다."
-            exit 0
-          fi
-      - name: Get Receive branch name
-        id: receive_branch_name
-        run: |
-          # PR의 브랜치 이름 가져오기
           RECEIVE_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          echo "PR의 브랜치 이름: $RECEIVE_BRANCH_NAME"
-          # 브랜치 이름에서 "AMZUIOS-1234" 부분 추출
-          EXTRACTED_NAME=$(echo "$RECEIVE_BRANCH_NAME" | grep -oP 'AMZUIOS-\d+')
-          if [[ -n "$EXTRACTED_NAME" ]]; then
-            echo "추출된 이름: $EXTRACTED_NAME"
-            echo "::set-output name=receive_branch_name::$EXTRACTED_NAME"
+          echo "Merged Branch Name: $MERGED_BRANCH_NAME / Receive Branch Name: $RECEIVE_BRANCH_NAME"
+           # 브랜치 이름에서 "배포 이름" 부분 추출
+          MERGED_EXTRACTED_NAME=$(echo "$MERGED_BRANCH_NAME"| awk -F'/' '{print $2}')
+          RECEIVE_EXTRACTED_NAME=$(echo "$RECEIVE_BRANCH_NAME" | grep -oP 'AMZUIOS-\d+')
+          if [[ -n "$MERGED_EXTRACTED_NAME" && -n "$RECEIVE_EXTRACTED_NAME" ]]; then
+            echo "보내는 PR 추출된 이름: $MERGED_EXTRACTED_NAME / 받는 PR 추출된 이름: $RECEIVE_EXTRACTED_NAME"
+            echo "::set-output name=merged_branch_name::deploy/$MERGED_EXTRACTED_NAME <- $RECEIVE_EXTRACTED_NAME"
           else
             echo "추출할 이름이 없습니다."
             exit 0
@@ -56,7 +43,7 @@ jobs:
       - name: Update PR Title
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
-          NEW_TITLE="deploy/ ${{ steps.receive_branch_name.outputs.receive_branch_name }} <- ${{ steps.merged_branch_name.outputs.merged_branch_name }} ${{ steps.pr_title.outputs.pr_title }}"
+          NEW_TITLE="${{ steps.merged_branch_name.outputs.merged_branch_name }} ${{ steps.pr_title.outputs.pr_title }}"
           # GitHub API를 사용하여 PR 제목 업데이트
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
