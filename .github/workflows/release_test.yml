@@ -16,12 +16,12 @@ jobs:
         id: pr_title
         run: |
           PR_TITLE=$(curl -sH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .title)
-          # PR 제목에 "release/, "<-", deploy/"가 포함되면 종료
-          if [[ "$PR_TITLE" == *"release/"* && "$PR_TITLE" == *"<-"* && "$PR_TITLE" == *"deploy/"* ]]; then
-            echo "# PR 제목에 'release/ <- deploy/'가 포함되므로 종료합니다."
+          # PR 제목에 "release/, deploy/"가 포함되면 종료
+          if [[ "$PR_TITLE" == *"release/"* && "$PR_TITLE" == *"deploy/"* ]]; then
+            echo "# PR 제목에 'release/, deploy/'가 포함되므로 종료합니다."
             exit 0
           else
-            echo "PR 제목이 'release/ <- deploy/'가 포함되지 않으므로 다음 스텝으로 진행합니다."
+            echo "PR 제목이 'release/, deploy/'가 포함되지 않으므로 다음 스텝으로 진행합니다."
             echo "::set-output name=pr_title::$PR_TITLE"
           fi
       - name: Get Issue Name
