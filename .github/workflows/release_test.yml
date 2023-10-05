@@ -15,10 +15,9 @@ jobs:
       - name: Check PR Title
         id: pr_title
         run: |
-        
           PR_TITLE=$(curl -sH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .title)
-          # PR 제목에 "release/ <- deploy/"가 포함되면 종료
-          if [[ "$PR_TITLE" == *"release/"* && "$PR_TITLE" == *"<-"* && "$PR_TITLE" == *"deploy/"*]]; then
+          # PR 제목에 "release/, "<-", deploy/"가 포함되면 종료
+          if [[ "$PR_TITLE" == *"release/"* && "$PR_TITLE" == *"<-"* && "$PR_TITLE" == *"deploy/"* ]]; then
             echo "# PR 제목에 'release/ <- deploy/'가 포함되므로 종료합니다."
             exit 0
           else
@@ -33,12 +32,12 @@ jobs:
           RECEIVE_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
           echo "보내는 PR의 브랜치 이름: $SEND_BRANCH_NAME"
           echo "받는 PR의 브랜치 이름: $RECEIVE_BRANCH_NAME"
-          # 브랜치 이름에서 "first/second/thrid" 중 second 부분 추출
-          SEND_EXTRACTED_NAME=${SEND_BRANCH_NAME#*/}
-          RECEIVE_EXTRACTED_NAME=${RECEIVE_BRANCH_NAME#*/}
-          if [[ -n "$SEND_EXTRACTED_NAME" && -n "$RECEIVE_BRANCH_NAME" ]]; then
+          # 브랜치 이름에서 "first/second/third" 중 second 부분 추출
+          SEND_EXTRACTED_NAME=$(echo $SEND_BRANCH_NAME | awk -F/ '{print $2}')
+          RECEIVE_EXTRACTED_NAME=$(echo $RECEIVE_BRANCH_NAME | awk -F/ '{print $2}')
+          if [[ -n "$SEND_EXTRACTED_NAME" && -n "$RECEIVE_EXTRACTED_NAME" ]]; then
             echo "보내는 PR 추출된 이름: $SEND_EXTRACTED_NAME 받는 PR 추출된 이름: $RECEIVE_EXTRACTED_NAME"
-            echo "::set-output name=issue_name::release/$RECEIVE_BRANCH_NAME <- deploy/$SEND_EXTRACTED_NAME"
+            echo "::set-output name=issue_name::release/$RECEIVE_EXTRACTED_NAME <- deploy/$SEND_EXTRACTED_NAME"
           else
             echo "추출할 이름이 없습니다."
             exit 0
