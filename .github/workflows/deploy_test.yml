@@ -21,12 +21,12 @@ jobs:
         run: |
           PR_TITLE=$(curl -sH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .title)
          
-          # PR 제목이 "$LAYER_NAME <"로 시작하면 작업 종료
-          if [[ "$PR_TITLE" == "$LAYER_NAME <"* ]]; then
-            echo "PR 제목이 '$LAYER_NAME <'로 시작하므로 작업을 종료합니다."
+          # PR 제목이 "$env.LAYER_NAME <"로 시작하면 작업 종료
+          if [[ "$PR_TITLE" == "$env.LAYER_NAME <"* ]]; then
+            echo "PR 제목이 '$env.LAYER_NAME <'로 시작하므로 작업을 종료합니다."
             exit 0
           else
-            echo "PR 제목이 '$LAYER_NAME <'로 시작하지 않으므로 다음 스텝으로 진행합니다."
+            echo "PR 제목이 '$env.LAYER_NAME <'로 시작하지 않으므로 다음 스텝으로 진행합니다."
             echo "::set-output name=pr_title::$PR_TITLE"
           fi
       - name: Get Merged Branch Name
@@ -39,8 +39,8 @@ jobs:
           # PR의 브랜치 이름 가져오기
           HEAD_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           echo "PR의 브랜치 이름: $HEAD_BRANCH_NAME"
-          # 브랜치 이름에서 "$ISSUE_PREFIX-1234" 부분 추출
-          HEAD_EXTRACTED_NAME=$(echo "$HEAD_BRANCH_NAME" | grep -oP '$ISSUE_PREFIX-\d+')
+          # 브랜치 이름에서 "$env.ISSUE_PREFIX-1234" 부분 추출
+          HEAD_EXTRACTED_NAME=$(echo "$HEAD_BRANCH_NAME" | grep -oP '$env.ISSUE_PREFIX-\d+')
           if [[ -n "$BASE_EXTRACTED_NAME" && -n "$HEAD_EXTRACTED_NAME" ]]; then
             echo "추출된 배포명: $BASE_EXTRACTED_NAME"
             echo "추출된 이슈명: $HEAD_EXTRACTED_NAME"
