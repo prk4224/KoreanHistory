@@ -29,7 +29,7 @@ jobs:
             echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
           fi
       - name: Get Issue Name
-        id: issue_name
+        id: prefix_title
         run: |
           # PR의 브랜치 이름 가져오기
           HEAD_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
@@ -50,7 +50,7 @@ jobs:
         if: ${{ steps.issue_name.outputs.issue_name != '' && steps.pr_title.outputs.pr_title != '' }}
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
-          NEW_TITLE="${{ steps.issue_name.outputs.issue_name }} ${{ steps.pr_title.outputs.pr_title }}"
+          NEW_TITLE="${{ steps.prefix_title.outputs.prefix_title }} ${{ steps.pr_title.outputs.pr_title }}"
           # GitHub API를 사용하여 PR 제목 업데이트
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
