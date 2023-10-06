@@ -30,6 +30,7 @@ jobs:
           fi
       - name: Get Issue Name
         id: prefix_title
+
         run: |
           # PR의 브랜치 이름 가져오기
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
@@ -39,6 +40,7 @@ jobs:
           if [[ -n "$EXTRACTED_NAME" ]]; then
             echo "PR 추출된 이름: $EXTRACTED_NAME"
             cho "prefix_title=$BASE_LAYER_NAME <- $HEAD_LAYER_NAME/$EXTRACTED_NAME" >> $GITHUB_OUTPUT
+
           else
             echo "추출할 이름이 없습니다."
             exit 0
