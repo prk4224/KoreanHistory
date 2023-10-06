@@ -26,10 +26,10 @@ jobs:
             exit 0
           else
             echo "PR 제목이 '$BASE_LAYER_NAME <- $HEAD_LAYER_NAME/'가 로 시작하지 않으므로 다음 스텝으로 진행합니다."
-            echo "::set-output name=pr_title::$PR_TITLE"
+           echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
           fi
       - name: Get Issue Name
-        id: issue_name
+        id: prefix_title
         run: |
           # PR의 브랜치 이름 가져오기
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
@@ -38,16 +38,16 @@ jobs:
           EXTRACTED_NAME=$(echo $BRANCH_NAME | awk -F/ '{print $2}')
           if [[ -n "$EXTRACTED_NAME" ]]; then
             echo "PR 추출된 이름: $EXTRACTED_NAME"
-            echo "::set-output name=issue_name::$BASE_LAYER_NAME <- $HEAD_LAYER_NAME/$EXTRACTED_NAME"
+            cho "prefix_title=$BASE_LAYER_NAME <- $HEAD_LAYER_NAME/$EXTRACTED_NAME" >> $GITHUB_OUTPUT
           else
             echo "추출할 이름이 없습니다."
             exit 0
           fi
       - name: Update PR Title
-        if: ${{ steps.issue_name.outputs.issue_name != '' && steps.pr_title.outputs.pr_title != '' }}
+        if: ${{ steps.prefix_title.outputs.prefix_title != '' && steps.pr_title.outputs.pr_title != '' }}
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
-          NEW_TITLE="${{ steps.issue_name.outputs.issue_name }} ${{ steps.pr_title.outputs.pr_title }}"
+          NEW_TITLE="${{ steps.prefix_title.outputs.prefix_title }} ${{ steps.pr_title.outputs.pr_title }}"
           # GitHub API를 사용하여 PR 제목 업데이트
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
