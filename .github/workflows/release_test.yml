@@ -47,7 +47,7 @@ jobs:
             exit 0
           fi
       - name: Update PR Title
-        if: ${{ steps.issue_name.outputs.issue_name != '' && steps.pr_title.outputs.pr_title != '' }}
+        if: ${{ steps.prefix_title.outputs.prefix_title != '' && steps.pr_title.outputs.pr_title != '' }}
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
           NEW_TITLE="${{ steps.prefix_title.outputs.prefix_title }} ${{ steps.pr_title.outputs.pr_title }}"
