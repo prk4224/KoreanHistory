@@ -5,11 +5,11 @@ on:
     branches:
       - 'deploy/*/base'
 
+permissions: write-all
+
 env:
   LAYER_NAME: "deploy"
   ISSUE_PREFIX: "AMZUAND"
-
-permissions: write-all
 
 jobs:
   deploy-pr-title-update:
