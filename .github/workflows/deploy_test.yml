@@ -27,7 +27,6 @@ jobs:
             exit 0
           else
             echo "PR 제목이 '$LAYER_NAME <'로 시작하지 않으므로 다음 스텝으로 진행합니다."
-            echo "::set-output name=pr_title::$PR_TITLE"
             echo "pr_title=$PR_TITLE" >> set-output
           fi
       - name: Get Merged Branch Name
