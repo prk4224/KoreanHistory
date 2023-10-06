@@ -7,6 +7,7 @@ on:
 
 env:
   LAYER_NAME: "deploy"
+  ISSUE_PREFIX: "AMZUAND"
 
 permissions: write-all
 
@@ -38,8 +39,8 @@ jobs:
           # PR의 브랜치 이름 가져오기
           HEAD_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           echo "PR의 브랜치 이름: $HEAD_BRANCH_NAME"
-          # 브랜치 이름에서 "AMZUIOS-1234" 부분 추출
-          HEAD_EXTRACTED_NAME=$(echo "$HEAD_BRANCH_NAME" | grep -oP 'AMZUIOS-\d+')
+          # 브랜치 이름에서 "$ISSUE_PREFIX-1234" 부분 추출
+          HEAD_EXTRACTED_NAME=$(echo "$HEAD_BRANCH_NAME" | grep -oP '$ISSUE_PREFIX-\d+')
           if [[ -n "$BASE_EXTRACTED_NAME" && -n "$HEAD_EXTRACTED_NAME" ]]; then
             echo "추출된 배포명: $BASE_EXTRACTED_NAME"
             echo "추출된 이슈명: $HEAD_EXTRACTED_NAME"
