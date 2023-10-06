@@ -44,7 +44,7 @@ jobs:
           if [[ -n "$BASE_EXTRACTED_NAME" && -n "$HEAD_EXTRACTED_NAME" ]]; then
             echo "추출된 배포명: $BASE_EXTRACTED_NAME"
             echo "추출된 이슈명: $HEAD_EXTRACTED_NAME"
-            echo "::set-output name=prefix_title::$LAYER_NAME/$BASE_EXTRACTED_NAME <- $HEAD_EXTRACTED_NAME"
+            echo "prefix_title=$LAYER_NAME/$BASE_EXTRACTED_NAME <- $HEAD_EXTRACTED_NAME" >> $GITHUB_OUTPUT
           else
             echo "추출할 이름이 없습니다."
             exit 0
