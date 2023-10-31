@@ -1,0 +1,52 @@
+name: deploy pr title update
+
+on:
+  pull_request:
+    branches:
+      - 'deploy/*/base'
+
+permissions: write-all
+
+jobs:
+  deploy-pr-title-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR Title
+        id: pr_title
+        run: |
+          PR_TITLE=$(curl -sH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .title)
+          # PR 제목이 "deploy <"로 시작하면 작업 종료
+          if [[ "$PR_TITLE" == "deploy <"* ]]; then
+            echo "PR 제목이 'deploy <'로 시작하므로 작업을 종료합니다."
+            exit 0
+          else
+            echo "PR 제목이 'deploy <'로 시작하지 않으므로 다음 스텝으로 진행합니다."
+            echo "::set-output name=pr_title::$PR_TITLE"
+          fi
+      - name: Get Merged Branch Name
+        id: merged_branch_name
+        run: |
+          SEND_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          RECEIVE_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
+          echo "보내는 브랜치 이름: $SEND_BRANCH_NAME / 받는 브랜치 이름: $RECEIVE_BRANCH_NAME"
+           # 브랜치 이름에서 "배포 이름" 부분 추출
+          SEND_EXTRACTED_NAME=$(echo "$SEND_BRANCH_NAME" | grep -oP 'AMZUAND-\d+')
+          RECEIVE_EXTRACTED_NAME=$(echo "$RECEIVE_BRANCH_NAME"| awk -F'/' '{print $2}')
+          if [[ -n "$RECEIVE_EXTRACTED_NAME" && -n "$SEND_EXTRACTED_NAME" ]]; then
+            echo "보내는 PR 추출된 이름: $SEND_EXTRACTED_NAME / 받는 PR 추출된 이름: $RECEIVE_EXTRACTED_NAME"
+            echo "::set-output name=merged_branch_name::deploy/$RECEIVE_EXTRACTED_NAME <- $SEND_EXTRACTED_NAME"
+          else
+            echo "추출할 이름이 없습니다."
+            exit 0
+          fi
+      - name: Update PR Title
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
+          NEW_TITLE="${{ steps.merged_branch_name.outputs.merged_branch_name }} ${{ steps.pr_title.outputs.pr_title }}"
+          # GitHub API를 사용하여 PR 제목 업데이트
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -d "{\"title\":\"$NEW_TITLE\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER"

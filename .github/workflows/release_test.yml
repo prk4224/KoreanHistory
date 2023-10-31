@@ -7,6 +7,10 @@ on:
 
 permissions: write-all
 
+env:
+  HEAD_LAYER_NAME: "deploy"
+  BASE_LAYER_NAME: "release"
+
 jobs:
   feature-pr-title-update:
     runs-on: ubuntu-latest
@@ -16,37 +20,37 @@ jobs:
         id: pr_title
         run: |
           PR_TITLE=$(curl -sH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .title)
-          # PR 제목에 "release/, deploy/"가 포함되면 종료
-          if [[ "$PR_TITLE" == *"release/"* && "$PR_TITLE" == *"deploy/"* ]]; then
-            echo "# PR 제목에 'release/, deploy/'가 포함되므로 종료합니다."
+          # PR 제목에 "$BASE_LAYER_NAME/, $HEAD_LAYER_NAME/"가 포함되면 종료
+          if [[ "$PR_TITLE" == *"$BASE_LAYER_NAME/"* && "$PR_TITLE" == *"$HEAD_LAYER_NAME/"* ]]; then
+            echo "# PR 제목에 '$BASE_LAYER_NAME/, $HEAD_LAYER_NAME/'가 포함되므로 종료합니다."
             exit 0
           else
-            echo "PR 제목이 'release/, deploy/'가 포함되지 않으므로 다음 스텝으로 진행합니다."
-            echo "::set-output name=pr_title::$PR_TITLE"
+            echo "PR 제목이 '$BASE_LAYER_NAME/, $HEAD_LAYER_NAME/'가 포함되지 않으므로 다음 스텝으로 진행합니다."
+            echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
           fi
       - name: Get Issue Name
-        id: issue_name
+        id: prefix_title
         run: |
           # PR의 브랜치 이름 가져오기
-          SEND_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          RECEIVE_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
-          echo "보내는 PR의 브랜치 이름: $SEND_BRANCH_NAME"
-          echo "받는 PR의 브랜치 이름: $RECEIVE_BRANCH_NAME"
+          HEAD_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          BASE_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
+          echo "보내는 PR의 브랜치 이름: $HEAD_BRANCH_NAME"
+          echo "받는 PR의 브랜치 이름: $BASE_BRANCH_NAME"
           # 브랜치 이름에서 "first/second/third" 중 second 부분 추출
-          SEND_EXTRACTED_NAME=$(echo $SEND_BRANCH_NAME | awk -F/ '{print $2}')
-          RECEIVE_EXTRACTED_NAME=$(echo $RECEIVE_BRANCH_NAME | awk -F/ '{print $2}')
-          if [[ -n "$SEND_EXTRACTED_NAME" && -n "$RECEIVE_EXTRACTED_NAME" ]]; then
-            echo "보내는 PR 추출된 이름: $SEND_EXTRACTED_NAME 받는 PR 추출된 이름: $RECEIVE_EXTRACTED_NAME"
-            echo "::set-output name=issue_name::release/$RECEIVE_EXTRACTED_NAME <- deploy/$SEND_EXTRACTED_NAME"
+          HEAD_EXTRACTED_NAME=$(echo $HEAD_BRANCH_NAME | awk -F/ '{print $2}')
+          BASE_EXTRACTED_NAME=$(echo $BASE_BRANCH_NAME | awk -F/ '{print $2}')
+          if [[ -n "$HEAD_EXTRACTED_NAME" && -n "$BASE_EXTRACTED_NAME" ]]; then
+            echo "보내는 PR 추출된 이름: $HEAD_EXTRACTED_NAME 받는 PR 추출된 이름: $BASE_EXTRACTED_NAME"
+            echo "prefix_title=$BASE_LAYER_NAME/$BASE_EXTRACTED_NAME <- $HEAD_LAYER_NAME/$HEAD_EXTRACTED_NAME" >> $GITHUB_OUTPUT
           else
             echo "추출할 이름이 없습니다."
             exit 0
           fi
       - name: Update PR Title
-        if: ${{ steps.issue_name.outputs.issue_name != '' && steps.pr_title.outputs.pr_title != '' }}
+        if: ${{ steps.prefix_title.outputs.prefix_title != '' && steps.pr_title.outputs.pr_title != '' }}
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
-          NEW_TITLE="${{ steps.issue_name.outputs.issue_name }} ${{ steps.pr_title.outputs.pr_title }}"
+          NEW_TITLE="${{ steps.prefix_title.outputs.prefix_title }} ${{ steps.pr_title.outputs.pr_title }}"
           # GitHub API를 사용하여 PR 제목 업데이트
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
