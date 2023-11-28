@@ -16,7 +16,7 @@ env:
   BASE_BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
   HEAD_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
   LAYER_NAME: "deploy"
-  ISSUE_PREFIX: "AMZUIOS-"
+  ISSUE_PREFIX: "AMZUAND-"
 
 jobs:
   deploy-pr-title-update:
