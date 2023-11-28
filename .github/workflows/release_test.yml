@@ -16,7 +16,7 @@ env:
   BASE_BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
   HEAD_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
   LAYER_NAME: "release"
-  ISSUE_PREFIX: "deploy"
+  HAED_LAYER_NAME: "deploy"
 
 jobs:
   deploy-pr-title-update:
@@ -28,22 +28,22 @@ jobs:
         run: |
           # 마지막 '/'로부터 앞 글자 추출 ex) deploy/scrum/base -> 'deploy/scurm/' 추출
           BASE_NAME=$(echo $BASE_BRANCH_NAME | cut -d'/' -f2)
-          HEAD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f2)
-          HEAD_CHILD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f3)
 
           # HEAD 브랜치가 deploy 브랜치 인지 확인
           if [[ $HEAD_BRANCH_NAME == deploy/* ]]; then
             echo "PR의 Head branch가 release child이거나 deploy base 브랜치 이므로 다음 스텝으로 진행합니다."
             echo "CHECK_FLAG=true" >> $GITHUB_OUTPUT
+            HEAD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f2)
             echo "base_name=$BASE_NAME" >> $GITHUB_OUTPUT
-            echo "child_name=$HEAD_NAME" >> $GITHUB_OUTPUT
+            echo "child_name=$HAED_LAYER_NAME/$HEAD_NAME" >> $GITHUB_OUTPUT
           # HEAD 브랜치가 BASE 브랜치와 동일한 스크럼명을 사용하는지 확인
           elif [[ $HEAD_BRANCH_NAME == release/* ]]; then
             echo "동일 배포 명을 사용하므로 다음 스텝으로 진행합니다."
             echo "$BASE_NAME $HEAD_NAME"
             echo "CHECK_FLAG=true" >> $GITHUB_OUTPUT
+            HEAD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f3)
             echo "base_name=$BASE_NAME" >> $GITHUB_OUTPUT
-            echo "child_name=$HEAD_CHILD_NAME" >> $GITHUB_OUTPUT
+            echo "child_name=$HEAD_NAME" >> $GITHUB_OUTPUT
           else
             echo "PR의 Head branch 설정이 잘못되었습니다. [HEAD BRANCH: '$HEAD_BRANCH_NAME']"
             echo "CHECK_FLAG=false" >> $GITHUB_OUTPUT
