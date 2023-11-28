@@ -27,15 +27,15 @@ jobs:
       - name: Get Merged Branch Name
         id: merged_branch_name
         run: |
-          SEND_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          RECEIVE_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
-          echo "보내는 브랜치 이름: $SEND_BRANCH_NAME / 받는 브랜치 이름: $RECEIVE_BRANCH_NAME"
+          MERGED_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
+          RECEIVE_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          echo "Merged Branch Name: $MERGED_BRANCH_NAME / Receive Branch Name: $RECEIVE_BRANCH_NAME"
            # 브랜치 이름에서 "배포 이름" 부분 추출
-          SEND_EXTRACTED_NAME=$(echo "$SEND_BRANCH_NAME" | grep -oP 'AMZUAND-\d+')
-          RECEIVE_EXTRACTED_NAME=$(echo "$RECEIVE_BRANCH_NAME"| awk -F'/' '{print $2}')
-          if [[ -n "$RECEIVE_EXTRACTED_NAME" && -n "$SEND_EXTRACTED_NAME" ]]; then
-            echo "보내는 PR 추출된 이름: $SEND_EXTRACTED_NAME / 받는 PR 추출된 이름: $RECEIVE_EXTRACTED_NAME"
-            echo "::set-output name=merged_branch_name::deploy/$RECEIVE_EXTRACTED_NAME <- $SEND_EXTRACTED_NAME"
+          MERGED_EXTRACTED_NAME=$(echo "$MERGED_BRANCH_NAME"| awk -F'/' '{print $2}')
+          RECEIVE_EXTRACTED_NAME=$(echo "$RECEIVE_BRANCH_NAME" | grep -oP 'AMZUAND-\d+')
+          if [[ -n "$MERGED_EXTRACTED_NAME" && -n "$RECEIVE_EXTRACTED_NAME" ]]; then
+            echo "보내는 PR 추출된 이름: $MERGED_EXTRACTED_NAME / 받는 PR 추출된 이름: $RECEIVE_EXTRACTED_NAME"
+            echo "::set-output name=merged_branch_name::deploy/$MERGED_EXTRACTED_NAME <- $RECEIVE_EXTRACTED_NAME"
           else
             echo "추출할 이름이 없습니다."
             exit 0
