@@ -29,6 +29,7 @@ jobs:
           # 마지막 '/'로부터 앞 글자 추출 ex) deploy/scrum/base -> 'deploy/scurm/' 추출
           BASE_NAME=$(echo $BASE_BRANCH_NAME | cut -d'/' -f2)
           HEAD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f2)
+          HEAD_CHILD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f3)
 
           # HEAD 브랜치가 deploy 브랜치 인지 확인
           if [[ $HEAD_BRANCH_NAME == deploy/* ]]; then
@@ -42,7 +43,7 @@ jobs:
             echo "$BASE_NAME $HEAD_NAME"
             echo "CHECK_FLAG=true" >> $GITHUB_OUTPUT
             echo "base_name=$BASE_NAME" >> $GITHUB_OUTPUT
-            echo "child_name=$HEAD_NAME" >> $GITHUB_OUTPUT
+            echo "child_name=$HEAD_CHILD_NAME" >> $GITHUB_OUTPUT
           else
             echo "PR의 Head branch 설정이 잘못되었습니다. [HEAD BRANCH: '$HEAD_BRANCH_NAME']"
             echo "CHECK_FLAG=false" >> $GITHUB_OUTPUT
