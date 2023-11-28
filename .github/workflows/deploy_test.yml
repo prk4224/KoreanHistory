@@ -4,56 +4,115 @@ on:
   pull_request:
     branches:
       - 'deploy/*/base'
-
-env:
-  LAYER_NAME: "deploy"
+    types:
+      - opened
+      - reopened
+      - auto_merge_enabled
+      - auto_merge_disabled
 
 permissions: write-all
+
+env:
+  BASE_BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
+  HEAD_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+  LAYER_NAME: "deploy"
+  ISSUE_PREFIX: "AMZUIOS-"
 
 jobs:
   deploy-pr-title-update:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check Head Branch
+        id: check_head
+        run: |
+          # 마지막 '/'로부터 앞 글자 추출 ex) deploy/scrum/base -> 'deploy/scurm/' 추출
+          BASE_NAME=$(echo $BASE_BRANCH_NAME | cut -d'/' -f2)
+          HEAD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f2)
+
+          # HEAD 브랜치가 feature 브랜치 인지 확인
+          if [[ $HEAD_BRANCH_NAME == feature/* ]]; then
+            echo "PR의 Head branch가 deploy child이거나 feature base 브랜치 이므로 다음 스텝으로 진행합니다."
+            echo "CHECK_FLAG=true" >> $GITHUB_OUTPUT
+            echo "base_name=$BASE_NAME" >> $GITHUB_OUTPUT
+            echo "child_name=$HEAD_NAME" >> $GITHUB_OUTPUT
+          # HEAD 브랜치가 BASE 브랜치와 동일한 스크럼명을 사용하는지 확인
+          elif [[ $HEAD_BRANCH_NAME == deploy/* ]]; then
+            echo "동일 배포 명을 사용하므로 다음 스텝으로 진행합니다."
+            echo "$BASE_NAME $HEAD_NAME"
+            echo "CHECK_FLAG=true" >> $GITHUB_OUTPUT
+            echo "base_name=$BASE_NAME" >> $GITHUB_OUTPUT
+            echo "child_name=$HEAD_NAME" >> $GITHUB_OUTPUT
+          else
+            echo "PR의 Head branch 설정이 잘못되었습니다. [HEAD BRANCH: '$HEAD_BRANCH_NAME']"
+            echo "CHECK_FLAG=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
       - name: Check PR Title
         id: pr_title
         run: |
           PR_TITLE=$(curl -sH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .title)
-         
-          # PR 제목이 "$LAYER_NAME <"로 시작하면 작업 종료
-          if [[ "$PR_TITLE" == "$LAYER_NAME <"* ]]; then
-            echo "PR 제목이 '$LAYER_NAME <'로 시작하므로 작업을 종료합니다."
-            exit 0
+
+          # PR 제목이 $LAYER_NAME 시작하면 붙이지 않는다.
+          if [[ "$PR_TITLE" == "$LAYER_NAME"* ]]; then
+            echo "PR 제목이 '$LAYER_NAME'로 시작하므로 이름을 붙이지 않습니다."
+            echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
           else
-            echo "PR 제목이 '$LAYER_NAME <'로 시작하지 않으므로 다음 스텝으로 진행합니다."
-            echo "::set-output name=pr_title::$PR_TITLE"
+            echo "PR 제목이 '$LAYER_NAME'로 시작하지 않으므로 다음 앞에 layer 이름을 추가합니다."
+            NEW_TITLE="$LAYER_NAME/${{ steps.check_head.outputs.base_name }} <- ${{ steps.check_head.outputs.child_name }} $PR_TITLE"
+            echo "pr_title=$NEW_TITLE" >> $GITHUB_OUTPUT
           fi
-      - name: Get Merged Branch Name
-        id: prefix_title
+
+      - name: Set Random Emoji
+        id: random_emoji
+        if: ${{ steps.pr_title.outputs.pr_title != '' && steps.check_head.outputs.CHECK_FLAG == 'true' }}
         run: |
-          BASE_BRANCH_NAME="${{ github.event.pull_request.base.ref }}"
-          echo "Merged Branch Name: $BASE_BRANCH_NAME"
-           # 브랜치 이름에서 "배포 이름" 부분 추출
-          BASE_EXTRACTED_NAME=$(echo "$BASE_BRANCH_NAME"| awk -F'/' '{print $2}')
-          # PR의 브랜치 이름 가져오기
-          HEAD_BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          echo "PR의 브랜치 이름: $HEAD_BRANCH_NAME"
-          # 브랜치 이름에서 "AMZUIOS-1234" 부분 추출
-          HEAD_EXTRACTED_NAME=$(echo "$HEAD_BRANCH_NAME" | grep -oP 'AMZUIOS-\d+')
-          if [[ -n "$BASE_EXTRACTED_NAME" && -n "$HEAD_EXTRACTED_NAME" ]]; then
-            echo "추출된 배포명: $BASE_EXTRACTED_NAME"
-            echo "추출된 이슈명: $HEAD_EXTRACTED_NAME"
-            echo "::set-output name=prefix_title::$LAYER_NAME/$BASE_EXTRACTED_NAME <- $HEAD_EXTRACTED_NAME"
+          # 랜덤 이모지 생성
+          emojis=("🔥" "🚨" "☄️" "❤️‍🔥" "🏎️" "🥊" "🌹" "🚒")
+          random_index=$((RANDOM % ${#emojis[@]}))
+          random_emoji="${emojis[$random_index]}"
+          echo "random_auto=(Auto${random_emoji})" >> $GITHUB_OUTPUT
+
+      - name: Check Auto merge
+        id: convert_title
+        if: ${{ steps.pr_title.outputs.pr_title != '' && steps.check_head.outputs.CHECK_FLAG == 'true' }}
+        run: |
+          PR_TITLE="${{ steps.pr_title.outputs.pr_title }}"
+
+          # 값이 있으면 == true면 "Object", 없으면 == false면 ""
+          PR_STATE="${{ github.event.pull_request.auto_merge }}"
+          echo "현재 PR 상태: $PR_STATE"
+
+          # Check if "(Auto)" is present in the PR title
+          if [[ $PR_TITLE == *"(Auto"* ]]; then
+            AUTO_PRESENT=true
           else
-            echo "추출할 이름이 없습니다."
-            exit 0
+            AUTO_PRESENT=false
           fi
-          
+
+          echo "오토 포함 여부: $AUTO_PRESENT"
+
+          # Determine the new title based on the PR state
+          if [[ "$PR_STATE" == "Object" && "$AUTO_PRESENT" == "false" ]]; then
+            NEW_TITLE="$PR_TITLE ${{ steps.random_emoji.outputs.random_auto }}"
+            echo "오토머지 켬 추출된 이름: $NEW_TITLE"
+            echo "convert_title=$NEW_TITLE" >> $GITHUB_OUTPUT
+          elif [[ "$PR_STATE" != "Object" && "$AUTO_PRESENT" == "true" ]]; then
+            NEW_TITLE=$(echo $PR_TITLE | sed 's/(Auto.*$//')
+            echo "오토머지 끔 추출된 이름: $NEW_TITLE"
+            echo "convert_title=$NEW_TITLE" >> $GITHUB_OUTPUT
+          else
+            echo "일반 상태 추출된 이름: $PR_TITLE"
+            echo "convert_title=$PR_TITLE" >> $GITHUB_OUTPUT
+          fi
+
       - name: Update PR Title
-        if: ${{ steps.prefix_title.outputs.prefix_title != '' && steps.pr_title.outputs.pr_title != '' }}
+        if: ${{ steps.convert_title.outputs.convert_title != '' && steps.check_head.outputs.CHECK_FLAG == 'true' }}
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"  # 업데이트할 PR 번호
-          NEW_TITLE="${{ steps.prefix_title.outputs.prefix_title }} ${{ steps.pr_title.outputs.pr_title }}"
+          NEW_TITLE="${{ steps.convert_title.outputs.convert_title }}"
+
           # GitHub API를 사용하여 PR 제목 업데이트
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
