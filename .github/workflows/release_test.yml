@@ -16,7 +16,7 @@ env:
   BASE_BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
   HEAD_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
   LAYER_NAME: "release"
-  ISSUE_PREFIX: "deploy"
+  HEAD_LAYER_NAME: "deploy"
 
 jobs:
   deploy-pr-title-update:
@@ -60,7 +60,7 @@ jobs:
             echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
           else
             echo "PR 제목이 '$LAYER_NAME'로 시작하지 않으므로 다음 앞에 layer 이름을 추가합니다."
-            NEW_TITLE="$LAYER_NAME/${{ steps.check_head.outputs.base_name }} <- ${{ steps.check_head.outputs.child_name }} $PR_TITLE"
+            NEW_TITLE="$LAYER_NAME/${{ steps.check_head.outputs.base_name }} <- $HEAD_LAYER_NAME/${{ steps.check_head.outputs.child_name }} $PR_TITLE"
             echo "pr_title=$NEW_TITLE" >> $GITHUB_OUTPUT
           fi
 
