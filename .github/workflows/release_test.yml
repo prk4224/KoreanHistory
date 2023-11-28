@@ -16,7 +16,7 @@ env:
   BASE_BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
   HEAD_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
   LAYER_NAME: "release"
-  HEAD_LAYER_NAME: "deploy"
+  ISSUE_PREFIX: "deploy"
 
 jobs:
   deploy-pr-title-update:
@@ -29,6 +29,7 @@ jobs:
           # 마지막 '/'로부터 앞 글자 추출 ex) deploy/scrum/base -> 'deploy/scurm/' 추출
           BASE_NAME=$(echo $BASE_BRANCH_NAME | cut -d'/' -f2)
           HEAD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f2)
+          HEAD_CHILD_NAME=$(echo $HEAD_BRANCH_NAME | cut -d'/' -f3)
 
           # HEAD 브랜치가 deploy 브랜치 인지 확인
           if [[ $HEAD_BRANCH_NAME == deploy/* ]]; then
@@ -42,7 +43,7 @@ jobs:
             echo "$BASE_NAME $HEAD_NAME"
             echo "CHECK_FLAG=true" >> $GITHUB_OUTPUT
             echo "base_name=$BASE_NAME" >> $GITHUB_OUTPUT
-            echo "child_name=$HEAD_NAME" >> $GITHUB_OUTPUT
+            echo "child_name=$HEAD_CHILD_NAME" >> $GITHUB_OUTPUT
           else
             echo "PR의 Head branch 설정이 잘못되었습니다. [HEAD BRANCH: '$HEAD_BRANCH_NAME']"
             echo "CHECK_FLAG=false" >> $GITHUB_OUTPUT
@@ -60,7 +61,7 @@ jobs:
             echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
           else
             echo "PR 제목이 '$LAYER_NAME'로 시작하지 않으므로 다음 앞에 layer 이름을 추가합니다."
-            NEW_TITLE="$LAYER_NAME/${{ steps.check_head.outputs.base_name }} <- $HEAD_LAYER_NAME/${{ steps.check_head.outputs.child_name }} $PR_TITLE"
+            NEW_TITLE="$LAYER_NAME/${{ steps.check_head.outputs.base_name }} <- ${{ steps.check_head.outputs.child_name }} $PR_TITLE"
             echo "pr_title=$NEW_TITLE" >> $GITHUB_OUTPUT
           fi
 
